@@ -58,7 +58,7 @@
       <li>0.75 × w1 + 1.25 × w2 should be close to 3500</li>
       <li>1.25 × w1 + 1 × w2 should be close to 4500</li>
     </ul>
-    <p>People figured out the math for picking the best possible w1 and w2 in the early 1800s. However, we’re not going to worry about that. Instead we’ll purposely go about it in a way that will seem overcomplicated and expensive to compute because later on this technique will prove magical.</p>
+    <p>People figured out the math for picking the best possible w1 and w2 hundreds of years ago. However, we’re not going to worry about that. Instead we’ll purposely go about it in a way that will seem overcomplicated and expensive to compute because later on this technique will prove magical.</p>
     <p>So what I said to my daughter over pizza was: Forget about finding the ideal w1 and w2 for the moment, just pick some random numbers. Mia picked 1000 and 3000. Great, calculate the prediction for turkey number 1:</p>
     <p class="centered">1 × 1000 + 1.5 × 3000 = 5500</p>
     <p>Wow! Not too bad. Can we quantify how good or bad it is? Mia said to subtract the actual number of feathers, so 5500 - 5000 = 500. Let’s do that for all three turkeys.</p>
@@ -191,7 +191,7 @@
       <figcaption>Table 3.12. Prediction for all three turkeys using our final weights.</figcaption>
     </figure>
     <p>We’re only off by 22 feathers on turkey #3. For turkey #1 we’re short 240 feathers, and for turkey #2, we’re over by 275 feathers. Much better than where we started.</p>
-    <p>You may be itching to know how close we got to the optimal answer. In the future we’ll work with models where that’s tricky or impossible to figure out. Here, though, it’s easy to compute the w1 and w2 that minimize loss. As I mentioned above, people figured out how to solve these problems in the early 1800s and without doing 1000 steps of computation. Set both partial derivatives above to 0 and you’ll have two equations and two variables. Solve for w1 and w2 and you’ll get (rounded to nearest whole number):</p>
+    <p>You may be itching to know how close we got to the optimal answer. In the future we’ll work with models where that’s tricky or impossible to figure out. Here, though, it’s easy to compute the w1 and w2 that minimize loss. As I mentioned above, people figured out how to solve these problems a long time ago and without doing 1000 steps of computation. Set both partial derivatives above to 0 and you’ll have two equations and two variables. Solve for w1 and w2 and you’ll get (rounded to nearest whole number):</p>
     <div class="inset">
       <p>w1 = 2347</p>
       <p>w2 = 1604</p>
@@ -210,7 +210,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-4.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 8, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 12, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>
