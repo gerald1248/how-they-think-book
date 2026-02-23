@@ -171,14 +171,14 @@
       <figcaption>Figure 8.11. The big picture of how loss is computed from x and y_actual.</figcaption>
     </figure>
     <p>Purple indicates the dimensions of each tensor. When looking at this diagram, remember the point of boiling everything down to a single loss number is so we can backpropagate and adjust the weights. In <a href="chapter-11.html" class="xref">chapter 11</a> we’ll start to get into what goes on inside the model and exactly what those weights are.</p>
-    <p>I’ve been using a tiny example for the diagrams. When I trained my 20-layer model ahead of time, which has a vocabulary size of 65,536 tokens and over a half a million weights, I used batches of 32 sequences each with 2048 tokens (B=32, T=2048). Here’s the diagrams again with these dimensions multiplied out so you can appreciate how many numbers we’re dealing with:</p>
+    <p>I’ve been using a tiny example for the diagrams. When I trained my 20-layer model ahead of time, which has a vocabulary size of 65,536 tokens and over a half a billion weights, I used batches of 32 sequences each with 2048 tokens (B=32, T=2048). Here’s the diagrams again with these dimensions multiplied out so you can appreciate how many numbers we’re dealing with:</p>
     <figure id="fig-8-12">
       <input type="checkbox" id="lb-84" class="lightbox-toggle">
       <label for="lb-84"><img src="images/RC076.png" alt="" loading="lazy"></label>
       <label for="lb-84" class="lightbox-overlay"><img src="images/RC076.png" alt=""></label>
       <figcaption>Figure 8.12. The total numbers in the tensors to compute loss for a single batch.</figcaption>
     </figure>
-    <p>In a single round of the training loop in the turkey example, we adjusted two weights using a batch of three pieces of data, each containing height, length, and actual number of feathers. Here, in a single round of the training loop, we’re adjusting over half a million weights based on backpropagating through a calculation that starts with 65,536 numbers and produces an output of over 4 billion numbers. In <a href="chapter-21.html" class="xref">chapter 21</a>, when we start training our 32-layer model, we’ll be adjusting over 2 billion weights. The fact that this actually works speaks to the incredible power of backpropagation and calculus and innovations in model architecture that we’ll be covering in upcoming chapters, and the fact it can be done in a fraction of a second speaks to the power of GPUs.</p>
+    <p>In a single round of the training loop in the turkey example, we adjusted two weights using a batch of three pieces of data, each containing height, length, and actual number of feathers. Here, in a single round of the training loop, we’re adjusting over half a billion weights based on backpropagating through a calculation that starts with 65,536 numbers and produces an output of over 4 billion numbers. In <a href="chapter-21.html" class="xref">chapter 21</a>, when we start training our 32-layer model, we’ll be adjusting over 2 billion weights. The fact that this actually works speaks to the incredible power of backpropagation and calculus and innovations in model architecture that we’ll be covering in upcoming chapters, and the fact it can be done in a fraction of a second speaks to the power of GPUs.</p>
     <hr class="section-break">
     <figure id="fig-8-13">
       <input type="checkbox" id="lb-85" class="lightbox-toggle">
@@ -272,7 +272,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-9.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 12, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 23, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>
