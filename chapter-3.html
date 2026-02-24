@@ -110,7 +110,7 @@
       <label for="lb-15" class="lightbox-overlay"><img src="images/RC014.png" alt=""></label>
       <figcaption>Figure 3.3. Red is f(x) = x<sup>2</sup>, blue is the tangent at x = 3.</figcaption>
     </figure>
-    <p>Okay, now forget about x and f(x) and let’s get back to figuring out how to tweak w1 and w2 to improve our turkey feather model. Since we want to take the derivative, let’s write out the loss in terms of w1 and w2 instead of plugging in the weights we guessed at above.</p>
+    <p>Okay, now let’s see how derivatives will help us adjust w1 and w2 to improve our turkey feather model. Since we’re going to want to compute derivatives of loss, let’s write out the loss calculation as an equation. I’ll first repeat the calculation we did above in <a href="#tbl-3-3" class="xref" data-preview="images/RC011.png">table 3.3</a> but using the variables w1 and w2 instead of plugging in specific weights.</p>
     <figure id="tbl-3-6">
       <input type="checkbox" id="lb-16" class="lightbox-toggle">
       <label for="lb-16"><img src="images/RC015.png" alt="" loading="lazy"></label>
@@ -135,7 +135,7 @@
     <div class="inset">
       <p>Partial derivative of loss with respect to w1 = 6.25(w1) + 7.375(w2) - 26500</p>
       <p>Partial derivative of loss with respect to w2 = 7.375(w1) + 9.625(w2) - 32750</p>
-      <p>(You can either get these using an online calculator or by remembering a few rules from calculus.)</p>
+      <p>(You can get these by copying the loss equation above into an online calculator and asking for the partial derivatives with respect to w1 and w2. Or you can use the calculus rules you learned in high school on the loss equation if you treat w2 as a constant to calculate the partial derivative with respect to w1 and vice versa. For example, the 6.25 in the first equation comes from 2×3.125.)</p>
     </div>
     <p>Evaluate the partial derivatives at w1=1000 and w2=3000:</p>
     <div class="inset">
@@ -210,7 +210,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-4.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 23, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>
