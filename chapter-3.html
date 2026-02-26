@@ -176,18 +176,42 @@
       <label for="lb-20" class="lightbox-overlay"><img src="images/RC019.png" alt=""></label>
       <figcaption>Table 3.10. Repeat again.</figcaption>
     </figure>
-    <p>Our loss is under a million! Let’s do a thousand steps. I’ll only show some of them in the table.</p>
+    <p>Our loss is under a million! Let’s do a thousand steps. I’ll show only some of them in the table.</p>
     <figure id="tbl-3-11">
       <input type="checkbox" id="lb-21" class="lightbox-toggle">
       <label for="lb-21"><img src="images/RC020.png" alt="" loading="lazy"></label>
       <label for="lb-21" class="lightbox-overlay"><img src="images/RC020.png" alt=""></label>
       <figcaption>Table 3.11. Loss after 1000 steps of updating our weights.</figcaption>
     </figure>
-    <p>We might have hoped for a loss of zero, but that’s probably not possible because we have three turkeys and two weights. 133,190 seems a lot better than 1,312,500. Let’s make predictions with w1=2311 and w2=1633:</p>
-    <figure id="tbl-3-12">
+    <p>We might have hoped for a loss of zero, but that’s probably not possible because we have three turkeys and two weights. 133,190 seems a lot better than 1,312,500 though!</p>
+    <p>If you look at <a href="#tbl-3-11" class="xref" data-preview="images/RC020.png">table 3.11</a> closely, as one reader did, you’ll notice that w1 goes down and then back up. Why is that?</p>
+    <p>Imagine you were placed somewhere in Death Valley National Park and your goal was to hike to the lowest point in the park, which is also the lowest point in the United States: Badwater Basin with an elevation of 282 feet below sea level. If the park were shaped like a perfectly round cereal bowl then sure, no matter where you started, as long as you always stepped in the steepest descending direction, you would walk directly to the lowest point. But here’s a topological map of part of the park. If you started at a peak on the right somewhere, and always took steps in the steepest local descending direction, you might<em> </em>end up in the basin, but your path would be winding.</p>
+    <figure id="fig-3-4" style="max-width:90%">
       <input type="checkbox" id="lb-22" class="lightbox-toggle">
-      <label for="lb-22"><img src="images/RC021.png" alt="" loading="lazy"></label>
-      <label for="lb-22" class="lightbox-overlay"><img src="images/RC021.png" alt=""></label>
+      <label for="lb-22"><img src="images/RC385.png" alt="" loading="lazy"></label>
+      <label for="lb-22" class="lightbox-overlay"><img src="images/RC385.png" alt=""></label>
+      <figcaption>Figure 3.4. Topological map of part of Death Valley National park with contour lines. The lowest contour line marks land 250 feet below sea level!</figcaption>
+    </figure>
+    <p>The Death Valley map has contour lines showing elevations. Let’s make an analogous contour plot of what the loss would come out to for a range of w1 and w2 values:</p>
+    <figure id="fig-3-5">
+      <input type="checkbox" id="lb-23" class="lightbox-toggle">
+      <label for="lb-23"><img src="images/RC383.png" alt="" loading="lazy"></label>
+      <label for="lb-23" class="lightbox-overlay"><img src="images/RC383.png" alt=""></label>
+      <figcaption>Figure 3.5. Contour plot of the loss surface.</figcaption>
+    </figure>
+    <p>The red dot marks the initial weights Mia picked. The blue star marks the minimum—our goal. Notice that the red dot is between contour lines for 1.2 million and 1.9 million, consistent with our initial calculation of a loss of 1.3 million in <a href="#tbl-3-7" class="xref" data-preview="images/RC016.png">table 3.7</a>. This loss surface is shaped like an elliptical bowl, much less complicated than the Death Valley terrain. Even so, will the first step shift w1 and w2 directly toward the correct final values? To move in the steepest direction we want to walk straight across that first contour line, in other words, we want to cross it perpendicularly. (By contrast, if we walked along the line our loss would stay the same.) Let’s add the steps to the plot:</p>
+    <figure id="fig-3-6">
+      <input type="checkbox" id="lb-24" class="lightbox-toggle">
+      <label for="lb-24"><img src="images/RC384.png" alt="" loading="lazy"></label>
+      <label for="lb-24" class="lightbox-overlay"><img src="images/RC384.png" alt=""></label>
+      <figcaption>Figure 3.6. Contour plot of the loss surface showing our w1 and w2 values every five steps.</figcaption>
+    </figure>
+    <p>You can see that even with this straightforward elliptical bowl, our first steps decrease w1 rather than moving us directly toward the goal. This explains why w1 initially goes down and then goes back up in <a href="#tbl-3-11" class="xref" data-preview="images/RC020.png">table 3.11</a>.</p>
+    <p>Now with that out of the way, and a useful picture for the future in your mind, let’s make feather predictions using w1=2311 and w2=1633:</p>
+    <figure id="tbl-3-12">
+      <input type="checkbox" id="lb-25" class="lightbox-toggle">
+      <label for="lb-25"><img src="images/RC021.png" alt="" loading="lazy"></label>
+      <label for="lb-25" class="lightbox-overlay"><img src="images/RC021.png" alt=""></label>
       <figcaption>Table 3.12. Prediction for all three turkeys using our final weights.</figcaption>
     </figure>
     <p>We’re only off by 22 feathers on turkey #3. For turkey #1 we’re short 240 feathers, and for turkey #2, we’re over by 275 feathers. Much better than where we started.</p>
@@ -198,9 +222,9 @@
     </div>
     <p>We got close. Let’s plug those weights in:</p>
     <figure id="tbl-3-13">
-      <input type="checkbox" id="lb-23" class="lightbox-toggle">
-      <label for="lb-23"><img src="images/RC022.png" alt="" loading="lazy"></label>
-      <label for="lb-23" class="lightbox-overlay"><img src="images/RC022.png" alt=""></label>
+      <input type="checkbox" id="lb-26" class="lightbox-toggle">
+      <label for="lb-26"><img src="images/RC022.png" alt="" loading="lazy"></label>
+      <label for="lb-26" class="lightbox-overlay"><img src="images/RC022.png" alt=""></label>
       <figcaption>Table 3.13. Prediction for all three turkeys using the optimal weights.</figcaption>
     </figure>
     <p>You also may be wondering if we could have gotten even closer to the optimal weights if we used a smaller learning rate and/or more steps. The answer is yes.</p>
@@ -210,7 +234,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-4.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

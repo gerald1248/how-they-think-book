@@ -28,17 +28,17 @@
     </div>
     <p>Now for the fun part: generating text. Let me bring in <a href="chapter-8.html#fig-8-3" class="xref" data-preview="images/RC066.png">figure 8.3</a> again:</p>
     <figure id="fig-9-1" style="max-width:90%">
-      <input type="checkbox" id="lb-94" class="lightbox-toggle">
-      <label for="lb-94"><img src="images/RC066.png" alt="" loading="lazy"></label>
-      <label for="lb-94" class="lightbox-overlay"><img src="images/RC066.png" alt=""></label>
+      <input type="checkbox" id="lb-97" class="lightbox-toggle">
+      <label for="lb-97"><img src="images/RC066.png" alt="" loading="lazy"></label>
+      <label for="lb-97" class="lightbox-overlay"><img src="images/RC066.png" alt=""></label>
       <figcaption>Figure 9.1. Next token prediction for the input “&lt;bos&gt; he.”</figcaption>
     </figure>
     <p>When I showed this diagram in <a href="chapter-8.html" class="xref">chapter 8</a>, the purpose was to compare the model output against the expected next word “went” as part of calculating our loss. Generation starts exactly the same but we <strong>do not</strong> want to calculate loss, backpropagate, or update weights. Instead, we use the probability distribution to pick our next word, and then we add that word to the sequence and feed it in again. Let’s do this, keeping in mind that the example output in figures <a href="#fig-9-1" class="xref" data-preview="images/RC066.png">9.1</a> and <a href="#fig-9-2" class="xref" data-preview="images/RC080.png">9.2</a> below is before training, so we should only expect nonsense at this point. Let’s mechanically go through the steps.</p>
     <p>The token with the top probability is “he.” We’ll pick that. Now our sequence is “&lt;bos&gt; he he.” Feed that in:</p>
     <figure id="fig-9-2">
-      <input type="checkbox" id="lb-95" class="lightbox-toggle">
-      <label for="lb-95"><img src="images/RC080.png" alt="" loading="lazy"></label>
-      <label for="lb-95" class="lightbox-overlay"><img src="images/RC080.png" alt=""></label>
+      <input type="checkbox" id="lb-98" class="lightbox-toggle">
+      <label for="lb-98"><img src="images/RC080.png" alt="" loading="lazy"></label>
+      <label for="lb-98" class="lightbox-overlay"><img src="images/RC080.png" alt=""></label>
       <figcaption>Figure 9.2. Next token prediction for the input “&lt;bos&gt; he he.”</figcaption>
     </figure>
     <p>The token with the top probability is “bed.” Now our sequence is “&lt;bos&gt; he he bed.” That’s nonsense but you get the idea. You’ll also see that it works the same if we start with an “empty” prompt (just &lt;bos&gt;), a prompt like we used above “&lt;bos&gt; he,” or a longer prompt like “&lt;bos&gt; The man is.”</p>
@@ -50,40 +50,40 @@
     <p>There’s one more thing I want to show before we end this chapter. I hope you find it annoying, or at least unsatisfying, that I gave an example of an untrained model spitting out nonsense. You want to see the magic of generation of sensical text. To do this, I’m going to use the 20-layer model I trained earlier. We’re now back to the vocab size of 65,536 so I can’t show the probability distribution over all possible tokens. Instead I’ll show the top 5 and the bottom 5.</p>
     <p>Here are the top and bottom five for the prompt “The capital of France is.” To make this a little fun for me while writing and you while reading, I’ll list the token IDs first so we can guess and then look them up. I promise not to cheat. You may want to pause here and guess yourself.</p>
     <figure id="tbl-9-1" style="max-width:70%">
-      <input type="checkbox" id="lb-96" class="lightbox-toggle">
-      <label for="lb-96"><img src="images/RC081.png" alt="" loading="lazy"></label>
-      <label for="lb-96" class="lightbox-overlay"><img src="images/RC081.png" alt=""></label>
+      <input type="checkbox" id="lb-99" class="lightbox-toggle">
+      <label for="lb-99"><img src="images/RC081.png" alt="" loading="lazy"></label>
+      <label for="lb-99" class="lightbox-overlay"><img src="images/RC081.png" alt=""></label>
       <figcaption>Table 9.1. Five most and least likely next tokens for the prompt “The capital of France is.”</figcaption>
     </figure>
     <p>The model really wants to complete the prompt with token 6237. I hope that’s “ Paris.” I’m guessing 261 is “ a” as in “ a city…” The ID 32 falls in the old ASCII range of UTF-8 (see <a href="chapter-7.html" class="xref">chapter 7</a>) and I’m guessing it’s a space, plus somewhere in the back of my head I probably know that. I’m not sure what 543 and 51481 are. Could 51481 be “ paris” (lowercase P)? 543 must be a common word or a common part of a word—”very”? Let’s check:</p>
     <figure id="tbl-9-2">
-      <input type="checkbox" id="lb-97" class="lightbox-toggle">
-      <label for="lb-97"><img src="images/RC082.png" alt="" loading="lazy"></label>
-      <label for="lb-97" class="lightbox-overlay"><img src="images/RC082.png" alt=""></label>
+      <input type="checkbox" id="lb-100" class="lightbox-toggle">
+      <label for="lb-100"><img src="images/RC082.png" alt="" loading="lazy"></label>
+      <label for="lb-100" class="lightbox-overlay"><img src="images/RC082.png" alt=""></label>
       <figcaption>Table 9.2. The tokens revealed!</figcaption>
     </figure>
     <p>Great! 6237 is “ Paris” as hoped. If we select the next token according to the probability distribution without adjusting temperature or making any other tweaks, then 98 times out of 100 we’ll choose “Paris.” In retrospect, “ the” does seem more likely than “ a.” And “ also” for 543 makes more sense than my guess of “very.” I’m surprised by the double space. Notice that the top five add up to just over 99%. This leaves only 1% of the probability to spread across all the other 65,531 tokens.</p>
     <p>Let’s explore what happens if we choose “the” and “also” as our next tokens. To make it easier to see the various directions it can go I’ll use a diagram instead of a table.</p>
     <figure id="fig-9-3">
-      <input type="checkbox" id="lb-98" class="lightbox-toggle">
-      <label for="lb-98"><img src="images/RC083.png" alt="" loading="lazy"></label>
-      <label for="lb-98" class="lightbox-overlay"><img src="images/RC083.png" alt=""></label>
+      <input type="checkbox" id="lb-101" class="lightbox-toggle">
+      <label for="lb-101"><img src="images/RC083.png" alt="" loading="lazy"></label>
+      <label for="lb-101" class="lightbox-overlay"><img src="images/RC083.png" alt=""></label>
       <figcaption>Figure 9.3. Predictions for the tokens after “the” and “also.”</figcaption>
     </figure>
     <p>Notice how the probability is very concentrated when there is an overwhelming single choice, like “Paris” after “The capital of France is,” but can be roughly evenly spread out over a few choices such as after “The capital of France is also.” The model really wants to get “Paris” in there, you can almost feel this urge it needs to satisfy to output “Paris” even in places it doesn’t quite fit, like “The capital of France is the Paris” and “The capital of France is also Paris.”</p>
     <p>The completion “country” for “The capital of France is also the” may seem odd, especially with 21% probability. Remember though that the tokenizer breaks up text with apostrophes, so I bet most of the probability for the token after “country” will go to “‘s”. Let’s check:</p>
     <figure id="tbl-9-3" style="max-width:60%">
-      <input type="checkbox" id="lb-99" class="lightbox-toggle">
-      <label for="lb-99"><img src="images/RC084.png" alt="" loading="lazy"></label>
-      <label for="lb-99" class="lightbox-overlay"><img src="images/RC084.png" alt=""></label>
+      <input type="checkbox" id="lb-102" class="lightbox-toggle">
+      <label for="lb-102"><img src="images/RC084.png" alt="" loading="lazy"></label>
+      <label for="lb-102" class="lightbox-overlay"><img src="images/RC084.png" alt=""></label>
       <figcaption>Table 9.3. Top five next token predictions for after “country.”</figcaption>
     </figure>
     <p>Yes. And choice 5 is the same thing with a curly apostrophe.</p>
     <p>Let’s do one more example that I brought up earlier in this chapter: “Paris is in.” I’m guessing “France” will be the top choice and “Europe” will be the next and I’m expecting to see the probability a bit more evenly distributed.</p>
     <figure id="tbl-9-4" style="max-width:60%">
-      <input type="checkbox" id="lb-100" class="lightbox-toggle">
-      <label for="lb-100"><img src="images/RC085.png" alt="" loading="lazy"></label>
-      <label for="lb-100" class="lightbox-overlay"><img src="images/RC085.png" alt=""></label>
+      <input type="checkbox" id="lb-103" class="lightbox-toggle">
+      <label for="lb-103"><img src="images/RC085.png" alt="" loading="lazy"></label>
+      <label for="lb-103" class="lightbox-overlay"><img src="images/RC085.png" alt=""></label>
       <figcaption>Table 9.4. Top five next token predictions for after “Paris is in.”</figcaption>
     </figure>
     <p>I was right about the probability being more spread out and wrong about France being the top choice.</p>
@@ -96,7 +96,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-10.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

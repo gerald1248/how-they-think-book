@@ -31,9 +31,9 @@
     <p>Back to our model. Think again about the first transformer block. With the attention mechanism as I described it in <a href="chapter-14.html" class="xref">chapter 14</a>, a specific token like “France” will emit the same query and key no matter where it falls in the sequence. For example, while calculating the attention weights for position 100, a “France” in position 98 will look exactly the same as a “France” in position 5. The situation is perhaps slightly improved in subsequent layers because some information will have been rolled forward through position mixing, but the intuition is the model should have more position information to work with.</p>
     <p>When Vaswani and his fellow researchers invented the transformer in 2017, they experimented with different approaches to injecting position information. They settled on one that required no learned parameters and worked for arbitrarily short and long sequences. Look back at figure 1 from their paper shown in <a href="chapter-6.html" class="xref">chapter 6</a> and you’ll see a positional encoding being added just after the embedding layer. The reason the diagram shows what looks like a sine wave connected to a plus sign is because their approach generated vectors with numbers that cycled over the positions at various frequencies in the various dimensions and then added these to the embeddings. (Don’t worry if that sentence doesn’t make sense.) This might sound crude, but it meant that a “the” in position five was no longer identical to a “the” in every other position and therefore the model could learn to exploit this information. I can say this with confidence not because it’s obvious but because they ran experiments that showed the technique to be effective.</p>
     <figure id="fig-15-1" style="max-width:50%">
-      <input type="checkbox" id="lb-184" class="lightbox-toggle">
-      <label for="lb-184"><img src="images/RC168.png" alt="" loading="lazy"></label>
-      <label for="lb-184" class="lightbox-overlay"><img src="images/RC168.png" alt=""></label>
+      <input type="checkbox" id="lb-187" class="lightbox-toggle">
+      <label for="lb-187"><img src="images/RC168.png" alt="" loading="lazy"></label>
+      <label for="lb-187" class="lightbox-overlay"><img src="images/RC168.png" alt=""></label>
       <figcaption>Figure 15.1. How the original transformer injected position information.</figcaption>
     </figure>
     <p>Our model, Nanochat, uses an even more effective technique. It was invented by researchers in Shenzhen, China in 2023. As you already can guess from figures <a href="chapter-14.html#fig-14-7" class="xref" data-preview="images/RC162.png">14.7</a> and <a href="chapter-11.html#fig-11-3" class="xref" data-preview="images/RC120.png">11.3</a>, we do not crudely add positional information right after the initial embedding layer. Instead, we inject it into the matching of queries with keys inside each transformer block, without ever touching the values.</p>
@@ -42,16 +42,16 @@
     <p>The easiest way to see how the technique works and why it’s called a rotary embedding is to look at an example. You may have encountered this piece of trivia at some point: “Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo” is a grammatically correct English sentence. Personally I can’t hear it as correct or make much sense of it, I think because I’m not familiar with “buffalo” as a verb meaning to bully.</p>
     <p>I’m going to tokenize that sentence (not worrying about capital vs lowercase B) which gives me eight identical tokens. I’m then going to convert these tokens into an embedding, normalize, go through my Q and K linear transforms, and then break the resulting size D vectors into 10 heads. Put another way, I’m going to stick “buffalo buffalo…” into my full model and stop just before we reach the rotary embeds in the first transformer block. You can follow along in figures <a href="chapter-11.html#fig-11-3" class="xref" data-preview="images/RC120.png">11.3</a>, <a href="chapter-13.html#fig-13-2" class="xref" data-preview="images/RC141.png">13.2</a>, and <a href="chapter-14.html#fig-14-7" class="xref" data-preview="images/RC162.png">14.7</a> above but that will be tedious, so let me pull it all together into a single diagram:</p>
     <figure id="fig-15-2">
-      <input type="checkbox" id="lb-185" class="lightbox-toggle">
-      <label for="lb-185"><img src="images/RC169.png" alt="" loading="lazy"></label>
-      <label for="lb-185" class="lightbox-overlay"><img src="images/RC169.png" alt=""></label>
+      <input type="checkbox" id="lb-188" class="lightbox-toggle">
+      <label for="lb-188"><img src="images/RC169.png" alt="" loading="lazy"></label>
+      <label for="lb-188" class="lightbox-overlay"><img src="images/RC169.png" alt=""></label>
       <figcaption>Figure 15.2. From start until the rotary embed.</figcaption>
     </figure>
     <p>Let’s look at a few of the 128 dimensions in the first head for the keys for the 8 positions (“buffalo, buffalo, …”). This is what you would see if you intercepted the tensor at the location I labeled <em><strong>d</strong></em><em> </em>in the diagram. (That’s just a label. It has nothing to do with “dimension” or “depth.”)</p>
     <figure id="tbl-15-1" style="max-width:90%">
-      <input type="checkbox" id="lb-186" class="lightbox-toggle">
-      <label for="lb-186"><img src="images/RC170.png" alt="" loading="lazy"></label>
-      <label for="lb-186" class="lightbox-overlay"><img src="images/RC170.png" alt=""></label>
+      <input type="checkbox" id="lb-189" class="lightbox-toggle">
+      <label for="lb-189"><img src="images/RC170.png" alt="" loading="lazy"></label>
+      <label for="lb-189" class="lightbox-overlay"><img src="images/RC170.png" alt=""></label>
       <figcaption>Table 15.1. Six of the 128 key dimensions in one head for all eight positions from the sequence “buffalo buffalo buffalo buffalo buffalo buffalo buffalo buffalo.”</figcaption>
     </figure>
     <p>The columns in this <a href="#tbl-15-1" class="xref" data-preview="images/RC170.png">table 15.1</a> are similar to the key columns in <a href="chapter-14.html#tbl-14-5" class="xref" data-preview="images/RC149.png">table 14.5</a>. There I pretended that a key had only two dimensions. Here we have the actual size from our 20-layer model: 128 dimensions. And let me say one more time where that 128 comes from because I know this is getting confusing. In my 20-layer model, D is 1280 which means each row at position <em><strong>b</strong></em> in <a href="#fig-15-2" class="xref" data-preview="images/RC169.png">figure 15.2</a> has size 1280. We split these vectors into ten heads, so the rows of keys in the single head shown in <a href="#tbl-15-1" class="xref" data-preview="images/RC170.png">table 15.1</a> have size 128.</p>
@@ -59,16 +59,16 @@
     <p>Finally, notice that I numbered the positions and dimensions starting with zero instead of one. This is how things actually work inside the computer and I wanted to stick to that convention so I wouldn’t get confused when making the plots below.</p>
     <p>Let’s look at the queries for these eight positions. Do you expect them to also be identical to each other?</p>
     <figure id="tbl-15-2" style="max-width:90%">
-      <input type="checkbox" id="lb-187" class="lightbox-toggle">
-      <label for="lb-187"><img src="images/RC171.png" alt="" loading="lazy"></label>
-      <label for="lb-187" class="lightbox-overlay"><img src="images/RC171.png" alt=""></label>
+      <input type="checkbox" id="lb-190" class="lightbox-toggle">
+      <label for="lb-190"><img src="images/RC171.png" alt="" loading="lazy"></label>
+      <label for="lb-190" class="lightbox-overlay"><img src="images/RC171.png" alt=""></label>
       <figcaption>Table 15.2. Six of the 128 query dimensions in one head for all eight positions.</figcaption>
     </figure>
     <p>Let’s now pretend we skip rotary embedding and go straight to scaled dot product attention. Consider the query for the last position, position 7. We know from <a href="chapter-14.html" class="xref">chapter 14</a> that we’ll be calculating a score saying how similar the query is to each of the eight keys. It would be nice to plot the query and keys so we can see how similar the query is to each key with our own eyes as we did in <a href="chapter-14.html#fig-14-1" class="xref" data-preview="images/RC150.png">figure 14.1</a>. We’re now dealing with 128 dimensions and unfortunately we humans can’t picture 128-dimensional data. Instead, let’s pick two dimensions to plot: 0 and 64. You’ll see later why I’m choosing those specific dimensions.</p>
     <figure id="fig-15-3" style="max-width:70%">
-      <input type="checkbox" id="lb-188" class="lightbox-toggle">
-      <label for="lb-188"><img src="images/RC172.png" alt="" loading="lazy"></label>
-      <label for="lb-188" class="lightbox-overlay"><img src="images/RC172.png" alt=""></label>
+      <input type="checkbox" id="lb-191" class="lightbox-toggle">
+      <label for="lb-191"><img src="images/RC172.png" alt="" loading="lazy"></label>
+      <label for="lb-191" class="lightbox-overlay"><img src="images/RC172.png" alt=""></label>
       <figcaption>Figure 15.3. Plot of dimensions 0 and 64 of the keys for positions 0–7 and the query for position 7. No rotation yet.</figcaption>
     </figure>
     <p>I plotted the keys in black. Read from the columns labeled 0 and 64 in <a href="#tbl-15-2" class="xref" data-preview="images/RC171.png">table 15.2</a> and you can see that the keys are correctly plotted at (-24.6, -6.5). You can trust me that I plotted all eight keys and labeled them, but the lines and labels all fall on top of each other. I also plotted one query in red and you can compare with <a href="#tbl-15-2" class="xref" data-preview="images/RC171.png">table 15.2</a> and see that it too is in the correct spot.</p>
@@ -76,95 +76,95 @@
     <p>You may also be surprised that the query and key vectors have different lengths because in all of the plots in <a href="chapter-14.html" class="xref">chapter 14</a> they were of the same length. There are two reasons for this. The first is that we don’t normalize the lengths until after the rotary embed step as you can see in <a href="chapter-14.html#fig-14-7" class="xref" data-preview="images/RC162.png">figure 14.7</a>. The second is when we do normalize, it will make the vectors have the same length in 128 dimensions, not in the two dimensions I happen to be plotting in <a href="#fig-15-3" class="xref" data-preview="images/RC172.png">figure 15.3</a>. (There is a subtle difference between my examples in this chapter and my examples in <a href="chapter-14.html" class="xref">chapter 14</a>. In <a href="chapter-14.html" class="xref">chapter 14</a> I gave examples as if our vectors were of size two. In this chapter our vectors are of size 128 but I’m only plotting two dimensions at a time.)</p>
     <p>Let’s look at the query for position 6:</p>
     <figure id="fig-15-4" style="max-width:70%">
-      <input type="checkbox" id="lb-189" class="lightbox-toggle">
-      <label for="lb-189"><img src="images/RC173.png" alt="" loading="lazy"></label>
-      <label for="lb-189" class="lightbox-overlay"><img src="images/RC173.png" alt=""></label>
+      <input type="checkbox" id="lb-192" class="lightbox-toggle">
+      <label for="lb-192"><img src="images/RC173.png" alt="" loading="lazy"></label>
+      <label for="lb-192" class="lightbox-overlay"><img src="images/RC173.png" alt=""></label>
       <figcaption>Figure 15.4. Dimensions 0 and 64 of the keys for positions 0–7 and the query for position 6. No rotation yet.</figcaption>
     </figure>
     <p>No surprise, it’s the same. Now I’ll apply the rotary embeddings to <strong>both</strong> the keys and queries. We’ll get into exactly how this works later but know that it’s an efficient operation that does not involve any learned parameters.</p>
     <figure id="fig-15-5" style="max-width:70%">
-      <input type="checkbox" id="lb-190" class="lightbox-toggle">
-      <label for="lb-190"><img src="images/RC174.png" alt="" loading="lazy"></label>
-      <label for="lb-190" class="lightbox-overlay"><img src="images/RC174.png" alt=""></label>
+      <input type="checkbox" id="lb-193" class="lightbox-toggle">
+      <label for="lb-193"><img src="images/RC174.png" alt="" loading="lazy"></label>
+      <label for="lb-193" class="lightbox-overlay"><img src="images/RC174.png" alt=""></label>
       <figcaption>Figure 15.5. Dimensions 0 and 64 of the keys for positions 0–7 and the query for position 7 after rotation.</figcaption>
     </figure>
     <p>Woah, that looks different! Compare with <a href="#fig-15-3" class="xref" data-preview="images/RC172.png">figure 15.3</a>. Other than the key for position 0, each key and the query was rotated. Look at the clockwise rotation from key 0 to key 1. Now look at the rotation from key 1 to key 2. You can see that the angle is the same. So key 1 is that angle away from key 0, key 2 is two times that angle away from key 0, and so on all the way through key 7, by which point we’ve started to circle around again.</p>
     <p>Notice also that the query for position 7 is close to the key for position 5. If we were matching the query to keys based only on these 2 of the 128 dimensions, position 5 would get the most weight followed by position 6. Think about that in relative terms for a moment. Position 7 matches most closely to the position two behind it. We would like this to remain the case even if there happened to be more tokens or fewer tokens in the sequence before we get to this position.</p>
     <p>Here’s the same plot showing the query for position 6:</p>
     <figure id="fig-15-6" style="max-width:70%">
-      <input type="checkbox" id="lb-191" class="lightbox-toggle">
-      <label for="lb-191"><img src="images/RC175.png" alt="" loading="lazy"></label>
-      <label for="lb-191" class="lightbox-overlay"><img src="images/RC175.png" alt=""></label>
+      <input type="checkbox" id="lb-194" class="lightbox-toggle">
+      <label for="lb-194"><img src="images/RC175.png" alt="" loading="lazy"></label>
+      <label for="lb-194" class="lightbox-overlay"><img src="images/RC175.png" alt=""></label>
       <figcaption>Figure 15.6. Dimensions 0 and 64 of the keys for positions 0–7 and the query for position 6 after rotation.</figcaption>
     </figure>
     <p>Good news. It’s doing what we want. Position 6 will now match most closely with position 4, the position two behind it.</p>
     <p>Something that might be bothering you is how fast we cycle around. Sequences can be thousands of tokens long. Imagine the plot above with a thousand keys. It seems likely that the query would match most closely with keys for positions hundreds of positions away just because they would happen to have the smallest angle. We somehow need the model to have room to learn both about close relative positions and distant relative positions and have a way to, on average, attach more weight to close positions. If we always rotate by the angle shown in figures <a href="#fig-15-5" class="xref" data-preview="images/RC174.png">15.5</a> and <a href="#fig-15-6" class="xref" data-preview="images/RC175.png">15.6</a> you can see we’ll be in trouble.</p>
     <p>Remember, though, that so far we’ve only looked at two of the 128 dimensions in the head. Let’s plot a different pair of dimensions: 10 and 74. First before rotation:</p>
     <figure id="fig-15-7" style="max-width:70%">
-      <input type="checkbox" id="lb-192" class="lightbox-toggle">
-      <label for="lb-192"><img src="images/RC367.png" alt="" loading="lazy"></label>
-      <label for="lb-192" class="lightbox-overlay"><img src="images/RC367.png" alt=""></label>
+      <input type="checkbox" id="lb-195" class="lightbox-toggle">
+      <label for="lb-195"><img src="images/RC367.png" alt="" loading="lazy"></label>
+      <label for="lb-195" class="lightbox-overlay"><img src="images/RC367.png" alt=""></label>
       <figcaption>Figure 15.7. Dimensions 10 and 74 of the keys for positions 0–7 and the query for position 7 before rotation.</figcaption>
     </figure>
     <p>Let’s rotate:</p>
     <figure id="fig-15-8" style="max-width:70%">
-      <input type="checkbox" id="lb-193" class="lightbox-toggle">
-      <label for="lb-193"><img src="images/RC176.png" alt="" loading="lazy"></label>
-      <label for="lb-193" class="lightbox-overlay"><img src="images/RC176.png" alt=""></label>
+      <input type="checkbox" id="lb-196" class="lightbox-toggle">
+      <label for="lb-196"><img src="images/RC176.png" alt="" loading="lazy"></label>
+      <label for="lb-196" class="lightbox-overlay"><img src="images/RC176.png" alt=""></label>
       <figcaption>Figure 15.8. Dimensions 10 and 74 of the keys for positions 0–7 and the query for position 7 after rotation.</figcaption>
     </figure>
     <p>The idea is the same as we saw for dimensions 0 and 64 in <a href="#fig-15-5" class="xref" data-preview="images/RC174.png">figure 15.5</a> but the angle of rotation is smaller. For example, compare the angle between the keys for position 0 and 1 in this plot compared with <a href="#fig-15-5" class="xref" data-preview="images/RC174.png">figure 15.5</a>. Now think about the matching score between the query for position 7 and say the keys for positions 0 and 1. In this <a href="#fig-15-8" class="xref" data-preview="images/RC176.png">figure 15.8</a>, the angle between the red query and the black position 0 key is not drastically different from the angle between the query and the position 1 key. In <a href="#fig-15-5" class="xref" data-preview="images/RC174.png">figure 15.5</a> for the pair of dimensions 0 and 64 the difference is much more pronounced.</p>
     <p>Let’s look at the position 6 query:</p>
     <figure id="fig-15-9" style="max-width:70%">
-      <input type="checkbox" id="lb-194" class="lightbox-toggle">
-      <label for="lb-194"><img src="images/RC177.png" alt="" loading="lazy"></label>
-      <label for="lb-194" class="lightbox-overlay"><img src="images/RC177.png" alt=""></label>
+      <input type="checkbox" id="lb-197" class="lightbox-toggle">
+      <label for="lb-197"><img src="images/RC177.png" alt="" loading="lazy"></label>
+      <label for="lb-197" class="lightbox-overlay"><img src="images/RC177.png" alt=""></label>
       <figcaption>Figure 15.9. Dimensions 10 and 74 of the keys for positions 0–7 and the query for position 6 after rotation.</figcaption>
     </figure>
     <p>Notice that the angle between the query for position 7 and key for the position two behind it (position 5) in <a href="#fig-15-8" class="xref" data-preview="images/RC176.png">figure 15.8</a> is the same as the angle between the query for position 6 and the key for position 4 in this <a href="#fig-15-9" class="xref" data-preview="images/RC177.png">figure 15.9</a>. This is expected and desired because we only care about relative position (in this contrived case where the tokens in each position are identical.)</p>
     <p>In higher dimension pairs the rotation angle becomes even smaller. Let’s look at dimension pair 20 and 84:</p>
     <figure id="fig-15-10" style="max-width:70%">
-      <input type="checkbox" id="lb-195" class="lightbox-toggle">
-      <label for="lb-195"><img src="images/RC178.png" alt="" loading="lazy"></label>
-      <label for="lb-195" class="lightbox-overlay"><img src="images/RC178.png" alt=""></label>
+      <input type="checkbox" id="lb-198" class="lightbox-toggle">
+      <label for="lb-198"><img src="images/RC178.png" alt="" loading="lazy"></label>
+      <label for="lb-198" class="lightbox-overlay"><img src="images/RC178.png" alt=""></label>
       <figcaption>Figure 15.10. Dimensions 20 and 84 of the keys for positions 0–7 and the query for position 6 after rotation.</figcaption>
     </figure>
     <p>You can start to see how the angle of rotation for these keys is so small that among them, the amount of attention paid to each by position seven is going to be determined far more by meaning than by relative position. It’s just that in this case with our contrived “buffalo buffalo…” sequence, the keys all started out identical before rotation, so the only thing the match has to go on is position.</p>
     <p>Lots of small angles do add up. The model can learn to make sense of relative distance over tens, hundreds, or thousands of tokens in a sequence. Let’s repeat the plot but pretend we had 50 buffalos:</p>
     <figure id="fig-15-11" style="max-width:70%">
-      <input type="checkbox" id="lb-196" class="lightbox-toggle">
-      <label for="lb-196"><img src="images/RC179.png" alt="" loading="lazy"></label>
-      <label for="lb-196" class="lightbox-overlay"><img src="images/RC179.png" alt=""></label>
+      <input type="checkbox" id="lb-199" class="lightbox-toggle">
+      <label for="lb-199"><img src="images/RC179.png" alt="" loading="lazy"></label>
+      <label for="lb-199" class="lightbox-overlay"><img src="images/RC179.png" alt=""></label>
       <figcaption>Figure 15.11. Dimensions 20 and 84 of the keys for positions 0–49 and the query for position 49 after rotation.</figcaption>
     </figure>
     <p>The difference between the query-to-key angle with position 0 and position 49 is substantial, almost 180 degrees. However in the highest dimensions pair in the head, dimensions 63 and 127, the angle between position 0 and 49 is less than half a degree:</p>
     <figure id="fig-15-12" style="max-width:70%">
-      <input type="checkbox" id="lb-197" class="lightbox-toggle">
-      <label for="lb-197"><img src="images/RC180.png" alt="" loading="lazy"></label>
-      <label for="lb-197" class="lightbox-overlay"><img src="images/RC180.png" alt=""></label>
+      <input type="checkbox" id="lb-200" class="lightbox-toggle">
+      <label for="lb-200"><img src="images/RC180.png" alt="" loading="lazy"></label>
+      <label for="lb-200" class="lightbox-overlay"><img src="images/RC180.png" alt=""></label>
       <figcaption>Figure 15.12. Dimensions 63 and 127 of the keys for positions 0–49 and the query for position 49 after rotation.</figcaption>
     </figure>
     <p>You can imagine how the model exploits this. As each layer is learning to emit queries and keys from its input, the model figures out that more or less emphasis on certain dimension pairs within a head results in more or less sensitivity to relative position.</p>
     <p>Every plot I showed above had the keys and queries identical prior to applying the rotary embed. For the sake of visualizing how this works when that’s not the case, here are the keys and a query for “The capital of France” before rotation:</p>
     <figure id="fig-15-13" style="max-width:70%">
-      <input type="checkbox" id="lb-198" class="lightbox-toggle">
-      <label for="lb-198"><img src="images/RC181.png" alt="" loading="lazy"></label>
-      <label for="lb-198" class="lightbox-overlay"><img src="images/RC181.png" alt=""></label>
+      <input type="checkbox" id="lb-201" class="lightbox-toggle">
+      <label for="lb-201"><img src="images/RC181.png" alt="" loading="lazy"></label>
+      <label for="lb-201" class="lightbox-overlay"><img src="images/RC181.png" alt=""></label>
       <figcaption>Figure 15.13. Dimensions 2 and 66 of the keys for positions 0–3 (“The capital of France”) and the query for position 3 (“France”) before rotation.</figcaption>
     </figure>
     <p>I chose the dimension 2 and 66 pair instead of dimensions 0 and 64 so that the rotation angle will be a little smaller. This will make it a little (but only a little!) easier to see what happens. Here’s the plot after rotation:</p>
     <figure id="fig-15-14" style="max-width:70%">
-      <input type="checkbox" id="lb-199" class="lightbox-toggle">
-      <label for="lb-199"><img src="images/RC182.png" alt="" loading="lazy"></label>
-      <label for="lb-199" class="lightbox-overlay"><img src="images/RC182.png" alt=""></label>
+      <input type="checkbox" id="lb-202" class="lightbox-toggle">
+      <label for="lb-202"><img src="images/RC182.png" alt="" loading="lazy"></label>
+      <label for="lb-202" class="lightbox-overlay"><img src="images/RC182.png" alt=""></label>
       <figcaption>Figure 15.14. Dimensions 2 and 66 of the keys for positions 0–3 and the query for position 3 after rotation.</figcaption>
     </figure>
     <p>Notice that the key for position 0 is unchanged. The key for position 1 rotates clockwise by a certain angle. The key for position 2 rotates right by twice that angle. If this were the whole picture (which it isn’t because we have another 126 dimensions in the head), the closest match for the query for position 3 (“France”) would be position 2 (“of”).</p>
     <p>Now let’s plot the rotated keys and query for “The <strong>current</strong> capital of France.” I inserted the word “current” so the sequence now has one additional position, but it still ends with “capital of France.”</p>
     <figure id="fig-15-15" style="max-width:70%">
-      <input type="checkbox" id="lb-200" class="lightbox-toggle">
-      <label for="lb-200"><img src="images/RC183.png" alt="" loading="lazy"></label>
-      <label for="lb-200" class="lightbox-overlay"><img src="images/RC183.png" alt=""></label>
+      <input type="checkbox" id="lb-203" class="lightbox-toggle">
+      <label for="lb-203"><img src="images/RC183.png" alt="" loading="lazy"></label>
+      <label for="lb-203" class="lightbox-overlay"><img src="images/RC183.png" alt=""></label>
       <figcaption>Figure 15.15. Dimensions 2 and 66 of the keys for positions 0–4 (“The current capital of France”) and the query for position 4 (“France”) after rotation.</figcaption>
     </figure>
     <p>The key for position 0 (“The”) is unchanged from <a href="#fig-15-14" class="xref" data-preview="images/RC182.png">figure 15.14</a>. The query for position 4 (“France”) is in a new place, but notice that the angle between it and position 3 (“of”) <strong>is identical</strong> to the angle between the query for position 3 (“France”) and the key for position 2 (“of”) in <a href="#fig-15-14" class="xref" data-preview="images/RC182.png">figure 15.14</a>. We inserted an extra word, but the relative relationship between the words after the extra word stays the same. So, again, if these were the only dimensions, “of” would get the highest match score with “France” just as in <a href="#fig-15-14" class="xref" data-preview="images/RC182.png">figure 15.14</a>.</p>
@@ -179,7 +179,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-16.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

@@ -32,78 +32,78 @@
     <p>Think first about the data from our turkeys. Turkey #1 has a height of 1 meter and a length of 1.5 meters. Turkey #2 has a height of 0.75 and a length of 1.25 Turkey #3 has a height of 1.25 and a length of 1. It would be nice if we could just stick all that information somewhere and give it a name, like “data.”</p>
     <p>The people who figured out how to do modern AI were far from the first to hit the problem of keeping lots of numbers organized. The idea of sticking numbers into a <strong>matrix</strong> and specifying ways of then manipulating those numbers to do useful things dates back at least 2,000 years.</p>
     <figure id="fig-5-1" style="max-width:70%">
-      <input type="checkbox" id="lb-34" class="lightbox-toggle">
-      <label for="lb-34"><img src="images/RC376.jpg" alt="" loading="lazy"></label>
-      <label for="lb-34" class="lightbox-overlay"><img src="images/RC376.jpg" alt=""></label>
+      <input type="checkbox" id="lb-37" class="lightbox-toggle">
+      <label for="lb-37"><img src="images/RC376.jpg" alt="" loading="lazy"></label>
+      <label for="lb-37" class="lightbox-overlay"><img src="images/RC376.jpg" alt=""></label>
       <figcaption>Figure 5.1. A Babylonian clay tablet from nearly 4000 years ago with a table of numbers in a cuneiform script.</figcaption>
     </figure>
     <p>Let’s stick our turkey data into a matrix:</p>
     <figure id="fig-5-2" style="max-width:50%">
-      <input type="checkbox" id="lb-35" class="lightbox-toggle">
-      <label for="lb-35"><img src="images/RC030.png" alt="" loading="lazy"></label>
-      <label for="lb-35" class="lightbox-overlay"><img src="images/RC030.png" alt=""></label>
+      <input type="checkbox" id="lb-38" class="lightbox-toggle">
+      <label for="lb-38"><img src="images/RC030.png" alt="" loading="lazy"></label>
+      <label for="lb-38" class="lightbox-overlay"><img src="images/RC030.png" alt=""></label>
       <figcaption>Figure 5.2. A matrix with our turkey heights and lengths.</figcaption>
     </figure>
     <p>There is absolutely nothing special going on beyond what you see. Sure, there’s all sorts of sophisticated math and physics around what you can do with matrices, but for the most part we’re not going to do any of that. The matrix above really is just six numbers, two for each turkey. It looks like the height and length columns of <a href="chapter-3.html#tbl-3-1" class="xref" data-preview="images/RC009.png">table 3.1</a> because it is. If you work with spreadsheets, the matrix is a spreadsheet. If you’re a software developer, the matrix is a two-dimensional array.</p>
     <figure id="fig-5-3" style="max-width:70%">
-      <input type="checkbox" id="lb-36" class="lightbox-toggle">
-      <label for="lb-36"><img src="images/RC031.png" alt="" loading="lazy"></label>
-      <label for="lb-36" class="lightbox-overlay"><img src="images/RC031.png" alt=""></label>
+      <input type="checkbox" id="lb-39" class="lightbox-toggle">
+      <label for="lb-39"><img src="images/RC031.png" alt="" loading="lazy"></label>
+      <label for="lb-39" class="lightbox-overlay"><img src="images/RC031.png" alt=""></label>
       <figcaption>Figure 5.3. Our turkey height and length matrix again.</figcaption>
     </figure>
     <p>Now why did I call the matrix X? Seems like I’m asking for trouble since so many things are called X or x and X can also get confused with the times symbol. I wanted to stick with the convention in AI. We’re creating a model that takes in data and makes a prediction. Just as in school you normally used “x” as the standard variable name when talking about the input to a function, like f(x) = x + 3, in AI X or x is the input to a model.</p>
     <figure id="fig-5-4">
-      <input type="checkbox" id="lb-37" class="lightbox-toggle">
-      <label for="lb-37"><img src="images/RC032.png" alt="" loading="lazy"></label>
-      <label for="lb-37" class="lightbox-overlay"><img src="images/RC032.png" alt=""></label>
+      <input type="checkbox" id="lb-40" class="lightbox-toggle">
+      <label for="lb-40"><img src="images/RC032.png" alt="" loading="lazy"></label>
+      <label for="lb-40" class="lightbox-overlay"><img src="images/RC032.png" alt=""></label>
       <figcaption>Figure 5.4. The X matrix goes in. Predicted numbers of feathers comes out.</figcaption>
     </figure>
     <p>Let’s keep organizing our closet. We know the actual number of feathers for each of our three turkeys. Let’s stick those in a matrix too:</p>
     <figure id="fig-5-5" style="max-width:70%">
-      <input type="checkbox" id="lb-38" class="lightbox-toggle">
-      <label for="lb-38"><img src="images/RC033.png" alt="" loading="lazy"></label>
-      <label for="lb-38" class="lightbox-overlay"><img src="images/RC033.png" alt=""></label>
+      <input type="checkbox" id="lb-41" class="lightbox-toggle">
+      <label for="lb-41"><img src="images/RC033.png" alt="" loading="lazy"></label>
+      <label for="lb-41" class="lightbox-overlay"><img src="images/RC033.png" alt=""></label>
       <figcaption>Figure 5.5. Matrix with actual number of feathers for our three turkeys.</figcaption>
     </figure>
     <p>By convention this matrix is called Y. However, to try to avoid confusion between the actual number of feathers from our data, and the predicted number of feathers, I’m being extra verbose and calling it “Y_actual.” </p>
     <p>What about the weights? It’s pretty annoying to keep talking about w1 and w2. Let’s stick those in a matrix too.</p>
     <figure id="fig-5-6" style="max-width:60%">
-      <input type="checkbox" id="lb-39" class="lightbox-toggle">
-      <label for="lb-39"><img src="images/RC034.png" alt="" loading="lazy"></label>
-      <label for="lb-39" class="lightbox-overlay"><img src="images/RC034.png" alt=""></label>
+      <input type="checkbox" id="lb-42" class="lightbox-toggle">
+      <label for="lb-42"><img src="images/RC034.png" alt="" loading="lazy"></label>
+      <label for="lb-42" class="lightbox-overlay"><img src="images/RC034.png" alt=""></label>
       <figcaption>Figure 5.6. Our weight matrix.</figcaption>
     </figure>
     <p>Using these weights and the height and length of our three turkeys, let’s predict the number of feathers for each turkey. We already know what calculation we want to do—the same as at the beginning of <a href="chapter-3.html" class="xref">chapter 3</a> where we multiplied height by w1 and length by w2 and added. Lucky for us we don’t need to describe this in detail. There’s something called matrix multiplication that means exactly that. So our prediction, which we’ll call Y_prediction, is XW meaning X matrix-multiplied by W.</p>
     <figure id="fig-5-7">
-      <input type="checkbox" id="lb-40" class="lightbox-toggle">
-      <label for="lb-40"><img src="images/RC035.png" alt="" loading="lazy"></label>
-      <label for="lb-40" class="lightbox-overlay"><img src="images/RC035.png" alt=""></label>
+      <input type="checkbox" id="lb-43" class="lightbox-toggle">
+      <label for="lb-43"><img src="images/RC035.png" alt="" loading="lazy"></label>
+      <label for="lb-43" class="lightbox-overlay"><img src="images/RC035.png" alt=""></label>
       <figcaption>Figure 5.7. Computing our predictions the matrix way.</figcaption>
     </figure>
     <p>There are a few reasons you don’t really need to think about the details of matrix multiplication. First—you already know it: it’s what we did in <a href="chapter-3.html" class="xref">chapter 3</a>. Second—we’re trying to move our brains up a level of abstraction and not have to think about every detail. You’re happy to accept that 3 × 4 is 12 without thinking each time, okay, that’s 3 plus 3 plus 3 plus 3. Third—the computer will calculate everything for us.</p>
     <p>But if that’s not satisfying, go read about matrix multiplication, or piece the procedure together from this: 1 × 1000 + 1.5 × 3000 = 5500. One other tidbit that may be helpful. We talk about a matrix as having size <em>m</em> × <em>n</em> where <em>m</em> is the number of rows and <em>n</em> is the number of columns. In the example above, X is 3×2 and W is 2×1 and the result, Y_prediction, is 3×1. This will always be true. An <em>m</em> × <em>n</em> matrix can be multiplied by an <em>n</em> × <em>p</em> matrix and the result will be <em>m</em> × <em>p</em>, meaning <em>m</em> rows and <em>p</em> columns.</p>
     <p>Our closet is becoming nice and clean. Except we’re not done yet. We calculated our predictions, but not our loss. Let’s start by calculating the error and in the process see another way in which matrix operations are intuitive and keep things organized. Error = Y_prediction - Y_actual:</p>
     <figure id="fig-5-8">
-      <input type="checkbox" id="lb-41" class="lightbox-toggle">
-      <label for="lb-41"><img src="images/RC036.png" alt="" loading="lazy"></label>
-      <label for="lb-41" class="lightbox-overlay"><img src="images/RC036.png" alt=""></label>
+      <input type="checkbox" id="lb-44" class="lightbox-toggle">
+      <label for="lb-44"><img src="images/RC036.png" alt="" loading="lazy"></label>
+      <label for="lb-44" class="lightbox-overlay"><img src="images/RC036.png" alt=""></label>
       <figcaption>Figure 5.8: Computing errors the matrix way.</figcaption>
     </figure>
     <p>To do Y_prediction minus Y_actual, we subtract the first element from the first element, the second from the second, and the third from the third. This is an <strong>element-wise</strong> operation.</p>
     <p>We’re getting close. Next we square the error. This again is an element-wise operation. There’s nothing crazy going on. We just square each element. There’s no interaction between elements.</p>
     <figure id="fig-5-9">
-      <input type="checkbox" id="lb-42" class="lightbox-toggle">
-      <label for="lb-42"><img src="images/RC037.png" alt="" loading="lazy"></label>
-      <label for="lb-42" class="lightbox-overlay"><img src="images/RC037.png" alt=""></label>
+      <input type="checkbox" id="lb-45" class="lightbox-toggle">
+      <label for="lb-45"><img src="images/RC037.png" alt="" loading="lazy"></label>
+      <label for="lb-45" class="lightbox-overlay"><img src="images/RC037.png" alt=""></label>
       <figcaption>Figure 5.9: Computing the squared errors.</figcaption>
     </figure>
     <p>The final step to computing our loss is to add the squared errors together. Up until this point we’ve kept our turkeys separate. In each matrix with three rows, the first was turkey #1, the second turkey #2, and the third turkey #3. Here we’re finally going to bring them together by adding the rows to get to a single loss number.</p>
     <p>In this case it’s easy enough to wrap your mind around. But I do think it’s easy to get confused once we start mixing items of data. This is important, and is going to come up when we get back to working with text. To do a good job of predicting the next word in a sentence, we’ll want to take information into account from many words, and since we’ll be representing everything as matrices, we’ll need to do operations that mix information up among data items. Hold that thought for later.</p>
     <p>Here we’ll sum the elements in the error<sup>2</sup> matrix.</p>
     <figure id="fig-5-10">
-      <input type="checkbox" id="lb-43" class="lightbox-toggle">
-      <label for="lb-43"><img src="images/RC038.png" alt="" loading="lazy"></label>
-      <label for="lb-43" class="lightbox-overlay"><img src="images/RC038.png" alt=""></label>
+      <input type="checkbox" id="lb-46" class="lightbox-toggle">
+      <label for="lb-46"><img src="images/RC038.png" alt="" loading="lazy"></label>
+      <label for="lb-46" class="lightbox-overlay"><img src="images/RC038.png" alt=""></label>
       <figcaption>Figure 5.10. Computing the loss.</figcaption>
     </figure>
     <p>Now instead of writing out our loss equation as we did early in <a href="chapter-3.html" class="xref">chapter 3</a> like this:</p>
@@ -119,24 +119,24 @@
     <p>X is fixed (our turkey heights and weights), Y_actual is fixed (the actual number of feathers of our turkeys), and we have some initial values for W (our weights). Our goal is to adjust our weights to minimize the loss.</p>
     <p>The diagram for the forward calculation is so much neater too:</p>
     <figure id="fig-5-11">
-      <input type="checkbox" id="lb-44" class="lightbox-toggle">
-      <label for="lb-44"><img src="images/RC039.png" alt="" loading="lazy"></label>
-      <label for="lb-44" class="lightbox-overlay"><img src="images/RC039.png" alt=""></label>
+      <input type="checkbox" id="lb-47" class="lightbox-toggle">
+      <label for="lb-47"><img src="images/RC039.png" alt="" loading="lazy"></label>
+      <label for="lb-47" class="lightbox-overlay"><img src="images/RC039.png" alt=""></label>
       <figcaption>Figure 5.11: Forward calculation the matrix way.</figcaption>
     </figure>
     <p>I’m using “@” to mean matrix multiplication. I could write (X)(input) but that’s not very clear.</p>
     <p>Before we come up with the diagram for the backward calculation, let me show the inputs to each step when we start with our old friends, w1=1000 and w2=3000.</p>
     <figure id="fig-5-12">
-      <input type="checkbox" id="lb-45" class="lightbox-toggle">
-      <label for="lb-45"><img src="images/RC040.png" alt="" loading="lazy"></label>
-      <label for="lb-45" class="lightbox-overlay"><img src="images/RC040.png" alt=""></label>
+      <input type="checkbox" id="lb-48" class="lightbox-toggle">
+      <label for="lb-48"><img src="images/RC040.png" alt="" loading="lazy"></label>
+      <label for="lb-48" class="lightbox-overlay"><img src="images/RC040.png" alt=""></label>
       <figcaption>Figure 5.12. Plug in our initial weights from earlier and get the initial loss from earlier.</figcaption>
     </figure>
     <p>Now backward:</p>
     <figure id="fig-5-13">
-      <input type="checkbox" id="lb-46" class="lightbox-toggle">
-      <label for="lb-46"><img src="images/RC041.png" alt="" loading="lazy"></label>
-      <label for="lb-46" class="lightbox-overlay"><img src="images/RC041.png" alt=""></label>
+      <input type="checkbox" id="lb-49" class="lightbox-toggle">
+      <label for="lb-49"><img src="images/RC041.png" alt="" loading="lazy"></label>
+      <label for="lb-49" class="lightbox-overlay"><img src="images/RC041.png" alt=""></label>
       <figcaption>Figure 5.13. The backward calculation the matrix way.</figcaption>
     </figure>
     <p>Hooray! In a much more organized way we calculated the partial derivatives of loss with respect to w1 and w2. I want to emphasize again that there’s no magic. We still had to do all the same calculations as our messy diagram above. We’re just now doing it in a way that’s easier to write down, and more important, easier to communicate to the computer.</p>
@@ -144,17 +144,17 @@
     <p>So far I’ve been using the term derivative or partial derivatives. Now we’ve put w1 and w2 into a matrix, and the partial derivative of w1 and the partial derivative of w2 into a corresponding matrix. This is called a <strong>gradient</strong>. The gradient of loss with respect to W tells us how making a small change to an element of W will affect the loss.</p>
     <p>I’ll put the forward and backward calculation on a single simplified diagram to emphasize that we start with W, do the forward pass, do the backward pass, and end up with the gradient of W.</p>
     <figure id="fig-5-14">
-      <input type="checkbox" id="lb-47" class="lightbox-toggle">
-      <label for="lb-47"><img src="images/RC042.png" alt="" loading="lazy"></label>
-      <label for="lb-47" class="lightbox-overlay"><img src="images/RC042.png" alt=""></label>
+      <input type="checkbox" id="lb-50" class="lightbox-toggle">
+      <label for="lb-50"><img src="images/RC042.png" alt="" loading="lazy"></label>
+      <label for="lb-50" class="lightbox-overlay"><img src="images/RC042.png" alt=""></label>
       <figcaption>Figure 5.14. The big picture of how we go from weights to the gradient of the loss with respect to the weights.</figcaption>
     </figure>
     <p>Here’s something that could be bothering you at this point. I keep showing W as the input to the forward calculation, and you could be thinking, wait, shouldn’t X, the heights and lengths of each turkey, be the input? Yes, they are both inputs and if you look at the detailed forward calculation you’ll see where X comes in. However, we’re not interested in changing X. The heights and lengths are what they are. We want to change W. So it’s more intuitive at this point to think of W as the input, even though X, W, and Y_actual are all inputs to the loss calculation.</p>
     <p>What do we now do with W’s gradient? The exact same thing we did above—use it to nudge W in the desired direction, the one that will cause the loss to go down. In <a href="chapter-3.html" class="xref">chapter 3</a> I showed how we do this by multiplying the gradient by a learning rate and subtracting it from the current weights. This calculation is another one where it’s easy to stay organized in matrix form. Let’s keep our learning rate at 0.01, the same as in <a href="chapter-3.html" class="xref">chapter 3</a>.</p>
     <figure id="fig-5-15" style="max-width:90%">
-      <input type="checkbox" id="lb-48" class="lightbox-toggle">
-      <label for="lb-48"><img src="images/RC043.png" alt="" loading="lazy"></label>
-      <label for="lb-48" class="lightbox-overlay"><img src="images/RC043.png" alt=""></label>
+      <input type="checkbox" id="lb-51" class="lightbox-toggle">
+      <label for="lb-51"><img src="images/RC043.png" alt="" loading="lazy"></label>
+      <label for="lb-51" class="lightbox-overlay"><img src="images/RC043.png" alt=""></label>
       <figcaption>Figure 5.15. Updating the weights the matrix way.</figcaption>
     </figure>
     <p>Take a look at <a href="chapter-3.html#tbl-3-8" class="xref" data-preview="images/RC017.png">table 3.8</a> above and you’ll see that after the first update we ended up with 981 for w1 and 2965 for w2. The results match because the calculation is the same.</p>
@@ -163,9 +163,9 @@
     <p>You’ll see that we don’t need much code at all. All of the head-spinning stuff like working out the backward calculation is done for you. This is the advantage of working at the right level of abstraction and sitting on the shoulders of decades of software development. We specify the matrices and the forward calculation in a language that is concise and clear. Then layer upon layer upon layer of software and hardware causes the correct forward and backward calculations to be executed, ultimately by transistors on chips.</p>
     <p>So here it is. Seven lines of code (or two based on what you count) that will compute the gradient we’ve painstakingly calculated by hand many times starting in <a href="chapter-3.html" class="xref">chapter 3</a>. I wrote the code in the programming language Python using the PyTorch library, the most popular top-level framework for writing AI models.</p>
     <figure id="fig-5-16" style="max-width:70%">
-      <input type="checkbox" id="lb-49" class="lightbox-toggle">
-      <label for="lb-49"><img src="images/RC044.png" alt="" loading="lazy"></label>
-      <label for="lb-49" class="lightbox-overlay"><img src="images/RC044.png" alt=""></label>
+      <input type="checkbox" id="lb-52" class="lightbox-toggle">
+      <label for="lb-52"><img src="images/RC044.png" alt="" loading="lazy"></label>
+      <label for="lb-52" class="lightbox-overlay"><img src="images/RC044.png" alt=""></label>
       <figcaption>Figure 5.16. PyTorch code to compute the weight gradient.</figcaption>
     </figure>
     <p>What does it print out?</p>
@@ -175,17 +175,17 @@
     </div>
     <p>We get the gradient of W just as in <a href="#fig-5-13" class="xref" data-preview="images/RC041.png">figure 5.13</a>. Nice! I annotated the code in case you’re curious what each line does.</p>
     <figure id="fig-5-17">
-      <input type="checkbox" id="lb-50" class="lightbox-toggle">
-      <label for="lb-50"><img src="images/RC374.png" alt="" loading="lazy"></label>
-      <label for="lb-50" class="lightbox-overlay"><img src="images/RC374.png" alt=""></label>
+      <input type="checkbox" id="lb-53" class="lightbox-toggle">
+      <label for="lb-53"><img src="images/RC374.png" alt="" loading="lazy"></label>
+      <label for="lb-53" class="lightbox-overlay"><img src="images/RC374.png" alt=""></label>
       <figcaption>Figure 5.17. Annotated code to compute the weight gradient.</figcaption>
     </figure>
     <p>Take a moment to appreciate how clean and powerful this approach is. We define a bunch of matrices and tell PyTorch we’re interested in the gradient with respect to one of them, W. Now for whatever calculations we do involving W, PyTorch keeps track of the computation graph and all necessary intermediate calculations along the way to later do the backward calculations. This is everything I showed in <a href="#fig-5-13" class="xref" data-preview="images/RC041.png">figure 5.13</a>. We then call backward() on loss. This tells PyTorch we’re interested in the gradient of loss, it does the backward calculations, and voilà, a matrix containing W’s gradient gets attached to W. In this code we print it out. In a training loop we would use it to adjust the weights.</p>
     <p>Speaking of adjusting the weights, let’s do the full training loop in code for 1000 steps like in <a href="chapter-3.html#tbl-3-11" class="xref" data-preview="images/RC020.png">table 3.11</a>.</p>
     <figure id="fig-5-18" style="max-width:70%">
-      <input type="checkbox" id="lb-51" class="lightbox-toggle">
-      <label for="lb-51"><img src="images/RC046.png" alt="" loading="lazy"></label>
-      <label for="lb-51" class="lightbox-overlay"><img src="images/RC046.png" alt=""></label>
+      <input type="checkbox" id="lb-54" class="lightbox-toggle">
+      <label for="lb-54"><img src="images/RC046.png" alt="" loading="lazy"></label>
+      <label for="lb-54" class="lightbox-overlay"><img src="images/RC046.png" alt=""></label>
       <figcaption>Figure 5.18. Code to train for 1000 steps.</figcaption>
     </figure>
     <p>What do we get?</p>
@@ -203,9 +203,9 @@
     <p>Over the past few sections of this chapter we moved up a few layers of abstraction so we could think in terms of matrices without getting bogged down in the details of matrix operations. I’ll go back into the weeds here to make a point.</p>
     <p>We want to multiply two 3x3 matrices:</p>
     <figure id="fig-5-19" style="max-width:70%">
-      <input type="checkbox" id="lb-52" class="lightbox-toggle">
-      <label for="lb-52"><img src="images/RC370.png" alt="" loading="lazy"></label>
-      <label for="lb-52" class="lightbox-overlay"><img src="images/RC370.png" alt=""></label>
+      <input type="checkbox" id="lb-55" class="lightbox-toggle">
+      <label for="lb-55"><img src="images/RC370.png" alt="" loading="lazy"></label>
+      <label for="lb-55" class="lightbox-overlay"><img src="images/RC370.png" alt=""></label>
       <figcaption>Figure 5.19. How many operations does it take to multiply two 3x3 matrices?</figcaption>
     </figure>
     <p>Let’s do this the only way we can as single-threaded humans:</p>
@@ -223,18 +223,18 @@
     </ol>
     <p>Here’s what we’ve done so far:</p>
     <figure id="fig-5-20" style="max-width:70%">
-      <input type="checkbox" id="lb-53" class="lightbox-toggle">
-      <label for="lb-53"><img src="images/RC371.png" alt="" loading="lazy"></label>
-      <label for="lb-53" class="lightbox-overlay"><img src="images/RC371.png" alt=""></label>
+      <input type="checkbox" id="lb-56" class="lightbox-toggle">
+      <label for="lb-56"><img src="images/RC371.png" alt="" loading="lazy"></label>
+      <label for="lb-56" class="lightbox-overlay"><img src="images/RC371.png" alt=""></label>
       <figcaption>Figure 5.20. After ten operations we’re 2/9th of the way there.</figcaption>
     </figure>
     <p>We’re 2/9th of the way done. This is going to get pretty tedious. Each number in the resulting matrix requires three multiplications and two additions. That’s a total of 27 multiplications and 18 additions. If we kept numbering the operations above, we would be done on the 45th operation.</p>
     <p>Now notice something interesting about calculating the resulting matrix. Calculating 90 didn’t require anything from the calculation of 84. We had to wait only because as single-threaded humans our brains can only do so much math at once. Go a level deeper. None of the multiplications have any dependencies either. We calculated 1 × 10 and then 2 × 13, but we could just as easily have done it in the other order—nothing would change.</p>
     <p>Matrix multiplication is sometimes called <em>embarrassingly parallel.</em> Yes, we may have an enormous amount of multiplying and adding to do (or in this small example 27 multiplications and 18 additions), but we can do much of it at the same time up to the constraints of our hardware. For example, the resulting matrix could be calculated in three parallel steps rather than 45 serial steps as shown here:</p>
     <figure id="tbl-5-1">
-      <input type="checkbox" id="lb-54" class="lightbox-toggle">
-      <label for="lb-54"><img src="images/RC050.png" alt="" loading="lazy"></label>
-      <label for="lb-54" class="lightbox-overlay"><img src="images/RC050.png" alt=""></label>
+      <input type="checkbox" id="lb-57" class="lightbox-toggle">
+      <label for="lb-57"><img src="images/RC050.png" alt="" loading="lazy"></label>
+      <label for="lb-57" class="lightbox-overlay"><img src="images/RC050.png" alt=""></label>
       <figcaption>Table 5.1. We can do our 45 operations in 3 parallel steps. (Imagine there are 9 columns in this table.)</figcaption>
     </figure>
     <p>Here we needed 45 operations. Starting in <a href="chapter-24.html" class="xref">chapter 24</a> we’ll be using NVIDIA H100 chips to train our 32-layer version of Nanochat. Through massive parallelism and speed, the H100, which came out in October 2022, can compute nearly 2000 <strong>trillion</strong> 16-bit floating point operations per second. (In <a href="chapter-30.html" class="xref">chapter 30</a> I explain what a 16-bit floating point number is and why it’s important to specify the number of bits when measuring calculation speed.)</p>
@@ -246,7 +246,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-6.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

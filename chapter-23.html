@@ -33,39 +33,39 @@
     <p>So why do we want to mess with multiple GPUs? Because life is short and we want the training to go faster. We’ll be training on eight GPUs. This will reduce our training time from a week and a half to under two days for our 32-layer model. As with everything we’re covering though, the same concept can be scaled up to much bigger models and many more GPUs. There we might be talking about turning centuries into weeks with ten thousand GPUs.</p>
     <p>Let’s zoom out to remember the big picture of how training works. Here’s a diagram similar to <a href="chapter-8.html#fig-8-11" class="xref" data-preview="images/RC075.png">figure 8.11</a> but extended to include backpropagation and the optimizer.</p>
     <figure id="fig-23-1">
-      <input type="checkbox" id="lb-282" class="lightbox-toggle">
-      <label for="lb-282"><img src="images/RC251.png" alt="" loading="lazy"></label>
-      <label for="lb-282" class="lightbox-overlay"><img src="images/RC251.png" alt=""></label>
+      <input type="checkbox" id="lb-285" class="lightbox-toggle">
+      <label for="lb-285"><img src="images/RC251.png" alt="" loading="lazy"></label>
+      <label for="lb-285" class="lightbox-overlay"><img src="images/RC251.png" alt=""></label>
       <figcaption>Figure 23.1. The big picture of a step in the training loop.</figcaption>
     </figure>
     <p>The purpose of training is to learn the parameters. Working in batches, we’ll feed in lots and lots of input and target tokens so we can calculate loss and update the parameters. For our 32-layer model, we’ll want to feed in a total of around 38 billion tokens. GPU memory will allow us to process batches of size 8 each with a sequence of 2048 tokens, so that will be 16,384 tokens per batch. Overall this will be around 2.3 million batches.</p>
     <figure id="fig-23-2">
-      <input type="checkbox" id="lb-283" class="lightbox-toggle">
-      <label for="lb-283"><img src="images/RC252.png" alt="" loading="lazy"></label>
-      <label for="lb-283" class="lightbox-overlay"><img src="images/RC252.png" alt=""></label>
+      <input type="checkbox" id="lb-286" class="lightbox-toggle">
+      <label for="lb-286"><img src="images/RC252.png" alt="" loading="lazy"></label>
+      <label for="lb-286" class="lightbox-overlay"><img src="images/RC252.png" alt=""></label>
       <figcaption>Figure 23.2. Consolidated diagram of a training loop step.</figcaption>
     </figure>
     <p>We want to split these 2.3 million batches up among our eight GPUs. That part is straightforward. (At least conceptually. These GPUs are fast, hungry beasts so we do need to make sure we can read our data from disk and turn it into tokens efficiently enough that a GPU is never sitting idle.)</p>
     <figure id="fig-23-3" style="max-width:70%">
-      <input type="checkbox" id="lb-284" class="lightbox-toggle">
-      <label for="lb-284"><img src="images/RC253.png" alt="" loading="lazy"></label>
-      <label for="lb-284" class="lightbox-overlay"><img src="images/RC253.png" alt=""></label>
+      <input type="checkbox" id="lb-287" class="lightbox-toggle">
+      <label for="lb-287"><img src="images/RC253.png" alt="" loading="lazy"></label>
+      <label for="lb-287" class="lightbox-overlay"><img src="images/RC253.png" alt=""></label>
       <figcaption>Figure 23.3. It’s easy to split batches among the GPUs.</figcaption>
     </figure>
     <p>If all we do is follow the approach in the diagram we’ll end up with eight different models, each trained on 1/8th of the data. This is not our goal. Our goal is to end up with a single set of parameters that reflect the learning from all of the data.</p>
     <p>Assume that to start we do have one model per GPU, but they are identical copies of each other meaning they have identical parameters. Now think about a single training step. The gradient that comes from doing backprop on GPU #1 is calculated by the average of many (e.g. 16,384) per-token losses. (See <a href="chapter-8.html#tbl-8-8" class="xref" data-preview="images/RC307.png">table 8.8</a> for a reminder of how the loss calculation is the average of per-token negative log losses.) This means if we take the average of the gradients from all eight GPUs we’ll end up with a single gradient that reflects the losses from all eight batches. Now we can update the parameters using this combined gradient and send the updated parameters to the eight models. The eight models will therefore remain identical and we’ll be ready for the next training step.</p>
     <p>This feels like a job for the optimizer (or really optimizers). The optimizer can say—oh, I’m part of a distributed training process with eight GPUs, therefore I can’t just update the parameters on this GPU, instead I need to coordinate with my fellow optimizers, get all the gradients, and then update. Let me sketch out one way to do this:</p>
     <figure id="fig-23-4">
-      <input type="checkbox" id="lb-285" class="lightbox-toggle">
-      <label for="lb-285"><img src="images/RC254.png" alt="" loading="lazy"></label>
-      <label for="lb-285" class="lightbox-overlay"><img src="images/RC254.png" alt=""></label>
+      <input type="checkbox" id="lb-288" class="lightbox-toggle">
+      <label for="lb-288"><img src="images/RC254.png" alt="" loading="lazy"></label>
+      <label for="lb-288" class="lightbox-overlay"><img src="images/RC254.png" alt=""></label>
       <figcaption>Figure 23.4. The optimizer on GPU #1 does all the optimizing and sends the updated parameters to the other GPUs.</figcaption>
     </figure>
     <p>Each GPU runs the model on its batch, calculates loss, does backprop, and then shares the gradient with one of the GPUs designated as the main one, GPU #1. This main GPU averages the gradients, runs the optimizers, updates its parameters, and sends them out. Once all eight GPUs have the new parameters the second training step starts. Here’s a zoomed in view of the process from the perspective of GPU #1:</p>
     <figure id="fig-23-5">
-      <input type="checkbox" id="lb-286" class="lightbox-toggle">
-      <label for="lb-286"><img src="images/RC255.png" alt="" loading="lazy"></label>
-      <label for="lb-286" class="lightbox-overlay"><img src="images/RC255.png" alt=""></label>
+      <input type="checkbox" id="lb-289" class="lightbox-toggle">
+      <label for="lb-289"><img src="images/RC255.png" alt="" loading="lazy"></label>
+      <label for="lb-289" class="lightbox-overlay"><img src="images/RC255.png" alt=""></label>
       <figcaption>Figure 23.5. Zoomed in view of GPU #1 receiving and averaging the gradients.</figcaption>
     </figure>
     <p>Your first thought might be—wow, that’s a lot of data to send around so frequently. You’re right. Say our parameters take up a total of 2 GB. Every GPU (ignoring #1 for the moment) needs to send out 2 GB for the gradient and receive 2 GB for the updated parameters. As an only slightly relevant comparison, back when people connected to the internet via dial-up modems, it would have taken around 100 hours to transfer 2 GB of data. Do we really need to do this?</p>
@@ -74,31 +74,31 @@
     <p>Another issue that’s a little more subtle is that Adam needs to maintain two moving averages and Muon needs to maintain one. This is two times the memory of the parameters for Adam and one times for Muon. With the <a href="#fig-23-4" class="xref" data-preview="images/RC254.png">figure 23.4</a> configuration, we’ll need to allocate all that extra memory only in GPU #1. This means we’ll either be leaving memory needlessly unused in the other GPUs or we’ll want to use smaller batch sizes with GPU #1 which opens a different can of worms.</p>
     <p>Let me show you a better approach:</p>
     <figure id="fig-23-6">
-      <input type="checkbox" id="lb-287" class="lightbox-toggle">
-      <label for="lb-287"><img src="images/RC256.png" alt="" loading="lazy"></label>
-      <label for="lb-287" class="lightbox-overlay"><img src="images/RC256.png" alt=""></label>
+      <input type="checkbox" id="lb-290" class="lightbox-toggle">
+      <label for="lb-290"><img src="images/RC256.png" alt="" loading="lazy"></label>
+      <label for="lb-290" class="lightbox-overlay"><img src="images/RC256.png" alt=""></label>
       <figcaption>Figure 23.6. Each GPU is responsible for optimizing a portion of the parameters.</figcaption>
     </figure>
     <p>It looks confusing but it’s much more balanced. Each GPU (called a <strong>rank</strong>) is responsible for a designated 1/8th of all of the parameters in the model. Each GPU receives the portion of the gradient it needs from every other GPU including itself, averages them, calculates the updates to its portion of the parameters, and sends them out.</p>
     <p>For the sake of illustration, imagine the final linear transformation (green box in <a href="chapter-20.html#fig-20-4" class="xref" data-preview="images/RC240.png">figure 20.4</a>) had 128 parameters instead of the over 134 million we’ll actually see in our 32-layer model. The GPUs could divide up responsibility as follows:</p>
     <figure id="fig-23-7">
-      <input type="checkbox" id="lb-288" class="lightbox-toggle">
-      <label for="lb-288"><img src="images/RC257.png" alt="" loading="lazy"></label>
-      <label for="lb-288" class="lightbox-overlay"><img src="images/RC257.png" alt=""></label>
+      <input type="checkbox" id="lb-291" class="lightbox-toggle">
+      <label for="lb-291"><img src="images/RC257.png" alt="" loading="lazy"></label>
+      <label for="lb-291" class="lightbox-overlay"><img src="images/RC257.png" alt=""></label>
       <figcaption>Figure 23.7. Each GPU takes responsibility for 1/8th of the parameters in the final linear transformation.</figcaption>
     </figure>
     <p>Let’s follow the movement across GPUs of just one element in the parameter matrix, the element highlighted in yellow. We could reference this element in code as parameter[7,0] since it’s the seventh row and zeroth column. Suppose we’re on training step 10. Each GPU will compute loss and then do backprop to calculate a gradient:</p>
     <figure id="tbl-23-1" style="max-width:70%">
-      <input type="checkbox" id="lb-289" class="lightbox-toggle">
-      <label for="lb-289"><img src="images/RC258.png" alt="" loading="lazy"></label>
-      <label for="lb-289" class="lightbox-overlay"><img src="images/RC258.png" alt=""></label>
+      <input type="checkbox" id="lb-292" class="lightbox-toggle">
+      <label for="lb-292"><img src="images/RC258.png" alt="" loading="lazy"></label>
+      <label for="lb-292" class="lightbox-overlay"><img src="images/RC258.png" alt=""></label>
       <figcaption>Table 23.1. Each GPU processes a different batch of data resulting in a different gradient.</figcaption>
     </figure>
     <p>GPU #4 is responsible for the slice of the parameter matrix containing parameter[7,0] so it will receive the appropriate slice of the corresponding gradient matrix from all the other GPUs and compute the average, 0.30 in this case. It will update its parameter slice. Say that the -0.36 becomes -0.39. This will then get shared out to all the GPUs and be in place before each GPU processes its next batch in step 11.</p>
     <figure id="tbl-23-2" style="max-width:60%">
-      <input type="checkbox" id="lb-290" class="lightbox-toggle">
-      <label for="lb-290"><img src="images/RC259.png" alt="" loading="lazy"></label>
-      <label for="lb-290" class="lightbox-overlay"><img src="images/RC259.png" alt=""></label>
+      <input type="checkbox" id="lb-293" class="lightbox-toggle">
+      <label for="lb-293"><img src="images/RC259.png" alt="" loading="lazy"></label>
+      <label for="lb-293" class="lightbox-overlay"><img src="images/RC259.png" alt=""></label>
       <figcaption>Table 23.2. All GPUs get the updated parameter before the next training step.</figcaption>
     </figure>
     <p>The Adam optimizer works just like my tiny example. Adam is used to optimize the parameters in the embed module and the final linear transformation (see <a href="chapter-20.html#fig-20-4" class="xref" data-preview="images/RC240.png">figure 20.4</a>). We only have one of each of these and so the optimizer must break up responsibility within the parameter matrix. This works well because as we talked about in <a href="chapter-20.html" class="xref">chapter 20</a>, Adam operates independently on each element within the parameter matrix.</p>
@@ -113,7 +113,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-24.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

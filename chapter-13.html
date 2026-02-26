@@ -28,24 +28,24 @@
     </div>
     <p>We’re ready to get back into the transformer. As a reminder of where we are and the big picture, our tokenizer (not shown in the diagram) converted text, say “The capital of France is,” to a sequence  of tokens: 449, 3422, 281, 4192, 309. The embedding module converted each of those into an embedding of 1280 numbers filled with meaning. We’re now going to feed this 5×1280 tensor into our first transformer block. We’ll then take the output, which will also be 5×1280, and feed it to the second block. We’ll repeat this over and over through a total of 20 blocks. We aim for that final output, once <em>projected</em> onto the vocabulary by the final linear layer, to be an appropriate prediction for the next token for each input token. After training, I sincerely hope that the top next token prediction after “is” will be “Paris!”</p>
     <figure id="fig-13-1">
-      <input type="checkbox" id="lb-157" class="lightbox-toggle">
-      <label for="lb-157"><img src="images/RC129.png" alt="" loading="lazy"></label>
-      <label for="lb-157" class="lightbox-overlay"><img src="images/RC129.png" alt=""></label>
+      <input type="checkbox" id="lb-160" class="lightbox-toggle">
+      <label for="lb-160"><img src="images/RC129.png" alt="" loading="lazy"></label>
+      <label for="lb-160" class="lightbox-overlay"><img src="images/RC129.png" alt=""></label>
       <figcaption>Figure 13.1. Model architecture. We’re about to dig into the transformer block.</figcaption>
     </figure>
     <p>Let’s look inside the transformer block.</p>
     <figure id="fig-13-2">
-      <input type="checkbox" id="lb-158" class="lightbox-toggle">
-      <label for="lb-158"><img src="images/RC141.png" alt="" loading="lazy"></label>
-      <label for="lb-158" class="lightbox-overlay"><img src="images/RC141.png" alt=""></label>
+      <input type="checkbox" id="lb-161" class="lightbox-toggle">
+      <label for="lb-161"><img src="images/RC141.png" alt="" loading="lazy"></label>
+      <label for="lb-161" class="lightbox-overlay"><img src="images/RC141.png" alt=""></label>
       <figcaption>Figure 13.2. Inside the transformer block.</figcaption>
     </figure>
     <p>Take a look at the diagram. Where do you think the learning is happening? The norm and adding operation are critical but contain no parameters of their own. Therefore all the parameters we need to learn must be somewhere in the causal self attention and/or MLP modules. Spoiler alert—they are in both. You will see.</p>
     <p>To keep this concrete, here’s example output from the embed module that we can use as input to the first transformer block:</p>
     <figure id="fig-13-3" style="max-width:70%">
-      <input type="checkbox" id="lb-159" class="lightbox-toggle">
-      <label for="lb-159"><img src="images/RC142.png" alt="" loading="lazy"></label>
-      <label for="lb-159" class="lightbox-overlay"><img src="images/RC142.png" alt=""></label>
+      <input type="checkbox" id="lb-162" class="lightbox-toggle">
+      <label for="lb-162"><img src="images/RC142.png" alt="" loading="lazy"></label>
+      <label for="lb-162" class="lightbox-overlay"><img src="images/RC142.png" alt=""></label>
       <figcaption>Figure 13.3. Example input to our first transformer block.</figcaption>
     </figure>
     <p>The high level idea is that causal self attention is where one position brings in information from earlier positions. For example, the fifth (“is”) might pull in information from “capital” and “France” so that eventually the model can predict “Paris” as the next token. Think of this as each position paying a certain amount of attention to each prior position. We’ll get into the details below.</p>
@@ -53,18 +53,18 @@
     <p>Keep in mind that the example tensor in <a href="#fig-13-3" class="xref" data-preview="images/RC142.png">figure 13.3</a> is only the input to the first block. For each successive block, the input will be the output of the prior block. It may be useful to think of each position as containing a token embedding, as shown above. However, after the first block this is no longer true. Instead, think of each position as containing a vector of size 1280 that somehow represents the sequence up to and including that position. In a sense, the successive layers take us from encoding the meaning of individual words (tokens) to encoding the meaning of the entire length of text up to a given position. (Casually, though, you will hear people talking about the <em>embeddings</em> out of say layer ten and that’s fine.) </p>
     <p>MLP stands for <strong>multilayer perceptron</strong>. I’ve avoided saying that up to now because the term makes it sound more complicated than it is. Hedgehog model #4 shown in <a href="chapter-10.html#fig-10-18" class="xref" data-preview="images/RC107.png">figure 10.18</a>, where we made a linear-ReLU-linear sandwich, was an MLP. Here’s the MLP inside our transformer:</p>
     <figure id="fig-13-4">
-      <input type="checkbox" id="lb-160" class="lightbox-toggle">
-      <label for="lb-160"><img src="images/RC143.png" alt="" loading="lazy"></label>
-      <label for="lb-160" class="lightbox-overlay"><img src="images/RC143.png" alt=""></label>
+      <input type="checkbox" id="lb-163" class="lightbox-toggle">
+      <label for="lb-163"><img src="images/RC143.png" alt="" loading="lazy"></label>
+      <label for="lb-163" class="lightbox-overlay"><img src="images/RC143.png" alt=""></label>
       <figcaption>Figure 13.4. Inside the MLP.</figcaption>
     </figure>
     <p>In hedgehog model #4, the initial linear transformation took us from one number (length of hedgehog) to 10 numbers. In the MLP in our transformer, the linear transformation goes from D to 4 times D which in our example is 1280 to 5120. We then do ReLU, square that, and then the second linear transformation takes us back to 1280. We don’t use any bias terms in our linear layers, so sticking with our 1280 example, there will be 1280 × 5120 parameters in each of these two linear transforms. That’s over 13 million parameters together. Multiply that times the 20 layers and you’ll see that over 262 million parameters are in the MLPs. This is where a lot of learning will take place.</p>
     <p>And I want to emphasize again, this is <strong>not only</strong>, or even mostly, learning about how to use the embedding of a single token/word to predict the next token. If that’s all that was happening, all of this high-dimensional (1280 in this case) information would be useless and we could just use the n-gram approach discussed in <a href="chapter-2.html" class="xref">chapter 2</a>. The vectors of size 1280 at each position represent and contain information from the entire sequence up to and including that position. You’ll see how soon.</p>
     <p>In case things are getting confusing, let me work through a tiny example of the calculation where I assume D = 2 and T = 3.</p>
     <figure id="fig-13-5">
-      <input type="checkbox" id="lb-161" class="lightbox-toggle">
-      <label for="lb-161"><img src="images/RC144.png" alt="" loading="lazy"></label>
-      <label for="lb-161" class="lightbox-overlay"><img src="images/RC144.png" alt=""></label>
+      <input type="checkbox" id="lb-164" class="lightbox-toggle">
+      <label for="lb-164"><img src="images/RC144.png" alt="" loading="lazy"></label>
+      <label for="lb-164" class="lightbox-overlay"><img src="images/RC144.png" alt=""></label>
       <figcaption>Figure 13.5. MLP calculation example with D = 2.</figcaption>
     </figure>
     <p>You can’t verify the calculations because you don’t know the weights inside the linear transformations. I more want you to see how the column dimension expands from two to eight and then contracts back to two. Notice also that in the input the first position and third position are both [1.00, 2.00] and therefore they also match in the output [0.35, -0.78].</p>
@@ -75,7 +75,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-14.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

@@ -35,16 +35,16 @@
     <p>The advantage of special tokens is that they will never appear in normal text. They can’t. The core part of the tokenizer only outputs tokens with IDs 0 through 65,526. So if we want to teach the model to do certain things in certain situations, and to signal certain things back to us, special tokens are the way to go. To the model they are nothing special—just tokens. By inserting them into training data the model will learn their meaning and learn to predict them just like any other token.</p>
     <p>Let’s say you open up a messaging app to chat with another human. First you type something and hit send. Then the other person types something. Then you type something again. We want to achieve this same behavior between you and the model. The model needs to learn that there are tokens that represent the human side of the chat. It needs to learn how to respond in a helpful way and indicate when it’s done so that you the human can have a turn again.</p>
     <figure id="fig-25-1" style="max-width:70%">
-      <input type="checkbox" id="lb-320" class="lightbox-toggle">
-      <label for="lb-320"><img src="images/RC271.png" alt="" loading="lazy"></label>
-      <label for="lb-320" class="lightbox-overlay"><img src="images/RC271.png" alt=""></label>
+      <input type="checkbox" id="lb-323" class="lightbox-toggle">
+      <label for="lb-323"><img src="images/RC271.png" alt="" loading="lazy"></label>
+      <label for="lb-323" class="lightbox-overlay"><img src="images/RC271.png" alt=""></label>
       <figcaption>Figure 25.1. A conversation between a human and the model.</figcaption>
     </figure>
     <p>Right now we’re talking about training the model. But later, post-training, when these interactions actually happen, parameter values will not be getting updated. Therefore the only memory the model will have of a chat will come from re-reading the entire chat transcript each time during its turn. This isn’t anything new—it’s exactly what we’ve been doing all along where the model reads a starting prompt and predicts a next token, adds that token on and reads again, and so on. (See discussion of KV cache in 17 for how this is done efficiently.) When the model reads the chat transcript, we want tokens that clearly indicate the parts that came from the user and the parts it itself said. Here are the special tokens we’ve invented for this purpose:</p>
     <figure id="tbl-25-1">
-      <input type="checkbox" id="lb-321" class="lightbox-toggle">
-      <label for="lb-321"><img src="images/RC272.png" alt="" loading="lazy"></label>
-      <label for="lb-321" class="lightbox-overlay"><img src="images/RC272.png" alt=""></label>
+      <input type="checkbox" id="lb-324" class="lightbox-toggle">
+      <label for="lb-324"><img src="images/RC272.png" alt="" loading="lazy"></label>
+      <label for="lb-324" class="lightbox-overlay"><img src="images/RC272.png" alt=""></label>
       <figcaption>Table 25.1. The four special tokens used to indicate who’s talking: the human or the model.</figcaption>
     </figure>
     <p>The shorthand is just a convenient way to view these special tokens. This “&lt;|x|&gt;” notation is unlikely to appear in normal text so when we decode the tokens coming out of the model, we can see the special tokens interspersed in normal text. I want to emphasize again, though, that tokens 65528, 65529, etc. will never actually come from or be turned into normal text. For example, when we ask the tokenizer to encode the literal text “&lt;|user_start|&gt;,” it outputs the tokens 60, 124, 15435, 95, 22889, 124, 62 which correspond to “&lt;”, “|”, “user”, etc.</p>
@@ -177,17 +177,17 @@
     <p>If you’ve used the Python programming language this may look familiar and if not it will look odd. The user is saying—I’m writing code to turn integers between 1 and 1000 into Roman numerals and here are examples of how it should work. This is pretty much standard documentation. In the old days the human would also implement the function, meaning write the code to actually turn numbers into Roman numerals. Here the idea is that the assistant (the model) will write the function.</p>
     <p>There are many ways to write code to achieve the same goal. For this reason we won’t try to match the output of the model to a specific solution. Instead we’ll automatically try a bunch of test cases that come with the HumanEval dataset. If they all pass we’ll score the conversation as correct overall. As an example, here are some of the checks for the conversation above:</p>
     <figure id="fig-25-2" style="max-width:60%">
-      <input type="checkbox" id="lb-322" class="lightbox-toggle">
-      <label for="lb-322"><img src="images/RC273.png" alt="" loading="lazy"></label>
-      <label for="lb-322" class="lightbox-overlay"><img src="images/RC273.png" alt=""></label>
+      <input type="checkbox" id="lb-325" class="lightbox-toggle">
+      <label for="lb-325"><img src="images/RC273.png" alt="" loading="lazy"></label>
+      <label for="lb-325" class="lightbox-overlay"><img src="images/RC273.png" alt=""></label>
       <figcaption>Figure 25.2. Example of checks performed to see if the model coded a HumanEval question correctly. “Candidate” is the function written by the model. “Assert” means to check that a statement is true.</figcaption>
     </figure>
     <hr class="section-break">
     <p>Here are all the tasks in ChatCORE and the number of conversations in each:</p>
     <figure id="tbl-25-2" style="max-width:60%">
-      <input type="checkbox" id="lb-323" class="lightbox-toggle">
-      <label for="lb-323"><img src="images/RC274.png" alt="" loading="lazy"></label>
-      <label for="lb-323" class="lightbox-overlay"><img src="images/RC274.png" alt=""></label>
+      <input type="checkbox" id="lb-326" class="lightbox-toggle">
+      <label for="lb-326"><img src="images/RC274.png" alt="" loading="lazy"></label>
+      <label for="lb-326" class="lightbox-overlay"><img src="images/RC274.png" alt=""></label>
       <figcaption>Table 25.2. All the tasks in our ChatCORE evaluation.</figcaption>
     </figure>
     <p>As with the CORE metric, we count the percent right for each task type, center the percentages by comparing with how random guessing would score, and then average all of those scores. This gives us a single overall score between 0 and 1. If our model produces random “garbage” we should score 0 and if the assistant answers every question correctly we should score 1.</p>
@@ -196,39 +196,39 @@
     <p>…and done! The training took 22 minutes. Running the ChatCORE evaluation took just under 10 minutes. In theory I spent $12.70 but in reality it was more because I hit a few bumps in the beginning and it took more time than I expected for the training to start.</p>
     <p>Here’s the plot of validation loss. We trained for 810 steps and measured validation loss seven times: at the start, at steps 150, 300, 450, 600, and 750, and at the end.</p>
     <figure id="fig-25-3" style="max-width:90%">
-      <input type="checkbox" id="lb-324" class="lightbox-toggle">
-      <label for="lb-324"><img src="images/RC329.png" alt="" loading="lazy"></label>
-      <label for="lb-324" class="lightbox-overlay"><img src="images/RC329.png" alt=""></label>
+      <input type="checkbox" id="lb-327" class="lightbox-toggle">
+      <label for="lb-327"><img src="images/RC329.png" alt="" loading="lazy"></label>
+      <label for="lb-327" class="lightbox-overlay"><img src="images/RC329.png" alt=""></label>
       <figcaption>Figure 25.3. Validation loss over all of mid-training.</figcaption>
     </figure>
     <p>Looks good. I don’t need to zoom in to confirm that it declined each time.</p>
     <p>And, as with base training, once we got going, we maintained near full use of the eight GPUs. Here’s utilization:</p>
     <figure id="fig-25-4" style="max-width:90%">
-      <input type="checkbox" id="lb-325" class="lightbox-toggle">
-      <label for="lb-325"><img src="images/RC330.png" alt="" loading="lazy"></label>
-      <label for="lb-325" class="lightbox-overlay"><img src="images/RC330.png" alt=""></label>
+      <input type="checkbox" id="lb-328" class="lightbox-toggle">
+      <label for="lb-328"><img src="images/RC330.png" alt="" loading="lazy"></label>
+      <label for="lb-328" class="lightbox-overlay"><img src="images/RC330.png" alt=""></label>
       <figcaption>Figure 25.4. GPU utilization. I’m not sure why it took several minutes for the training to actually start.</figcaption>
     </figure>
     <p>And here’s memory:</p>
     <figure id="fig-25-5" style="max-width:90%">
-      <input type="checkbox" id="lb-326" class="lightbox-toggle">
-      <label for="lb-326"><img src="images/RC331.png" alt="" loading="lazy"></label>
-      <label for="lb-326" class="lightbox-overlay"><img src="images/RC331.png" alt=""></label>
+      <input type="checkbox" id="lb-329" class="lightbox-toggle">
+      <label for="lb-329"><img src="images/RC331.png" alt="" loading="lazy"></label>
+      <label for="lb-329" class="lightbox-overlay"><img src="images/RC331.png" alt=""></label>
       <figcaption>Figure 25.5. GPU memory allocated over the whole training.</figcaption>
     </figure>
     <p>Did we achieve anything useful? Let’s look at our ChatCORE evaluation results.</p>
     <figure id="tbl-25-3">
-      <input type="checkbox" id="lb-327" class="lightbox-toggle">
-      <label for="lb-327"><img src="images/RC275.png" alt="" loading="lazy"></label>
-      <label for="lb-327" class="lightbox-overlay"><img src="images/RC275.png" alt=""></label>
+      <input type="checkbox" id="lb-330" class="lightbox-toggle">
+      <label for="lb-330"><img src="images/RC275.png" alt="" loading="lazy"></label>
+      <label for="lb-330" class="lightbox-overlay"><img src="images/RC275.png" alt=""></label>
       <figcaption>Table 25.3. ChatCORE score after the mid-training phase.</figcaption>
     </figure>
     <p>Yes! Something is happening. A raw accuracy of 65% on our friend ARC Easy means we’re feeding a user message into the model with a multiple choice question and the model is predicting the correct letter answer. It’s also nice to see that the model achieves 99% on the spelling bee task. I’ll show the exact test later.</p>
     <p>The only tasks in common with our CORE evaluation are ARC Easy and ARC Challenge. These are the exact same 2,376 and 1,172 multiple choice questions, but in ChatCORE we’re asking the model to solve them in a new and more challenging way. In CORE, we formed prompts with 10 example questions followed by the actual question followed by one of the choices. We then looked at which prompt had the highest probability and considered this to be the model’s choice. In ChatCORE, we pose a single multiple choice question the same way you might to ChatGPT and look at the model’s next token prediction. So even though I know they aren’t directly comparable, I still want to look:</p>
     <figure id="tbl-25-4">
-      <input type="checkbox" id="lb-328" class="lightbox-toggle">
-      <label for="lb-328"><img src="images/RC276.png" alt="" loading="lazy"></label>
-      <label for="lb-328" class="lightbox-overlay"><img src="images/RC276.png" alt=""></label>
+      <input type="checkbox" id="lb-331" class="lightbox-toggle">
+      <label for="lb-331"><img src="images/RC276.png" alt="" loading="lazy"></label>
+      <label for="lb-331" class="lightbox-overlay"><img src="images/RC276.png" alt=""></label>
       <figcaption>Table 25.4. Comparison of ARC questions between CORE and ChatCORE.</figcaption>
     </figure>
     <p>I’m not sure what to make of the comparison other than a bit of surprise that they are both still in the same ballpark. I believe or at least hope this is a sign that our model is robust and adaptable. If we were working with a traditional, non-deep, non-GPT model that we had carefully trained to do well on ARC Easy via the CORE way of posing the questions, I suspect it would be nearly useless at answering this conversational (ChatCORE) way.</p>
@@ -262,7 +262,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-26.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

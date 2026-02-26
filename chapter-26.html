@@ -32,9 +32,9 @@
     <p>It turns out that the dance is coordinated with—you guessed it—more special tokens. It’s beautiful and I suppose a type of magic from the model’s perspective. It learns that if it generates a certain special token, then everything it generates next will be handed off to a tool and the tool’s output will then appear as the following tokens. From the model’s perspective nothing different is happening. It’s generating a next token, reading the full sequence, generating another next token, reading the new full sequence. It doesn’t know that there’s been this sleight of hand where a bunch of new tokens were added to the sequence that it did not generate. And actually, from its point of view, the coordination is similar to the user / assistant conversation turns we looked at in <a href="chapter-25.html" class="xref">chapter 25</a>.</p>
     <p>Here are the tool-use special tokens for our model:</p>
     <figure id="tbl-26-1">
-      <input type="checkbox" id="lb-329" class="lightbox-toggle">
-      <label for="lb-329"><img src="images/RC277.png" alt="" loading="lazy"></label>
-      <label for="lb-329" class="lightbox-overlay"><img src="images/RC277.png" alt=""></label>
+      <input type="checkbox" id="lb-332" class="lightbox-toggle">
+      <label for="lb-332"><img src="images/RC277.png" alt="" loading="lazy"></label>
+      <label for="lb-332" class="lightbox-overlay"><img src="images/RC277.png" alt=""></label>
       <figcaption>Table 26.1. Special tokens for calculator tool use.</figcaption>
     </figure>
     <p>The only tool our model will have access to is a Python calculator. Python is a complete programming language, but we’ll only allow a small piece of it to be used to evaluate math-like expressions. For example “2 + 3” evaluates to “5” and “‘zipper’.count(‘p’)” evaluates to “2” because there are two p’s in zipper.</p>
@@ -85,9 +85,9 @@
     <p>This example shows multiple calculator expressions in the same conversation. We hope the model will learn that when it writes out basic math it should then think to calculate it using Python rather than calculating it “in its head.” And again, for mid-training, the conversation above is just another conversation. (Later, when we get to the final phase of training in <a href="chapter-28.html" class="xref">chapter 28</a>, you’ll see the technique we use to boost our performance on these GSM8K word problems.)</p>
     <p>We’ll soon get into special considerations for <em>training</em> on Python expressions and the resulting output. But for now, so you can see where we’re going, let’s jump to assuming we’re done with all training and we’re chatting with the model by feeding it a prompt. This is where the engine that surrounds the model will run the Python calculator tool for the model. Let me illustrate. Say the user starts a chat session with “What is 5+2?” This diagram shows where each next token comes from.</p>
     <figure id="fig-26-1">
-      <input type="checkbox" id="lb-330" class="lightbox-toggle">
-      <label for="lb-330"><img src="images/RC278.png" alt="" loading="lazy"></label>
-      <label for="lb-330" class="lightbox-overlay"><img src="images/RC278.png" alt=""></label>
+      <input type="checkbox" id="lb-333" class="lightbox-toggle">
+      <label for="lb-333"><img src="images/RC278.png" alt="" loading="lazy"></label>
+      <label for="lb-333" class="lightbox-overlay"><img src="images/RC278.png" alt=""></label>
       <figcaption>Figure 26.1. The engine surrounding the model calls the Python calculator and appends the result to the token stream for the model to read.</figcaption>
     </figure>
     <p>The engine, which we’ll see again in <a href="chapter-29.html" class="xref">chapter 29</a> when we chat with our model, takes the user&#x27;s question, forms the initial stream of tokens shown at the top of the diagram, and feeds it to the model. The model begins to answer by saying “5 + 2 is” and then knows it should use the calculator tool, so it generates “&lt;|python_start|&gt;5+2&lt;|python_end|&gt;.” The engine, which is coordinating the whole process, takes the <em>python end</em> special token as its cue to invoke Python to evaluate “5+2” which returns 7. The engine appends “&lt;|output_start|&gt;7&lt;|output_end|&gt;” to the growing token stream. The model then reads the output, parrots it back to the user, and generates the <em>assistant end</em> special token. I left this out of the diagram for legibility.</p>
@@ -98,7 +98,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-27.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

@@ -33,40 +33,40 @@
     <p>Look back at <a href="chapter-5.html#fig-5-7" class="xref" data-preview="images/RC035.png">figure 5.7</a> to get a feel for the operations involved in multiplying one matrix by another. One multiplication of floating point numbers (see chapter C028) could be 0.1234567 × 0.9876543. Do this on a piece of paper. How long does it take you?</p>
     <p>I just tried. I’m not sure I’ve ever multiplied out so many digits before.</p>
     <figure id="fig-17-1" style="max-width:60%">
-      <input type="checkbox" id="lb-208" class="lightbox-toggle">
-      <label for="lb-208"><img src="images/RC191.jpg" alt="" loading="lazy"></label>
-      <label for="lb-208" class="lightbox-overlay"><img src="images/RC191.jpg" alt=""></label>
+      <input type="checkbox" id="lb-211" class="lightbox-toggle">
+      <label for="lb-211"><img src="images/RC191.jpg" alt="" loading="lazy"></label>
+      <label for="lb-211" class="lightbox-overlay"><img src="images/RC191.jpg" alt=""></label>
       <figcaption>Figure 17.1. Me multiplying two numbers.</figcaption>
     </figure>
     <p>Here’s how long it took me:</p>
     <figure id="fig-17-2" style="max-width:50%">
-      <input type="checkbox" id="lb-209" class="lightbox-toggle">
-      <label for="lb-209"><img src="images/RC192.png" alt="" loading="lazy"></label>
-      <label for="lb-209" class="lightbox-overlay"><img src="images/RC192.png" alt=""></label>
+      <input type="checkbox" id="lb-212" class="lightbox-toggle">
+      <label for="lb-212"><img src="images/RC192.png" alt="" loading="lazy"></label>
+      <label for="lb-212" class="lightbox-overlay"><img src="images/RC192.png" alt=""></label>
       <figcaption>Figure 17.2. How long it took me to multiply the two numbers.</figcaption>
     </figure>
     <p>Call it 12 minutes. Keep that in mind. That’s for one floating point operation or <strong>FLOP</strong>.</p>
     <p>Let’s take the first matrix multiplication we’ll encounter, the Q linear transformation in the first transformer block for my 20-layer model. If our prompt “Please tell me about Paris” is five tokens, the matrix multiplication that actually does the linear transformation will look like this:</p>
     <figure id="fig-17-3">
-      <input type="checkbox" id="lb-210" class="lightbox-toggle">
-      <label for="lb-210"><img src="images/RC193.png" alt="" loading="lazy"></label>
-      <label for="lb-210" class="lightbox-overlay"><img src="images/RC193.png" alt=""></label>
+      <input type="checkbox" id="lb-213" class="lightbox-toggle">
+      <label for="lb-213"><img src="images/RC193.png" alt="" loading="lazy"></label>
+      <label for="lb-213" class="lightbox-overlay"><img src="images/RC193.png" alt=""></label>
       <figcaption>Figure 17.3. The first matrix multiplication when computing the next token for the prompt “Please tell me about Paris.”</figcaption>
     </figure>
     <p>A rough estimate for the total floating point operations to do a single matrix multiplication is rows of the first matrix × 2 × columns of the first matrix × columns of the second matrix. (As a reminder, the columns of the first matrix will always be equal to the rows of the second matrix.) So in this example that’s 5 × 1280 × 2 × 1280 = 16,384,000 FLOPs.</p>
     <p>We start by feeding “Please tell me about Paris” into the model in order to predict the next token. In order to estimate the total FLOPs required for this calculation but without going totally crazy, let’s only count the matrix multiplications. For the sake of the point I’m making here we won’t worry about norms, softmax, addition, etc.</p>
     <p>To  keep organized I made a spreadsheet and matched colors with my diagrams.</p>
     <figure id="tbl-17-1">
-      <input type="checkbox" id="lb-211" class="lightbox-toggle">
-      <label for="lb-211"><img src="images/RC194.png" alt="" loading="lazy"></label>
-      <label for="lb-211" class="lightbox-overlay"><img src="images/RC194.png" alt=""></label>
+      <input type="checkbox" id="lb-214" class="lightbox-toggle">
+      <label for="lb-214"><img src="images/RC194.png" alt="" loading="lazy"></label>
+      <label for="lb-214" class="lightbox-overlay"><img src="images/RC194.png" alt=""></label>
       <figcaption>Table 17.1. Estimated floating point operations for all of the matrix multiplications to compute the next token for “Please tell me about Paris” in my 20-layer model.</figcaption>
     </figure>
     <p>So that’s around five billion FLOPs. But that’s just for predicting our sixth token, say “Paris” in a completion that starts: “Paris is the capital of…” Now we need to feed in six tokens: “Please tell me about Paris. Paris” to get back our seventh token. Using my same spreadsheet, I estimated the number of flops to compute the seventh token at around 5.7 billion, so we’re already up to 11 billion to generate the two tokens. Let’s say the full completion is 20 tokens. This means we’ll keep repeating the process of predicting the next token and feeding the full sequence in as input until we input a sequence of 24 tokens to predict our 25th.</p>
     <figure id="tbl-17-2" style="max-width:50%">
-      <input type="checkbox" id="lb-212" class="lightbox-toggle">
-      <label for="lb-212"><img src="images/RC195.png" alt="" loading="lazy"></label>
-      <label for="lb-212" class="lightbox-overlay"><img src="images/RC195.png" alt=""></label>
+      <input type="checkbox" id="lb-215" class="lightbox-toggle">
+      <label for="lb-215"><img src="images/RC195.png" alt="" loading="lazy"></label>
+      <label for="lb-215" class="lightbox-overlay"><img src="images/RC195.png" alt=""></label>
       <figcaption>Table 17.2. Total FLOPs for the matrix multiplies to generate a 20-token completion to “Please tell me about Paris.”</figcaption>
     </figure>
     <p>That’s 277 billion floating point operations to tell me that “Paris is the capital of France and one of the world’s most influential cities—historically, culturally, and intellectually.” Not long ago that would have sounded insane. Of course, just because something sounds insane isn’t a reason to avoid it. Thinking of Paris, Marie and Pierre Curie started with a literal ton of pitchblende in 1896 and spent years making painstaking extractions to isolate and discover a speck of Radium. Closer to home, the history of computing is filled with solving problems in less efficient but more generalizable ways knowing that advances in hardware (e.g. Moore’s Law) will eventually make the inefficiency moot.</p>
@@ -74,17 +74,17 @@
     <p>How about an Apple IIe from 1983? This was the original hit product from Apple, one of the world’s first widely available personal computers. I dug mine up and amazingly it still runs. It supported floating point multiplication, though in software, meaning that the multiplication of two floating point numbers would be translated into lower level instructions for the chip to execute vs the chip having the intrinsic capability. (See a link to the floating point operations assembly code written by Apple co-founder Steve Wozniak himself in the further reading section.)</p>
     <p>I wrote a loop in BASIC that repeated the same multiplication I did on paper 1000 times in a row. I timed it. It took 58 seconds. I also ran the same loop without the multiplication and that took 3 seconds. So figure 55 seconds to do 1000 operations. That’s 18 floating point operations per second. At that speed it would take around 500 years to generate the twenty token completion to “Please tell me about Paris.”</p>
     <figure id="fig-17-4" style="max-width:60%">
-      <input type="checkbox" id="lb-213" class="lightbox-toggle">
-      <label for="lb-213"><img src="images/RC196.jpg" alt="" loading="lazy"></label>
-      <label for="lb-213" class="lightbox-overlay"><img src="images/RC196.jpg" alt=""></label>
+      <input type="checkbox" id="lb-216" class="lightbox-toggle">
+      <label for="lb-216"><img src="images/RC196.jpg" alt="" loading="lazy"></label>
+      <label for="lb-216" class="lightbox-overlay"><img src="images/RC196.jpg" alt=""></label>
       <figcaption>Figure 17.4. A BASIC loop that multiplies 0.1234567 and 0.9876543 1000 times on an Apple IIe.</figcaption>
     </figure>
     <p>I have a MacBook Air with an Apple M1 chip from 2020. The M1 chip, like most modern chips, has built-in support for floating point operations. I wrote a loop in the C programming language and tried my best to make sure the chip was doing nothing other than the floating point multiplication of two numbers 10 billion times. This took around five seconds, so that’s two billion operations per second. At that speed the full calculation of the twenty token completion would require between two and three minutes. (I share this only to illustrate how big a deal 277 billion FLOPs is or isn’t for a modern computer. When I actually use the model on my Mac to generate tokens, it’s faster because even a Mac from 2020 has a GPU and a way to use parallelism to efficiently multiply matrices. Read about MPS if interested.)</p>
     <p>And for fun I also timed my white plastic MacBook from 2010 with an Intel Core 2 Duo chip, which also has dedicated support for floating point operations.</p>
     <figure id="tbl-17-3" style="max-width:70%">
-      <input type="checkbox" id="lb-214" class="lightbox-toggle">
-      <label for="lb-214"><img src="images/RC197.png" alt="" loading="lazy"></label>
-      <label for="lb-214" class="lightbox-overlay"><img src="images/RC197.png" alt=""></label>
+      <input type="checkbox" id="lb-217" class="lightbox-toggle">
+      <label for="lb-217"><img src="images/RC197.png" alt="" loading="lazy"></label>
+      <label for="lb-217" class="lightbox-overlay"><img src="images/RC197.png" alt=""></label>
       <figcaption>Table 17.3. Time to complete 277 billion floating point operations.</figcaption>
     </figure>
     <p>I share all of this to give you a feel for what it takes to perform on the order of 277 billion operations to generate around 20 words. It’s not an insurmountable number of operations by modern standards by any stretch of the imagination, but it’s not so trivial that we shouldn’t worry about it.</p>
@@ -94,48 +94,48 @@
     <p>Let me repeat that because it’s so important and, at least for me, when I think about so many operations and so many numbers all over the place, it’s not obvious. We input a sequence of five tokens to generate a sixth. Then we input these original five tokens plus the new one. In this second time through the model, the size 1280 vectors corresponding to the fifth position coming out of every transformer block are <em>identical</em> to what they were for the fifth position the first time through the model.</p>
     <p>This observation hints at a much more efficient way to calculate. We only need to feed in the last generated token as long as the keys and values computed previously, and the new ones for this new token, can be made available to each transformer block. Let me show this in a digram:</p>
     <figure id="fig-17-5">
-      <input type="checkbox" id="lb-215" class="lightbox-toggle">
-      <label for="lb-215"><img src="images/RC198.png" alt="" loading="lazy"></label>
-      <label for="lb-215" class="lightbox-overlay"><img src="images/RC198.png" alt=""></label>
+      <input type="checkbox" id="lb-218" class="lightbox-toggle">
+      <label for="lb-218"><img src="images/RC198.png" alt="" loading="lazy"></label>
+      <label for="lb-218" class="lightbox-overlay"><img src="images/RC198.png" alt=""></label>
       <figcaption>Figure 17.5. If we save the keys and values in each transformer block we don’t need to compute them again.</figcaption>
     </figure>
     <p>We save the old keys and values from before, and we generate the new ones by running the input through the K and V linear transformations. For queries the situation is even better because we only need to worry about the query for the new token. In other words, we need to know what this new position wants to pay attention to, but there’s no need to even worry about what the earlier positions paid attention to.</p>
     <figure id="fig-17-6">
-      <input type="checkbox" id="lb-216" class="lightbox-toggle">
-      <label for="lb-216"><img src="images/RC199.png" alt="" loading="lazy"></label>
-      <label for="lb-216" class="lightbox-overlay"><img src="images/RC199.png" alt=""></label>
+      <input type="checkbox" id="lb-219" class="lightbox-toggle">
+      <label for="lb-219"><img src="images/RC199.png" alt="" loading="lazy"></label>
+      <label for="lb-219" class="lightbox-overlay"><img src="images/RC199.png" alt=""></label>
       <figcaption>Figure 17.6. A single query for our new position can be scored against the keys for all positions to determine attention weights.</figcaption>
     </figure>
     <p>Here’s the full causal self attention and scaled dot product attention diagrams with the key/value cache. “Cached” means saved previously. “Append” means to add on to the end.</p>
     <figure id="fig-17-7">
-      <input type="checkbox" id="lb-217" class="lightbox-toggle">
-      <label for="lb-217"><img src="images/RC200.png" alt="" loading="lazy"></label>
-      <label for="lb-217" class="lightbox-overlay"><img src="images/RC200.png" alt=""></label>
+      <input type="checkbox" id="lb-220" class="lightbox-toggle">
+      <label for="lb-220"><img src="images/RC200.png" alt="" loading="lazy"></label>
+      <label for="lb-220" class="lightbox-overlay"><img src="images/RC200.png" alt=""></label>
       <figcaption>Figure 17.7. Causal self attention with a KV cache.</figcaption>
     </figure>
     <p>The cache is shown in orange. The asterisk indicates a dimension swap as explained under <a href="chapter-16.html#fig-16-5" class="xref" data-preview="images/RC188.png">figure 16.5</a>.</p>
     <p>Coming into causal self attention we have just a single position corresponding to the new token we’ve added to the sequence. This is why the overall input has shape 1×1280. Just before scaled product attention we reach into the cache and get the keys and values we computed earlier and the shape becomes 6×10×128. We also add the new key and value to the cache so they will be there for next time.</p>
     <p>Here’s what happens inside scaled dot product attention:</p>
     <figure id="fig-17-8">
-      <input type="checkbox" id="lb-218" class="lightbox-toggle">
-      <label for="lb-218"><img src="images/RC201.png" alt="" loading="lazy"></label>
-      <label for="lb-218" class="lightbox-overlay"><img src="images/RC201.png" alt=""></label>
+      <input type="checkbox" id="lb-221" class="lightbox-toggle">
+      <label for="lb-221"><img src="images/RC201.png" alt="" loading="lazy"></label>
+      <label for="lb-221" class="lightbox-overlay"><img src="images/RC201.png" alt=""></label>
       <figcaption>Figure 17.8. The q input is only the single new position. The k and v inputs are the same as usual.</figcaption>
     </figure>
     <p>Wow, look at all that saved work. Yes, we have to keep a lot of memory around (if we can), but it’s no more than we would need to do the calculations from scratch, and we now only calculate outputs that we didn’t calculate before.</p>
     <p>If you want an intuition for why this works without thinking about matrix multiplication, consider the description of matching queries with keys, computing scores, and mixing values described in <a href="chapter-14.html" class="xref">chapter 14</a>. We want to match our new query against all keys (saved and the new one) to get a score for each that we can use to blend in all of the values (saved and the new one). Nothing about this requires the queries from prior positions.</p>
     <p>Here’s my spreadsheet estimating floating point operations for all matrix multiplications for this 6th input token using the <strong>KV cache</strong> approach:</p>
     <figure id="tbl-17-4">
-      <input type="checkbox" id="lb-219" class="lightbox-toggle">
-      <label for="lb-219"><img src="images/RC202.png" alt="" loading="lazy"></label>
-      <label for="lb-219" class="lightbox-overlay"><img src="images/RC202.png" alt=""></label>
+      <input type="checkbox" id="lb-222" class="lightbox-toggle">
+      <label for="lb-222"><img src="images/RC202.png" alt="" loading="lazy"></label>
+      <label for="lb-222" class="lightbox-overlay"><img src="images/RC202.png" alt=""></label>
       <figcaption>Table 17.4. Estimated floating point operations for all of the matrix multiplications to compute the seventh token.</figcaption>
     </figure>
     <p>And here’s the total for generating the entire completion:</p>
     <figure id="tbl-17-5" style="max-width:50%">
-      <input type="checkbox" id="lb-220" class="lightbox-toggle">
-      <label for="lb-220"><img src="images/RC203.png" alt="" loading="lazy"></label>
-      <label for="lb-220" class="lightbox-overlay"><img src="images/RC203.png" alt=""></label>
+      <input type="checkbox" id="lb-223" class="lightbox-toggle">
+      <label for="lb-223"><img src="images/RC203.png" alt="" loading="lazy"></label>
+      <label for="lb-223" class="lightbox-overlay"><img src="images/RC203.png" alt=""></label>
       <figcaption>Table 17.5. Total FLOPs for the matrix multiplies to generate a 20-token completion to “Please tell me about Paris” with the KV cache.</figcaption>
     </figure>
     <p>We drop from 277 billion to 23 billion. This is a whole order of magnitude fewer operations. A human could finish in only half a million years.</p>
@@ -143,25 +143,25 @@
     <p>You might be tempted to think that this part of the calculation barely matters. For six tokens, it’s only around 30,000 FLOPs for the 10 heads. For all 20 transformer blocks that’s 600,000 FLOPs. That’s nothing compared to the nearly billion total FLOPs to compute the next token. Don’t get tricked by the fact that six or 24 is so much smaller than 1280. Don’t get fooled either by the fact that a generated sequence of a couple dozen tokens is child’s play compared to the size 2048 sequence I used during training. When you start chatting with ChatGPT, the entire back and forth goes into that sequence. As do any documents the model needs to read along the way, information it pulls in from prior chats, the system prompt with core instructions, instructions and output from tools, and hidden (from you) thinking. It adds up fast.</p>
     <p>Let’s say the sequence grows to 20,000 tokens which is completely reasonable with a modern model. (Although not useful with our 20-layer example model, but that’s okay.) Here’s the updated spreadsheet:</p>
     <figure id="tbl-17-6">
-      <input type="checkbox" id="lb-221" class="lightbox-toggle">
-      <label for="lb-221"><img src="images/RC204.png" alt="" loading="lazy"></label>
-      <label for="lb-221" class="lightbox-overlay"><img src="images/RC204.png" alt=""></label>
+      <input type="checkbox" id="lb-224" class="lightbox-toggle">
+      <label for="lb-224"><img src="images/RC204.png" alt="" loading="lazy"></label>
+      <label for="lb-224" class="lightbox-overlay"><img src="images/RC204.png" alt=""></label>
       <figcaption>Table 17.6. Estimated floating point operations to compute the next token starting with a 20,000-token sequence.</figcaption>
     </figure>
     <p>We’ve jumped from around one billion to three billion flops. Sequence length is in fact a huge factor in memory and number of calculations. This perhaps gives an appreciation for why people were shocked when Google came out with a model with a million token context window in early 2024.</p>
     <p>Theory is great. Time to see the KV cache in action. I used my 20-layer model with the prompt we’ve been using this whole chapter (“Please tell me about Paris”) and forced it to generate 10,000 tokens. Without the KV cache this took 4 minutes and 29 seconds. With the cache it took 1 minute and 22 seconds.</p>
     <p>Without the cache, the GPU was working at near 100% the whole time (doing a lot of useless work!). More and more memory was allocated and then freed. You can see that in this chart:</p>
     <figure id="fig-17-9">
-      <input type="checkbox" id="lb-222" class="lightbox-toggle">
-      <label for="lb-222"><img src="images/RC205.png" alt="" loading="lazy"></label>
-      <label for="lb-222" class="lightbox-overlay"><img src="images/RC205.png" alt=""></label>
+      <input type="checkbox" id="lb-225" class="lightbox-toggle">
+      <label for="lb-225"><img src="images/RC205.png" alt="" loading="lazy"></label>
+      <label for="lb-225" class="lightbox-overlay"><img src="images/RC205.png" alt=""></label>
       <figcaption>Figure 17.9. GPU utilization and memory use during generation of 10,000 tokens without a KV cache.</figcaption>
     </figure>
     <p>With the cache, the GPU did not need to allocate as much memory or work as hard, which would free it up to do other more useful work, say generating text for other users at the same time.</p>
     <figure id="fig-17-10">
-      <input type="checkbox" id="lb-223" class="lightbox-toggle">
-      <label for="lb-223"><img src="images/RC206.png" alt="" loading="lazy"></label>
-      <label for="lb-223" class="lightbox-overlay"><img src="images/RC206.png" alt=""></label>
+      <input type="checkbox" id="lb-226" class="lightbox-toggle">
+      <label for="lb-226"><img src="images/RC206.png" alt="" loading="lazy"></label>
+      <label for="lb-226" class="lightbox-overlay"><img src="images/RC206.png" alt=""></label>
       <figcaption>Figure 17.10. GPU utilization and memory use during generation of 10,000 tokens with a KV cache.</figcaption>
     </figure>
     <p>Enough inside baseball. Let’s assume we can get the model to generate text. How will we know if it’s any good? </p>
@@ -171,7 +171,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-18.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

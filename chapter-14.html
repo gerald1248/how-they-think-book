@@ -29,7 +29,7 @@
     <p>I’m going to read you a paragraph. I want you to think about the scene and understanding forming in your mind and how these change after each word.</p>
     <p>“In…” That’s the first word. What is your mind thinking? Normally you already have context—is this in a novel, a friend talking with you, on a test, the start of a video? But here you have none other than it’s going to be something appropriate enough for this book. Okay, well, you’re going to read about something in something. Perhaps a place like “In France,” or a field like “In computer science,” or “In baseball,” or the expression “In fact, he did know the murderer,” or a year “In 2025,” or the start of a grand story or even the Bible, “In the beginning…” Anyway, your mind is primed for more and likely preparing for location, subject matter, or temporal context.</p>
     <p>“In 1873…” Those are the first two words. Now you’re prepared for information or a story about something that happened a long time ago, but not in ancient or prehistoric times. You might already have 19th century images forming in your mind—maybe someone in a tophat on a street with horse-drawn carriages comes to mind like in a period drama. 1873 isn’t a year that has significance to me, so my mind isn’t jumping to anything in particular as it would with 1776.</p>
-    <p>“In 1873, Tesla…” In isolation, Tesla is going to instantly make you think cars. And maybe even here you think for the tiniest moment, but you correct because you know the car company wasn’t around in 1873. You may know that there was a famous engineer named Nikola Tesla and if so whatever you may know about him—inventor, electricity, motors—will be in your mind. Even if you didn&#x27;t know about Nikola Tesla, the capital T will make you think it’s about a person, and you’ll in fact already have new information—ah, so that’s where the car company got its name!</p>
+    <p>“In 1873, Tesla…” In isolation, Tesla is going to instantly make you think cars. And maybe even here you think that for the tiniest moment, but you correct because you know the car company wasn’t around in 1873. You may know that there was a famous engineer named Nikola Tesla and if so whatever you may know about him—inventor, electricity, motors—will be in your mind. Even if you didn&#x27;t know about Nikola Tesla, the capital T will make you think it’s about a person, and you’ll in fact already have new information—ah, so that’s where the car company got its name!</p>
     <p>“In 1873, Tesla returned to his birthtown, Smiljan.” Now you have a lot of information. Smiljan is a town. It’s where Tesla was born, almost certainly years before 1873 because it doesn’t say “His parents brought him back to his birthtown.” He obviously left Smiljan and you may be primed to learn why or to where. Also the way “Smiljan” is spelled and sounds is a clue to its location. As a mere mortal you may soon (like in seconds) forget the specific year 1873 and specific town, but you know this sentence contains that information. Okay, let’s keep going.</p>
     <p>“In 1873, Tesla returned to his birthtown, Smiljan. Shortly after he arrived…”  You know with high certainty that “he” refers to Tesla and you’re anticipating learning what happened next. You also have formed an estimate of “shortly—days or weeks or possibly months, but not years or centuries or millennia (this isn’t geology) and not nanoseconds (this isn’t particle physics).</p>
     <p>“In 1873, Tesla returned to his birthtown, Smiljan. Shortly after he arrived, Tesla contracted…” In isolation, “contracted” is likely to relate to a legal agreement, “He contracted with a vendor…,” but in the scene forming in our mind we probably don’t even think of that. Instead we think that he got sick and expect the next word to be the disease or a modifier of the disease “a severe…” The disease is going to be something that was around in the 19th century, not Covid. Even if you’ve never heard of Tesla, your mind could be linking up a potential chain already: there was a person, getting sick somehow resulted in him doing something worthy of a car company naming themselves after him.</p>
@@ -45,24 +45,24 @@
     <p>You likely have intuition that not all information is equal, and different information is important at different positions. When we get to “Smiljan,” “birthdown” is relevant. When we get to the final question mark, the first sentence is more relevant than the second, and the year 1873 is the most relevant token (tokens) in the first sentence.</p>
     <p>To get into the next level of detail we need to take a little detour into the terminology used for databases and information retrieval. Here’s an example of a database. (If you’re used to thinking of databases as having tables and columns, imagine this as a single table with two columns.)</p>
     <figure id="tbl-14-1" style="max-width:50%">
-      <input type="checkbox" id="lb-162" class="lightbox-toggle">
-      <label for="lb-162"><img src="images/RC145.png" alt="" loading="lazy"></label>
-      <label for="lb-162" class="lightbox-overlay"><img src="images/RC145.png" alt=""></label>
+      <input type="checkbox" id="lb-165" class="lightbox-toggle">
+      <label for="lb-165"><img src="images/RC145.png" alt="" loading="lazy"></label>
+      <label for="lb-165" class="lightbox-overlay"><img src="images/RC145.png" alt=""></label>
       <figcaption>Table 14.1. A very small database.</figcaption>
     </figure>
     <p>A <strong>query</strong> of 1770 will match the row with <strong>key </strong>1770 and return the <strong>value</strong> Beethoven. A query of 1810 will match two rows and return the values Schumann and Chopin.</p>
     <p>Keys and queries don’t have to be strict matches. Another type of database, especially popular in recent years, is a vector database:</p>
     <figure id="tbl-14-2">
-      <input type="checkbox" id="lb-163" class="lightbox-toggle">
-      <label for="lb-163"><img src="images/RC146.png" alt="" loading="lazy"></label>
-      <label for="lb-163" class="lightbox-overlay"><img src="images/RC146.png" alt=""></label>
+      <input type="checkbox" id="lb-166" class="lightbox-toggle">
+      <label for="lb-166"><img src="images/RC146.png" alt="" loading="lazy"></label>
+      <label for="lb-166" class="lightbox-overlay"><img src="images/RC146.png" alt=""></label>
       <figcaption>Table 14.2. A very small vector database.</figcaption>
     </figure>
     <p>The key is a long vector of numbers and the value is a document. The idea is that the key represents the document in much the same way an embedding represents a token as described in <a href="chapter-11.html" class="xref">chapter 11</a>. Let’s say our query is “articles about composers” which we’ll also turn into a vector. Instead of the database doing an exact match on key, it will score the similarity between the query and each key, using, for example, the same cosine similarity calculation I used to compare embeddings in <a href="chapter-11.html" class="xref">chapter 11</a> (see <a href="chapter-11.html#tbl-11-3" class="xref" data-preview="images/RC126.png">table 11.3</a>). Example:</p>
     <figure id="tbl-14-3">
-      <input type="checkbox" id="lb-164" class="lightbox-toggle">
-      <label for="lb-164"><img src="images/RC147.png" alt="" loading="lazy"></label>
-      <label for="lb-164" class="lightbox-overlay"><img src="images/RC147.png" alt=""></label>
+      <input type="checkbox" id="lb-167" class="lightbox-toggle">
+      <label for="lb-167"><img src="images/RC147.png" alt="" loading="lazy"></label>
+      <label for="lb-167" class="lightbox-overlay"><img src="images/RC147.png" alt=""></label>
       <figcaption>Table 14.3. Cosine similarity scores between the query “articles about composers” and the keys.</figcaption>
     </figure>
     <p>We could tell the database to return all matches above a certain score or to return the top few matches. In this case, if we asked for the top two matches, we would correctly retrieve the documents on Mozart and Bieber but not Washington.</p>
@@ -72,106 +72,106 @@
     <p>This meet-in-the middle-approach of “I generate a query and you generate a key” is common and essential to making information retrieval possible. It predates computers. For example, the Dewey Decimal System was introduced to organize libraries starting in the late 1800s and was a way to match queries with books. Of course Melvil Dewey had to design his system from scratch and hand-categorize books, and the musicians at Pandora in 1999 had to manually categorize songs. But with our deep learning way of thinking, we simply define the architecture and wish the system into existence. In this case the architecture is one where positions emit queries, keys, and values so that appropriate information can be retrieved and incorporated.</p>
     <p>So how are we possibly going to get the model calculations to do something like emitting queries, keys, and values, then matching up queries and keys, and then pulling in values? Suppose our sequence so far is “The capital of France is” and, to keep things a little easier to imagine, let’s say we’re in the first transformer block <em>and</em> our embeddings only have two dimensions (which would never actually work). So here’s the input:</p>
     <figure id="tbl-14-4" style="max-width:70%">
-      <input type="checkbox" id="lb-165" class="lightbox-toggle">
-      <label for="lb-165"><img src="images/RC148.png" alt="" loading="lazy"></label>
-      <label for="lb-165" class="lightbox-overlay"><img src="images/RC148.png" alt=""></label>
+      <input type="checkbox" id="lb-168" class="lightbox-toggle">
+      <label for="lb-168"><img src="images/RC148.png" alt="" loading="lazy"></label>
+      <label for="lb-168" class="lightbox-overlay"><img src="images/RC148.png" alt=""></label>
       <figcaption>Table 14.4. The embeddings for “The capital of France is” pretending that D=2.</figcaption>
     </figure>
     <p>For each position (row), we want to come up with a key advertising what it has to offer, a value, and a query saying what it’s interested in from earlier positions. It’s a little tricky that unlike a person querying for a book in the library, every single position both has information to offer other positions <em>and</em> is itself querying for information.</p>
     <p>Let’s turn to our old friend the linear transformation. Our hope is that under the pressure of backpropagation we’ll have three linear transformations that learn to produce useful keys, values, and queries. We stick with the same dimensions (2 in this tiny example) for each of our keys, values, and queries, so let’s say our three transformations applied to the input in <a href="#tbl-14-4" class="xref" data-preview="images/RC148.png">table 14.4</a> output this:</p>
     <figure id="tbl-14-5">
-      <input type="checkbox" id="lb-166" class="lightbox-toggle">
-      <label for="lb-166"><img src="images/RC149.png" alt="" loading="lazy"></label>
-      <label for="lb-166" class="lightbox-overlay"><img src="images/RC149.png" alt=""></label>
+      <input type="checkbox" id="lb-169" class="lightbox-toggle">
+      <label for="lb-169"><img src="images/RC149.png" alt="" loading="lazy"></label>
+      <label for="lb-169" class="lightbox-overlay"><img src="images/RC149.png" alt=""></label>
       <figcaption>Table 14.5. Input embeddings transformed into queries, keys, and values.</figcaption>
     </figure>
     <p>I made the query numbers for the first four positions gray to emphasize that right now, in this example, we’re only thinking about our final position, position 5.</p>
     <p>I should mention that I normalized the queries and keys after the linear transform so that they all have the same length. You’ll see this step later when we get to <a href="#fig-14-7" class="xref" data-preview="images/RC162.png">figure 14.7</a> and I’ll explain the exact calculation in <a href="chapter-22.html" class="xref">chapter 22</a>. This is why the vectors in the upcoming plots all have the same length, and it’s why we’ll be able to compute the query / key matching score with simple pairwise multiplication and addition. These details don’t matter to build your intuition.</p>
     <p>Getting back on track, we want to compare the query for that last position (-0.51, 1.32) to each key. This is similar to the vector database lookup in <a href="#tbl-14-3" class="xref" data-preview="images/RC147.png">table 14.3</a>. Since we’re working with two dimensions we can plot the vectors:</p>
     <figure id="fig-14-1" style="max-width:70%">
-      <input type="checkbox" id="lb-167" class="lightbox-toggle">
-      <label for="lb-167"><img src="images/RC150.png" alt="" loading="lazy"></label>
-      <label for="lb-167" class="lightbox-overlay"><img src="images/RC150.png" alt=""></label>
+      <input type="checkbox" id="lb-170" class="lightbox-toggle">
+      <label for="lb-170"><img src="images/RC150.png" alt="" loading="lazy"></label>
+      <label for="lb-170" class="lightbox-overlay"><img src="images/RC150.png" alt=""></label>
       <figcaption>Figure 14.1. The keys for positions 1–5 in black and the query for position 5 in red.</figcaption>
     </figure>
     <p>The black vectors are our keys. The red vector is the query for the last position. The query is close to “capital” indicating that the “is” position is very interested in the “capital” position and will want to pull information in from its value.</p>
     <p>Since all the vectors have the same length, we can compute a score saying how similar the query is to each of the other vectors by doing pairwise multiplication and adding. If you play with this calculation you’ll see that the bigger the number, the smaller the angle between the query and key.</p>
     <figure id="tbl-14-6" style="max-width:60%">
-      <input type="checkbox" id="lb-168" class="lightbox-toggle">
-      <label for="lb-168"><img src="images/RC151.png" alt="" loading="lazy"></label>
-      <label for="lb-168" class="lightbox-overlay"><img src="images/RC151.png" alt=""></label>
+      <input type="checkbox" id="lb-171" class="lightbox-toggle">
+      <label for="lb-171"><img src="images/RC151.png" alt="" loading="lazy"></label>
+      <label for="lb-171" class="lightbox-overlay"><img src="images/RC151.png" alt=""></label>
       <figcaption>Table 14.6. The score for the position 5 query compared against the keys for positions 1–5.</figcaption>
     </figure>
     <p>(If you try to repeat my calculation you’ll see that after summing the pairwise multiplications I then multiplied by a scale factor of around 0.7. I’ll explain this below.)</p>
     <p>As you can see in the scores and confirm in the plot, the red query matches most closely with the key for position 2 “capital” followed by “of” followed by “France” followed by “is” itself. “The” is in last place. Unlike the database example where we were only interested in the top few results or the results above a certain threshold, here we’re going to use all of the values but mix them in according to the score. To do this we’ll want to resize our scores so they add up to 1 (or 100%). We’ll call this the <strong>attention weight</strong> because it’s how much attention we plan to give the values from each position.</p>
     <figure id="tbl-14-7" style="max-width:60%">
-      <input type="checkbox" id="lb-169" class="lightbox-toggle">
-      <label for="lb-169"><img src="images/RC152.png" alt="" loading="lazy"></label>
-      <label for="lb-169" class="lightbox-overlay"><img src="images/RC152.png" alt=""></label>
+      <input type="checkbox" id="lb-172" class="lightbox-toggle">
+      <label for="lb-172"><img src="images/RC152.png" alt="" loading="lazy"></label>
+      <label for="lb-172" class="lightbox-overlay"><img src="images/RC152.png" alt=""></label>
       <figcaption>Table 14.7. How much attention position 5 will pay to positions 1–5.</figcaption>
     </figure>
     <p>Notice how “capital” had the highest score and now has the highest weight of 0.60. I did the conversion using the softmax function. The details are not important, but if you’re curious, take a look back at <a href="chapter-8.html#tbl-8-10" class="xref" data-preview="images/RC309.png">table 8.10</a> where I showed how to calculate it.</p>
     <p>Now we’re on the home stretch. We want our output vector for this position 5 to consist of 60% of the value from position 2, 26% of the value from position 3, and so on. Multiply the weights by the values, add them together, and this mix of the values is more or less our output.</p>
     <figure id="tbl-14-8">
-      <input type="checkbox" id="lb-170" class="lightbox-toggle">
-      <label for="lb-170"><img src="images/RC153.png" alt="" loading="lazy"></label>
-      <label for="lb-170" class="lightbox-overlay"><img src="images/RC153.png" alt=""></label>
+      <input type="checkbox" id="lb-173" class="lightbox-toggle">
+      <label for="lb-173"><img src="images/RC153.png" alt="" loading="lazy"></label>
+      <label for="lb-173" class="lightbox-overlay"><img src="images/RC153.png" alt=""></label>
       <figcaption>Table 14.8. Our output vector for position 5 mixes information from the input vectors for positions 1–5 according to the attention weights.</figcaption>
     </figure>
     <p>Coming out of this, position 5 contains the vector [-35.60, 60.21]. (Again, in reality the vector would have way more numbers.) This vector represents information about the entire sequence that is relevant at this position to predicting the next token: “Paris” we hope.</p>
     <p>Yes, it’s complicated. It will take time to wrap your head around. But the good news for using it in a deep learning model is everything I showed can be done with a few matrix operations. In fact we’ll be able to calculate the outputs for all of the positions at the same time.</p>
     <p>Now let’s look at it in diagram form. I’m going to work from the inside out. Assume we’re inside the blue causal self attention module shown in diagram 13.2, we’ve done the linear transformations and normalizations that I mentioned and will show on a diagram later, and we’re now ready with our query, key, and value tensors. The query, key, and value tensors, similar to what’s shown in <a href="#tbl-14-5" class="xref" data-preview="images/RC149.png">table 14.5</a>, are the inputs to <strong>scaled dot product attention</strong>:</p>
     <figure id="fig-14-2">
-      <input type="checkbox" id="lb-171" class="lightbox-toggle">
-      <label for="lb-171"><img src="images/RC154.png" alt="" loading="lazy"></label>
-      <label for="lb-171" class="lightbox-overlay"><img src="images/RC154.png" alt=""></label>
+      <input type="checkbox" id="lb-174" class="lightbox-toggle">
+      <label for="lb-174"><img src="images/RC154.png" alt="" loading="lazy"></label>
+      <label for="lb-174" class="lightbox-overlay"><img src="images/RC154.png" alt=""></label>
       <figcaption>Figure 14.2. Scaled dot product attention.</figcaption>
     </figure>
     <p>The operations on matrices shown in this diagram will do everything I walked through above and more. As a reminder, I’m using “@” to indicate matrix multiplication.</p>
     <p>Let’s drill into a few of the operations and then I’ll show the same query, key, and value I used above flowing through all of the operations. We’ll start with the <strong>mask</strong>. If you accidentally left out the mask the trained model would be useless. To explain, I want to zoom way out of the internals of the model and back to the big picture discussed in <a href="chapter-8.html" class="xref">chapter 8</a>.</p>
     <figure id="fig-14-3">
-      <input type="checkbox" id="lb-172" class="lightbox-toggle">
-      <label for="lb-172"><img src="images/RC155.png" alt="" loading="lazy"></label>
-      <label for="lb-172" class="lightbox-overlay"><img src="images/RC155.png" alt=""></label>
+      <input type="checkbox" id="lb-175" class="lightbox-toggle">
+      <label for="lb-175"><img src="images/RC155.png" alt="" loading="lazy"></label>
+      <label for="lb-175" class="lightbox-overlay"><img src="images/RC155.png" alt=""></label>
       <figcaption>Figure 14.3. Reminder of the tokens that we input during training.</figcaption>
     </figure>
     <p>During training, we feed in huge amounts of text and calculate loss based on how well the first position predicts token 3, the second position predicts token 11, and so on. The one thing we must absolutely, positively not do when the model is calculating the next token for a certain position is let it use information from tokens after that position.</p>
     <p>For example, the next token prediction for position 3 can and should use information from positions 1, 2, and its own position. But it <strong>must not</strong> use information from positions 4 and 5. Otherwise all the model will learn is how to cheat by copying the next token.</p>
     <figure id="fig-14-4" style="max-width:70%">
-      <input type="checkbox" id="lb-173" class="lightbox-toggle">
-      <label for="lb-173"><img src="images/RC156.png" alt="" loading="lazy"></label>
-      <label for="lb-173" class="lightbox-overlay"><img src="images/RC156.png" alt=""></label>
+      <input type="checkbox" id="lb-176" class="lightbox-toggle">
+      <label for="lb-176"><img src="images/RC156.png" alt="" loading="lazy"></label>
+      <label for="lb-176" class="lightbox-overlay"><img src="images/RC156.png" alt=""></label>
       <figcaption>Figure 14.4. While making a prediction for position 3, the model must not be allowed to cheat by using information from positions 4 or 5.</figcaption>
     </figure>
     <p>The mask guarantees no cheating. It makes sure that for a given position, the attention weights will be zero for all greater positions. <a href="#tbl-14-8" class="xref" data-preview="images/RC153.png">Table 14.8</a> showed the attention weights for position 5 meaning how much attention position 5 wants to give positions 1–5. Here’s now a table with the weights for all five positions before and after the mask:</p>
     <figure id="tbl-14-9">
-      <input type="checkbox" id="lb-174" class="lightbox-toggle">
-      <label for="lb-174"><img src="images/RC157.png" alt="" loading="lazy"></label>
-      <label for="lb-174" class="lightbox-overlay"><img src="images/RC157.png" alt=""></label>
+      <input type="checkbox" id="lb-177" class="lightbox-toggle">
+      <label for="lb-177"><img src="images/RC157.png" alt="" loading="lazy"></label>
+      <label for="lb-177" class="lightbox-overlay"><img src="images/RC157.png" alt=""></label>
       <figcaption>Table 14.9. How much attention each position gives every other position with and without a mask. We must use the masked version or the model will learn to cheat.</figcaption>
     </figure>
     <p>Notice that in the masked version, for position 1, 100% of the weight falls on position 1. Think about that for a second. It’s the only option because position 1 is not allowed to see positions 2–5. For position 2, 84% of the weight falls on position 1, 16% on position 2, and none on 3–5. When the weights for position 2 get multiplied by the values for all positions, no information from position 3, 4, or 5 will get blended in.</p>
     <p>Now backing up to the start of <a href="#fig-14-2" class="xref" data-preview="images/RC154.png">figure 14.2</a>, the first step is to matrix multiply the query by the <strong>transpose</strong> of the keys. The transpose of a matrix is the same matrix with the rows and columns switched. For example:</p>
     <figure id="fig-14-5">
-      <input type="checkbox" id="lb-175" class="lightbox-toggle">
-      <label for="lb-175"><img src="images/RC158.png" alt="" loading="lazy"></label>
-      <label for="lb-175" class="lightbox-overlay"><img src="images/RC158.png" alt=""></label>
+      <input type="checkbox" id="lb-178" class="lightbox-toggle">
+      <label for="lb-178"><img src="images/RC158.png" alt="" loading="lazy"></label>
+      <label for="lb-178" class="lightbox-overlay"><img src="images/RC158.png" alt=""></label>
       <figcaption>Figure 14.5: Transpose example.</figcaption>
     </figure>
     <p>Our goal is to compute a score between every query and every key, and as a reminder, we compute the score by doing element-wise multiplication and then adding. This is called the <strong>dot product</strong>. Since we have 5 queries and 5 keys in our example, we want to end up with 25 scores. If you work through it, you’ll see that matrix multiplying the query by the transpose of the keys results in a matrix where each element is the dot product of one row in the query and one row in the keys. However, there’s no need to work through it, just know you’ll end up with a matrix like the one shown as the output to the matrix multiply (@) in <a href="#fig-14-6" class="xref" data-preview="images/RC161.png">figure 14.6</a> below. That number 0.49 at the top left is the score between the first query and the first key.</p>
     <p>One last detail is the box I labeled “scale.” This means divide the scores by the square root of the size of the vectors, 2 in this example but in reality it will be a much bigger number. We do this because with lots of numbers in our vectors, the scores (dot products) will get large and softmax doesn’t play well with large numbers. I’ll show this with an example:</p>
     <figure id="tbl-14-10" style="max-width:70%">
-      <input type="checkbox" id="lb-176" class="lightbox-toggle">
-      <label for="lb-176"><img src="images/RC159.png" alt="" loading="lazy"></label>
-      <label for="lb-176" class="lightbox-overlay"><img src="images/RC159.png" alt=""></label>
+      <input type="checkbox" id="lb-179" class="lightbox-toggle">
+      <label for="lb-179"><img src="images/RC159.png" alt="" loading="lazy"></label>
+      <label for="lb-179" class="lightbox-overlay"><img src="images/RC159.png" alt=""></label>
       <figcaption>Table 14.10. Example showing how softmax doesn’t work well with large numbers.</figcaption>
     </figure>
     <p>The big scores are 100 times the non-big scores, and with these big numbers softmax assigns all of the weight to position 2. We do not want that! We’re trying to blend information from multiple positions. Look back at <a href="chapter-8.html#tbl-8-10" class="xref" data-preview="images/RC309.png">table 8.10</a> as a reminder for how the softmax calculation works. If you play with a few numbers you’ll see why it behaves poorly with big ones.</p>
     <p>Now you know everything you need to know to follow every calculation in scaled dot product attention. Here’s the same example we worked through in tables above but now using matrices and calculating the output for all positions, not just the last position.</p>
     <figure id="fig-14-6">
-      <input type="checkbox" id="lb-177" class="lightbox-toggle">
-      <label for="lb-177"><img src="images/RC161.png" alt="" loading="lazy"></label>
-      <label for="lb-177" class="lightbox-overlay"><img src="images/RC161.png" alt=""></label>
+      <input type="checkbox" id="lb-180" class="lightbox-toggle">
+      <label for="lb-180"><img src="images/RC161.png" alt="" loading="lazy"></label>
+      <label for="lb-180" class="lightbox-overlay"><img src="images/RC161.png" alt=""></label>
       <figcaption>Figure 14.6. The full scaled dot product attention calculation worked through above.</figcaption>
     </figure>
     <p>Of course this is a crazy diagram and the point is not to look at the individual numbers. Notice that the output for the last position (-35.60, 60.21) matches the calculation from <a href="#tbl-14-8" class="xref" data-preview="images/RC153.png">table 14.8</a>. Note also that the output for the first position (13.89, -43.42) matches the first position in the values since the first position isn’t allowed to mix in values from any other position.</p>
@@ -180,49 +180,49 @@
     <hr class="section-break">
     <p>It’s time to see where query, key, and value come from. I mentioned linear transformations and normalization above but I glossed over certain details and didn’t show a diagram. Well, here it is:</p>
     <figure id="fig-14-7">
-      <input type="checkbox" id="lb-178" class="lightbox-toggle">
-      <label for="lb-178"><img src="images/RC162.png" alt="" loading="lazy"></label>
-      <label for="lb-178" class="lightbox-overlay"><img src="images/RC162.png" alt=""></label>
+      <input type="checkbox" id="lb-181" class="lightbox-toggle">
+      <label for="lb-181"><img src="images/RC162.png" alt="" loading="lazy"></label>
+      <label for="lb-181" class="lightbox-overlay"><img src="images/RC162.png" alt=""></label>
       <figcaption>Figure 14.7: Causal Self Attention</figcaption>
     </figure>
     <p>As we talk this through, let’s think of our input as being a tensor of size 100×1280 corresponding to a sequence of 100 positions each represented by a vector with 1280 dimensions. (For scaled dot product attention above it was helpful to think of each vector as having size two, but that’s too small to see things here.)</p>
     <p>We take the input and do three different linear transformations. All three transformations preserve the dimensions (1280 → 1280 in our example). Each will learn its own weights during training in such a way that Q transforms its input into queries, K transforms its input into keys, and V transforms its input into values. So far this is what we covered above.</p>
     <p>Here’s something you haven’t seen yet: split into <strong>heads</strong>. What it does is straightforward and doesn’t involve learning any parameters. Say we want to split into 10 heads:</p>
     <figure id="fig-14-8">
-      <input type="checkbox" id="lb-179" class="lightbox-toggle">
-      <label for="lb-179"><img src="images/RC163.png" alt="" loading="lazy"></label>
-      <label for="lb-179" class="lightbox-overlay"><img src="images/RC163.png" alt=""></label>
+      <input type="checkbox" id="lb-182" class="lightbox-toggle">
+      <label for="lb-182"><img src="images/RC163.png" alt="" loading="lazy"></label>
+      <label for="lb-182" class="lightbox-overlay"><img src="images/RC163.png" alt=""></label>
       <figcaption>Figure 14.8. Example of splitting into heads.</figcaption>
     </figure>
     <p>All we’re doing is splitting up the vectors. The question is why. I’ll share a picture of why it feels intuitive to me that multiple heads could be helpful.</p>
     <p>Let’s pretend each position in the sequence is represented by a color. Position 1 is blue, position 2 is green, and position 3 is red:</p>
     <figure id="fig-14-9" style="max-width:50%">
-      <input type="checkbox" id="lb-180" class="lightbox-toggle">
-      <label for="lb-180"><img src="images/RC164.png" alt="" loading="lazy"></label>
-      <label for="lb-180" class="lightbox-overlay"><img src="images/RC164.png" alt=""></label>
+      <input type="checkbox" id="lb-183" class="lightbox-toggle">
+      <label for="lb-183"><img src="images/RC164.png" alt="" loading="lazy"></label>
+      <label for="lb-183" class="lightbox-overlay"><img src="images/RC164.png" alt=""></label>
       <figcaption>Figure 14.9. Pretend each position is a color.</figcaption>
     </figure>
     <p>Now pretend I’m figuring out the output for position 3. We match queries and keys and the resulting attention weight tells us to pay 70% attention to position 1, 5% to position 2, and 25% to position 3. Let me mix the colors in that ratio:</p>
     <figure id="fig-14-10" style="max-width:50%">
-      <input type="checkbox" id="lb-181" class="lightbox-toggle">
-      <label for="lb-181"><img src="images/RC165.png" alt="" loading="lazy"></label>
-      <label for="lb-181" class="lightbox-overlay"><img src="images/RC165.png" alt=""></label>
+      <input type="checkbox" id="lb-184" class="lightbox-toggle">
+      <label for="lb-184"><img src="images/RC165.png" alt="" loading="lazy"></label>
+      <label for="lb-184" class="lightbox-overlay"><img src="images/RC165.png" alt=""></label>
       <figcaption>Figure 14.10. Output for position 3 after mixing the colors from positions 1, 2, and 3.</figcaption>
     </figure>
     <p>However, if I break the vectors up into two, perhaps the queries and keys will tell me to mix the first half with weights of 75%, 5%, and 25% and the second half with weights of 5%, 75%, and 25%. My output for position 3 will then look like this:</p>
     <figure id="fig-14-11" style="max-width:50%">
-      <input type="checkbox" id="lb-182" class="lightbox-toggle">
-      <label for="lb-182"><img src="images/RC166.png" alt="" loading="lazy"></label>
-      <label for="lb-182" class="lightbox-overlay"><img src="images/RC166.png" alt=""></label>
+      <input type="checkbox" id="lb-185" class="lightbox-toggle">
+      <label for="lb-185"><img src="images/RC166.png" alt="" loading="lazy"></label>
+      <label for="lb-185" class="lightbox-overlay"><img src="images/RC166.png" alt=""></label>
       <figcaption>Figure 14.11. Mixture of positions 1, 2, and 3 when I have two heads.</figcaption>
     </figure>
     <p>The mixing that occurs <em>within</em> a position is already incredibly rich due to the linear transformations, especially the big ones in the MLP covered in <a href="chapter-13.html" class="xref">chapter 13</a>. However, mixing between positions seems a little too restrictive. Using multiple heads gives more room for the model to learn what to pay attention to.</p>
     <p>The classic way to think about this is that one head might learn to pay attention to adjectives that modify the current position, and another to the nouns referenced by the pronoun in the current position. I think it’s the right concept but I’m not sure what actually happens is ever that obvious or interpretable.</p>
     <p>If you’re following every detail you might wonder how the tensor dimensions change after we split into heads. Let me show that, and for completeness, I’ll include the batch dimension too.</p>
     <figure id="fig-14-12">
-      <input type="checkbox" id="lb-183" class="lightbox-toggle">
-      <label for="lb-183"><img src="images/RC167.png" alt="" loading="lazy"></label>
-      <label for="lb-183" class="lightbox-overlay"><img src="images/RC167.png" alt=""></label>
+      <input type="checkbox" id="lb-186" class="lightbox-toggle">
+      <label for="lb-186"><img src="images/RC167.png" alt="" loading="lazy"></label>
+      <label for="lb-186" class="lightbox-overlay"><img src="images/RC167.png" alt=""></label>
       <figcaption>Figure 14.12. Tensor dimension after splitting into heads.</figcaption>
     </figure>
     <p>For example, using our zero-based indexing notation mentioned above in <a href="chapter-8.html" class="xref">chapter 8</a> and the example we’ve been following, output[0,1,2,:] would be a vector of length 128 corresponding to the third head in the second position of the first sequence in the batch. And if you’re wondering, yes, we need to pick a number of heads that divides evenly into D.</p>
@@ -233,7 +233,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-15.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

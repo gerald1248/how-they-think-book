@@ -70,58 +70,58 @@
     <p>These days we’re so used to ChatGPT that our first instinct is probably to paste the question and choices in and we’ll expect it to answer. It will probably even explain its answer, so if our only purpose was grading, we might say something like “please respond with the letter only.” However, initially our GPT model won’t be tuned to act like an assistant. So what will happen if we try using the whole question as a prompt? It might generate A, B, C or D, but it’s also likely to generate something different. Then what would we do? Score the question as wrong? We’re not ready to operate at that level. We’re looking for a way to assess if the model is becoming smart. We want to somehow force out of it whatever it “thinks” the most likely answer is.</p>
     <p>Here’s the approach. First we assemble the following four pieces of text:</p>
     <figure id="tbl-18-1">
-      <input type="checkbox" id="lb-224" class="lightbox-toggle">
-      <label for="lb-224"><img src="images/RC207.png" alt="" loading="lazy"></label>
-      <label for="lb-224" class="lightbox-overlay"><img src="images/RC207.png" alt=""></label>
+      <input type="checkbox" id="lb-227" class="lightbox-toggle">
+      <label for="lb-227"><img src="images/RC207.png" alt="" loading="lazy"></label>
+      <label for="lb-227" class="lightbox-overlay"><img src="images/RC207.png" alt=""></label>
       <figcaption>Table 18.1. The four sequences we’re going to feed into the model. Each is formed from the question and a different multiple choice answer.</figcaption>
     </figure>
     <p>For this particular multiple choice question the start of each answer is the same, so the only differences are in the last few words:</p>
     <figure id="tbl-18-2">
-      <input type="checkbox" id="lb-225" class="lightbox-toggle">
-      <label for="lb-225"><img src="images/RC208.png" alt="" loading="lazy"></label>
-      <label for="lb-225" class="lightbox-overlay"><img src="images/RC208.png" alt=""></label>
+      <input type="checkbox" id="lb-228" class="lightbox-toggle">
+      <label for="lb-228"><img src="images/RC208.png" alt="" loading="lazy"></label>
+      <label for="lb-228" class="lightbox-overlay"><img src="images/RC208.png" alt=""></label>
       <figcaption>Table 18.2. All four sequences are the same except for the highlighted parts.</figcaption>
     </figure>
     <p>We feed each piece of text into the model. What does the model output? As usual, it gives a probability distribution for each next token for each input token. We can then go check the actual next tokens in the text (e.g. “routes,” “of”) and see what probability the model gave them. Refer back to <a href="chapter-8.html" class="xref">chapter 8</a> for how this works.</p>
     <p>In this case, since all four pieces of text start out the same, the probabilities for each word in each sequence will be the same until the text diverges. So let’s ignore those probabilities and start with the predictions from the last “the”:</p>
     <figure id="tbl-18-3" style="max-width:90%">
-      <input type="checkbox" id="lb-226" class="lightbox-toggle">
-      <label for="lb-226"><img src="images/RC209.png" alt="" loading="lazy"></label>
-      <label for="lb-226" class="lightbox-overlay"><img src="images/RC209.png" alt=""></label>
+      <input type="checkbox" id="lb-229" class="lightbox-toggle">
+      <label for="lb-229"><img src="images/RC209.png" alt="" loading="lazy"></label>
+      <label for="lb-229" class="lightbox-overlay"><img src="images/RC209.png" alt=""></label>
       <figcaption>Table 18.3. Probabilities assigned by the model to the next tokens in the text.</figcaption>
     </figure>
     <p>The way to read this is that everything up to “the” predicted “routes” with .01% probability, “locations” with 2.44% probability, and “elevations” with 0.12% probability. Everything up to “routes” in the first piece of text predicted “of” with 60.65% probability, and so on.</p>
     <p>I hope this is starting to make sense. The model has all of its world knowledge and all of the information from the text up to the point where the text diverges. It uses this to make an informed and educated prediction of each next token in each piece of text. This will give us the model’s overall prediction of the probability. The text with the highest probability is the choice the model thinks is right.</p>
     <p>So now we just need to multiply the probabilities, right? Not so fast. This would give an unfair advantage to short answers. To get around this we can first multiply and then take the geometric mean, in this case, either the cube root or fourth root based on if the text has three or four words. Let’s do that:</p>
     <figure id="tbl-18-4">
-      <input type="checkbox" id="lb-227" class="lightbox-toggle">
-      <label for="lb-227"><img src="images/RC210.png" alt="" loading="lazy"></label>
-      <label for="lb-227" class="lightbox-overlay"><img src="images/RC210.png" alt=""></label>
+      <input type="checkbox" id="lb-230" class="lightbox-toggle">
+      <label for="lb-230"><img src="images/RC210.png" alt="" loading="lazy"></label>
+      <label for="lb-230" class="lightbox-overlay"><img src="images/RC210.png" alt=""></label>
       <figcaption>Table 18.4. The probability of each completion according to the model.</figcaption>
     </figure>
     <p>The model “thinks” answer C) is correct. That happens to be wrong and I’ll come back to how we keep score. Let’s stay focused on the idea. In our own minds we’re constantly judging probability. How likely is that answer to be right? Do I believe him? Can I cross the road before that car gets here? Will she notice?</p>
     <p>This is what the model is doing. You can almost feel it thinking. It predicts the next token for “the.” It sees “locations,” yup, okay, it’s not crazy, I put that at 2.4%. It predicts the next token after “locations,” sees “of,” yes, that’s exactly what I thought. It’s similar to one of the ways our brains operate: with each new piece of information we update our assessment. The model is wrong here, of course, but we too are fallible.</p>
     <p>To drive this home, I’m going to add one more multiple choice answer. The changed part of the text here, “toppings on pizza,” is perfectly likely in other situations but makes no sense in this context.</p>
     <figure id="tbl-18-5">
-      <input type="checkbox" id="lb-228" class="lightbox-toggle">
-      <label for="lb-228"><img src="images/RC211.png" alt="" loading="lazy"></label>
-      <label for="lb-228" class="lightbox-overlay"><img src="images/RC211.png" alt=""></label>
+      <input type="checkbox" id="lb-231" class="lightbox-toggle">
+      <label for="lb-231"><img src="images/RC211.png" alt="" loading="lazy"></label>
+      <label for="lb-231" class="lightbox-overlay"><img src="images/RC211.png" alt=""></label>
       <figcaption>Table 18.5. One more sequence to feed the model.</figcaption>
     </figure>
     <p>Here are the probabilities:</p>
     <figure id="tbl-18-6">
-      <input type="checkbox" id="lb-229" class="lightbox-toggle">
-      <label for="lb-229"><img src="images/RC212.png" alt="" loading="lazy"></label>
-      <label for="lb-229" class="lightbox-overlay"><img src="images/RC212.png" alt=""></label>
+      <input type="checkbox" id="lb-232" class="lightbox-toggle">
+      <label for="lb-232"><img src="images/RC212.png" alt="" loading="lazy"></label>
+      <label for="lb-232" class="lightbox-overlay"><img src="images/RC212.png" alt=""></label>
       <figcaption>Table 18.6. The probability of each completion according to the model including “toppings on pizza.”</figcaption>
     </figure>
     <p>The model really doesn’t think the answer is the new choice E). This is like a student who isn’t sure of the right answer but is positive they can rule out one of them.</p>
     <p>I showed all of this with probabilities because I feel it’s intuitive. It’s easy to get your head around the idea that given all of the context, the model believes there is only a 0.55% chance that pizza belongs there. However, as discussed in <a href="chapter-8.html" class="xref">chapter 8</a>, we don’t actually work in probabilities. Multiplying lots of small numbers and taking their nth root is a bad idea. Instead we work with the negative logs of the probabilities, i.e., negative log loss. In fact, calculating which sequence is most likely is exactly the same as the loss calculation I showed at the end of <a href="chapter-8.html" class="xref">chapter 8</a> in <a href="chapter-8.html#tbl-8-8" class="xref" data-preview="images/RC307.png">table 8.8</a>.</p>
     <p>For the sake of a reminder of the connection between probability and negative log loss, and to see how clean the calculations are when sticking with logs, let me recreate <a href="#tbl-18-6" class="xref" data-preview="images/RC212.png">table 18.6</a> using negative log loss:</p>
     <figure id="tbl-18-7">
-      <input type="checkbox" id="lb-230" class="lightbox-toggle">
-      <label for="lb-230"><img src="images/RC213.png" alt="" loading="lazy"></label>
-      <label for="lb-230" class="lightbox-overlay"><img src="images/RC213.png" alt=""></label>
+      <input type="checkbox" id="lb-233" class="lightbox-toggle">
+      <label for="lb-233"><img src="images/RC213.png" alt="" loading="lazy"></label>
+      <label for="lb-233" class="lightbox-overlay"><img src="images/RC213.png" alt=""></label>
       <figcaption>Table 18.7. The sequence with the lowest loss is the one the model thinks is most likely.</figcaption>
     </figure>
     <p>For SQuAD, CORE specifies that we use the 10-shot approach to prime the model. The same is true here for ARC. So each piece of text that we input to the model consists of 10 identical examples chosen randomly from other questions in ARC followed by this question and answer.</p>
@@ -130,9 +130,9 @@
     <p>As GPT models became even better at answering grade-school questions, a logical next step was to draw questions from college and graduate school standardized tests. These tests require more knowledge and more reasoning than the types of questions in SQuAD and ARC. In September 2023, a team of nine researchers at Microsoft published AGI Eval with banks of questions from nine exams. The idea is that a computer acing these exams would be evidence of artificial general intelligence, or at least a leap in that direction.</p>
     <p>Here’s a table from their paper. It lists the exams, the number of humans who take each exam each year, and the number of questions they copied from each exam.</p>
     <figure id="tbl-18-8">
-      <input type="checkbox" id="lb-231" class="lightbox-toggle">
-      <label for="lb-231"><img src="images/RC214.png" alt="" loading="lazy"></label>
-      <label for="lb-231" class="lightbox-overlay"><img src="images/RC214.png" alt=""></label>
+      <input type="checkbox" id="lb-234" class="lightbox-toggle">
+      <label for="lb-234"><img src="images/RC214.png" alt="" loading="lazy"></label>
+      <label for="lb-234" class="lightbox-overlay"><img src="images/RC214.png" alt=""></label>
       <figcaption>Table 18.8: Table 1 from <em>AGIEval: A Human-Centric Benchmark for Evaluating Foundation Models</em></figcaption>
     </figure>
     <p>Even at the time of publication, the researchers’ tests showed that OpenAI GPT-4 could score 95% on the SAT math questions (using chain-of-thought reasoning). The top 1% of human performance was 94%.</p>
@@ -147,9 +147,9 @@
     </div>
     <p>Well, that seems fun. And the model is going to have to do something very different from pulling “2010” out of a reading passage to figure it out. I solved it but it took a while. I would have to get much faster before I could take the LSATs.</p>
     <figure id="fig-18-1" style="max-width:70%">
-      <input type="checkbox" id="lb-232" class="lightbox-toggle">
-      <label for="lb-232"><img src="images/RC215.jpg" alt="" loading="lazy"></label>
-      <label for="lb-232" class="lightbox-overlay"><img src="images/RC215.jpg" alt=""></label>
+      <input type="checkbox" id="lb-235" class="lightbox-toggle">
+      <label for="lb-235"><img src="images/RC215.jpg" alt="" loading="lazy"></label>
+      <label for="lb-235" class="lightbox-overlay"><img src="images/RC215.jpg" alt=""></label>
       <figcaption>Figure 18.1. Me solving a “Logic Games” question.</figcaption>
     </figure>
     <p>I used a meet-in-the-middle approach (a little similar to the discussion of matching keys and values in <a href="chapter-14.html" class="xref">chapter 14</a>). I first marked the things that had to be true from the question and then ruled out three of the four answers. I suppose a model could do something similar where it starts making logical statements to rule things in or out, reads those, and makes more logical statements. This is a chain-of-thought approach, something our 20-layer or even 32-layer model will not be capable of.</p>
@@ -162,9 +162,9 @@
     <p>The Dyck language, named after late-19th early-20 century mathematician Walther Franz Anton von Dyck, is a formal language that requires matching brackets. For example, “[ ( ) ]” is a valid “word” in the language, but “[ ( ]” is not because the opening parenthesis is not balanced by a closing parenthesis. The need to balance brackets and parentheses, and understand the grouping they indicate, comes up all the time in math expressions and in programming languages.</p>
     <p>You may never have written a computer program, but I hope you can imagine that writing code to balance brackets can be achieved by codifying some non-mysterious logic. Let me write one:</p>
     <figure id="fig-18-2" style="max-width:70%">
-      <input type="checkbox" id="lb-233" class="lightbox-toggle">
-      <label for="lb-233"><img src="images/RC216.png" alt="" loading="lazy"></label>
-      <label for="lb-233" class="lightbox-overlay"><img src="images/RC216.png" alt=""></label>
+      <input type="checkbox" id="lb-236" class="lightbox-toggle">
+      <label for="lb-236"><img src="images/RC216.png" alt="" loading="lazy"></label>
+      <label for="lb-236" class="lightbox-overlay"><img src="images/RC216.png" alt=""></label>
       <figcaption>Figure 18.2. Python code to balance brackets.</figcaption>
     </figure>
     <p>This little bit of code, which takes no time to run, prints out the brackets to close the text at the top. It will work even if there are hundreds or thousands of brackets to balance, and as a bonus it will complain if the input text is invalid, say “[ ( ].” I hope you can also imagine a) why it may not be an easy task for a GPT model and b) how a model getting good at a task like this is a likely prerequisite to reading and writing computer code and math.</p>
@@ -181,9 +181,9 @@
     <p>I will not go through each task type in detail. In total, CORE has 91,037 questions spread across 22 task types. Each type is evaluated via completion (like SQuAD) or by choosing an option using loss (like ARC). The score for each task is then centered and the scores across all tasks are averaged. The higher the score the better. A perfect score would be 1.</p>
     <p>Here’s a sample of “questions” from four other task types:</p>
     <figure id="tbl-18-9">
-      <input type="checkbox" id="lb-234" class="lightbox-toggle">
-      <label for="lb-234"><img src="images/RC217.png" alt="" loading="lazy"></label>
-      <label for="lb-234" class="lightbox-overlay"><img src="images/RC217.png" alt=""></label>
+      <input type="checkbox" id="lb-237" class="lightbox-toggle">
+      <label for="lb-237"><img src="images/RC217.png" alt="" loading="lazy"></label>
+      <label for="lb-237" class="lightbox-overlay"><img src="images/RC217.png" alt=""></label>
       <figcaption>Table 18.9. A sample of four other tasks types not discussed above. If curious, the answers are “D. Tarahumara-del-Centro,” “voting,” “C. stands and walks back across the lawn,” #1, and #2.</figcaption>
     </figure>
   </article>
@@ -192,7 +192,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-19.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

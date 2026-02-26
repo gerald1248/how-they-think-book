@@ -29,33 +29,33 @@
     <p>I lied. We’re going to talk about hedgehogs before we crack open the transformer. I want to cover a few deep neural network concepts in a more straightforward model so there will be fewer new concepts inside the transformer.</p>
     <p>In <a href="chapter-3.html" class="xref">chapter 3</a> we created a model that took the height and length of a turkey and predicted the number of feathers. Suppose you land on an alien planet that happens to have a lot of hedgehogs. You go out and measure the length and count the number of quills on a thousand of them.</p>
     <figure id="fig-10-1" style="max-width:90%">
-      <input type="checkbox" id="lb-101" class="lightbox-toggle">
-      <label for="lb-101"><img src="images/RC086.png" alt="" loading="lazy"></label>
-      <label for="lb-101" class="lightbox-overlay"><img src="images/RC086.png" alt=""></label>
+      <input type="checkbox" id="lb-104" class="lightbox-toggle">
+      <label for="lb-104"><img src="images/RC086.png" alt="" loading="lazy"></label>
+      <label for="lb-104" class="lightbox-overlay"><img src="images/RC086.png" alt=""></label>
       <figcaption>Figure 10.1. An alien hedgehog.</figcaption>
     </figure>
     <p>Here’s the data on the first 10 alien hedgehogs:</p>
     <figure id="tbl-10-1" style="max-width:70%">
-      <input type="checkbox" id="lb-102" class="lightbox-toggle">
-      <label for="lb-102"><img src="images/RC087.png" alt="" loading="lazy"></label>
-      <label for="lb-102" class="lightbox-overlay"><img src="images/RC087.png" alt=""></label>
+      <input type="checkbox" id="lb-105" class="lightbox-toggle">
+      <label for="lb-105"><img src="images/RC087.png" alt="" loading="lazy"></label>
+      <label for="lb-105" class="lightbox-overlay"><img src="images/RC087.png" alt=""></label>
       <figcaption>Table 10.1. Data on our first 10 alien hedgehogs.</figcaption>
     </figure>
     <p>I had to make the data up because if we have human or robot teams on alien planets, they’ve prioritized other types of research, or kept the hedgehog stuff out of the public domain. Look at the table. Does a relationship between length and number of quills jump out at you? You would think the longer the animal the more quills, but even from a glance this doesn’t seem to be true.</p>
     <p>We as humans are excellent at spotting patterns and trends when data is graphed in two dimensions. We’re also reasonable at seeing trends in three dimensions. Once we go beyond three we need to take special measures to view data, for example, making many plots each with different combinations of two dimensions, or using math to reduce the dimensions. Fortunately this example has only two dimensions: length and number of quills. This is one less than the turkeys where we dealt with height, length, and number of feathers.</p>
     <p>Let’s plot all 1000 hedgehogs.</p>
     <figure id="fig-10-2" style="max-width:70%">
-      <input type="checkbox" id="lb-103" class="lightbox-toggle">
-      <label for="lb-103"><img src="images/RC088.png" alt="" loading="lazy"></label>
-      <label for="lb-103" class="lightbox-overlay"><img src="images/RC088.png" alt=""></label>
+      <input type="checkbox" id="lb-106" class="lightbox-toggle">
+      <label for="lb-106"><img src="images/RC088.png" alt="" loading="lazy"></label>
+      <label for="lb-106" class="lightbox-overlay"><img src="images/RC088.png" alt=""></label>
       <figcaption>Figure 10.2. Length vs number of quills for 1000 alien hedgehogs.</figcaption>
     </figure>
     <p>We can immediately see that there is a relationship between length and number of quills. It looks like hedgehogs around 1.3 meters long have over 5000 quills, ones that are 1.5 meters drop down to closer to 1000 quills, and 1.6 meter hedgehogs have around 4000 quills. It all seems pretty weird, but definitely not random. If you told me the length of a hedgehog not in this dataset, I bet I could make a pretty good prediction of how many quills it has.</p>
     <p>That’s fine for a mental model. But how about a computer model? Our goal is:</p>
     <figure id="fig-10-3">
-      <input type="checkbox" id="lb-104" class="lightbox-toggle">
-      <label for="lb-104"><img src="images/RC089.png" alt="" loading="lazy"></label>
-      <label for="lb-104" class="lightbox-overlay"><img src="images/RC089.png" alt=""></label>
+      <input type="checkbox" id="lb-107" class="lightbox-toggle">
+      <label for="lb-107"><img src="images/RC089.png" alt="" loading="lazy"></label>
+      <label for="lb-107" class="lightbox-overlay"><img src="images/RC089.png" alt=""></label>
       <figcaption>Figure 10.3. Hedgehog model we want to create. It should take in length and predict the number of quills.</figcaption>
     </figure>
     <p>One thing I didn’t worry about in the turkey example was holding back <strong>validation</strong> data. Here we’re going to be more careful. The idea is that if I use all of my data to train, I could end up with a model that seems incredible as evidenced by very low loss. However, maybe what’s really happening is the model has become <strong>overfit</strong> to the training data and won’t do a great job with new data. The whole point of the model is to predict things we don’t know.</p>
@@ -68,70 +68,70 @@
     <p>Finally, <strong>mean squared error or MSE</strong> is just more standard. It’s probably the most common loss function for models that predict continuous values like number of quills.</p>
     <p>Time to build a model. Let’s start simple, even simpler than we started with the turkey example. The average number of quills of the hedgehogs in the training data is 3.03. Let’s just ignore the input and always predict 3.03.</p>
     <figure id="fig-10-4">
-      <input type="checkbox" id="lb-105" class="lightbox-toggle">
-      <label for="lb-105"><img src="images/RC090.png" alt="" loading="lazy"></label>
-      <label for="lb-105" class="lightbox-overlay"><img src="images/RC090.png" alt=""></label>
+      <input type="checkbox" id="lb-108" class="lightbox-toggle">
+      <label for="lb-108"><img src="images/RC090.png" alt="" loading="lazy"></label>
+      <label for="lb-108" class="lightbox-overlay"><img src="images/RC090.png" alt=""></label>
       <figcaption>Figure 10.4. Hedgehog model #1. As simple as it gets.</figcaption>
     </figure>
     <p>We can calculate loss:</p>
     <figure id="tbl-10-2" style="max-width:50%">
-      <input type="checkbox" id="lb-106" class="lightbox-toggle">
-      <label for="lb-106"><img src="images/RC095.png" alt="" loading="lazy"></label>
-      <label for="lb-106" class="lightbox-overlay"><img src="images/RC095.png" alt=""></label>
+      <input type="checkbox" id="lb-109" class="lightbox-toggle">
+      <label for="lb-109"><img src="images/RC095.png" alt="" loading="lazy"></label>
+      <label for="lb-109" class="lightbox-overlay"><img src="images/RC095.png" alt=""></label>
       <figcaption>Table 10.2. Loss on training and validation data for hedgehog model #1.</figcaption>
     </figure>
     <p>Since the square root of 1.050 is 1.025, we’ll be off by an average of around 1025 quills, judging by our validation set. Let’s try to beat this with a model like the one we used to predict the number of turkey feathers.</p>
     <p>In a way this is more straightforward than the turkey model because we have a single input. In the turkey model we multiplied height by a weight, length by a different weight, and added those together. We started with random weights and adjusted them through training until they were close to optimal.</p>
     <p>We’ll do the same here except with just a single weight. I do though want to add in what’s called a <strong>bias term</strong>. This is a number that gets added after the multiplication. So using x to mean our input, here’s what the model look like:</p>
     <figure id="fig-10-5">
-      <input type="checkbox" id="lb-107" class="lightbox-toggle">
-      <label for="lb-107"><img src="images/RC091.png" alt="" loading="lazy"></label>
-      <label for="lb-107" class="lightbox-overlay"><img src="images/RC091.png" alt=""></label>
+      <input type="checkbox" id="lb-110" class="lightbox-toggle">
+      <label for="lb-110"><img src="images/RC091.png" alt="" loading="lazy"></label>
+      <label for="lb-110" class="lightbox-overlay"><img src="images/RC091.png" alt=""></label>
       <figcaption>Figure 10.5. Hedgehog model #2. It has two parameters: w and b.</figcaption>
     </figure>
     <p>As an example, if w is 1 and b is 1, we would predict that a hedgehog of length 2 meters would have 3 (thousand) quills.</p>
     <p>Before we train, I want to tighten up our terminology. In the turkey example we adjusted weights. In this model, I have a <em>weight</em> and a <em>bias</em> and I’ll be adjusting both of these. I might casually call everything a weight, but to avoid confusion, I’m going to use the term <strong>parameter</strong>. Our model has two parameters and we’ll be adjusting both of them during training to minimize loss.</p>
     <p>I won’t show the training steps because they’re the same as the turkey example. Here’s the result:</p>
     <figure id="tbl-10-3" style="max-width:70%">
-      <input type="checkbox" id="lb-108" class="lightbox-toggle">
-      <label for="lb-108"><img src="images/RC096.png" alt="" loading="lazy"></label>
-      <label for="lb-108" class="lightbox-overlay"><img src="images/RC096.png" alt=""></label>
+      <input type="checkbox" id="lb-111" class="lightbox-toggle">
+      <label for="lb-111"><img src="images/RC096.png" alt="" loading="lazy"></label>
+      <label for="lb-111" class="lightbox-overlay"><img src="images/RC096.png" alt=""></label>
       <figcaption>Table 10.3. Loss for hedgehog model #2.</figcaption>
     </figure>
     <p>Model #2 beat model #1! Validation loss is also lower than training loss so it doesn’t look like we overfit. Here are the parameters we learned:</p>
     <figure id="tbl-10-4" style="max-width:50%">
-      <input type="checkbox" id="lb-109" class="lightbox-toggle">
-      <label for="lb-109"><img src="images/RC097.png" alt="" loading="lazy"></label>
-      <label for="lb-109" class="lightbox-overlay"><img src="images/RC097.png" alt=""></label>
+      <input type="checkbox" id="lb-112" class="lightbox-toggle">
+      <label for="lb-112"><img src="images/RC097.png" alt="" loading="lazy"></label>
+      <label for="lb-112" class="lightbox-overlay"><img src="images/RC097.png" alt=""></label>
       <figcaption>Table 10.4. Parameters we learned for hedgehog model #1.</figcaption>
     </figure>
     <p>And best of all, and unlike when we get into modeling all of human knowledge and reasoning with our transformer :), we can easily visualize exactly what our model is doing by plotting the predictions.</p>
     <figure id="fig-10-6" style="max-width:70%">
-      <input type="checkbox" id="lb-110" class="lightbox-toggle">
-      <label for="lb-110"><img src="images/RC098.png" alt="" loading="lazy"></label>
-      <label for="lb-110" class="lightbox-overlay"><img src="images/RC098.png" alt=""></label>
+      <input type="checkbox" id="lb-113" class="lightbox-toggle">
+      <label for="lb-113"><img src="images/RC098.png" alt="" loading="lazy"></label>
+      <label for="lb-113" class="lightbox-overlay"><img src="images/RC098.png" alt=""></label>
       <figcaption>Figure 10.6. Predictions of hedgehog model #2 plotted on top of the actual data.</figcaption>
     </figure>
     <p>The good news is we’re making better predictions than before. The bad news is the model doesn’t seem all that great compared to what we humans could do. This is not a surprise because multiplying by a single weight and adding a bias can’t give us anything <em>other</em> than a line. In fact you might remember learning the line equation <em>y = mx + b </em>in middle school.</p>
     <p>Before we go on, I want to redraw the model diagram. We talked in <a href="chapter-5.html" class="xref">chapter 5</a> about how helpful it is to work at higher levels of abstraction, for example with matrices. But in <a href="#fig-10-5" class="xref" data-preview="images/RC091.png">figure 10.5</a> I went all the way back to scalar variables (x, w, and b). There’s a term for multiplying by weights and adding a bias: a <strong>linear</strong> transformation. Since that’s the only thing going on in model #2, I’m going to redraw my diagram using a <em>linear module</em> which I’ll show as a green box. You’ll be seeing many of these when we look inside the transformer in the next few chapters.</p>
     <figure id="fig-10-7">
-      <input type="checkbox" id="lb-111" class="lightbox-toggle">
-      <label for="lb-111"><img src="images/RC092.png" alt="" loading="lazy"></label>
-      <label for="lb-111" class="lightbox-overlay"><img src="images/RC092.png" alt=""></label>
+      <input type="checkbox" id="lb-114" class="lightbox-toggle">
+      <label for="lb-114"><img src="images/RC092.png" alt="" loading="lazy"></label>
+      <label for="lb-114" class="lightbox-overlay"><img src="images/RC092.png" alt=""></label>
       <figcaption>Figure 10.7. Hedgehog model #2 redrawn.</figcaption>
     </figure>
     <p>I wrote “1 → 1” in the linear module to indicate that we’re transforming from a single dimension (length) to a single dimension (number of quills). As a reminder from the turkey example, we can show this as a matrix. I know at this point it’s overkill.</p>
     <figure id="fig-10-8">
-      <input type="checkbox" id="lb-112" class="lightbox-toggle">
-      <label for="lb-112"><img src="images/RC093.png" alt="" loading="lazy"></label>
-      <label for="lb-112" class="lightbox-overlay"><img src="images/RC093.png" alt=""></label>
+      <input type="checkbox" id="lb-115" class="lightbox-toggle">
+      <label for="lb-115"><img src="images/RC093.png" alt="" loading="lazy"></label>
+      <label for="lb-115" class="lightbox-overlay"><img src="images/RC093.png" alt=""></label>
       <figcaption>Figure 10.8. The operations inside the linear module shown the matrix way.</figcaption>
     </figure>
     <p>Two thoughts pop into my mind as I think about how to build a better model. The first is that there’s this up and down relationship between length and number of quills, so no matter what, a single line isn’t going to be that great. I want to give the model more parameters to work with. The second is that I’ve heard of deep learning and deep neural networks and so I should try making my model deeper. This too might give it more room to learn the patterns in the data. Let’s try:</p>
     <figure id="fig-10-9">
-      <input type="checkbox" id="lb-113" class="lightbox-toggle">
-      <label for="lb-113"><img src="images/RC094.png" alt="" loading="lazy"></label>
-      <label for="lb-113" class="lightbox-overlay"><img src="images/RC094.png" alt=""></label>
+      <input type="checkbox" id="lb-116" class="lightbox-toggle">
+      <label for="lb-116"><img src="images/RC094.png" alt="" loading="lazy"></label>
+      <label for="lb-116" class="lightbox-overlay"><img src="images/RC094.png" alt=""></label>
       <figcaption>Figure 10.9. Hedgehog model #3.</figcaption>
     </figure>
     <p>In this model I take a single input (like before) and feed it to my first linear transform. This first linear transform turns it into 10 numbers. Those 10 numbers go into the second linear transform which turns it back into one number. I drew 10 arrows between the layers here to emphasize the 10 numbers but I won’t do this going forward.</p>
@@ -139,38 +139,38 @@
     <p>The first linear layer has 10 weights and 10 biases. Let’s call the input to this layer x, the length of a hedgehog. The 10 numbers coming out of the layer are w<sub>1</sub>(x) + b<sub>1</sub>, w<sub>2</sub>(x) + b<sub>2</sub>, etc. In other words, each number coming out is the input multiplied by a different weight and added to a different bias.</p>
     <p>It’s easier to keep track of all this with matrices:</p>
     <figure id="fig-10-10">
-      <input type="checkbox" id="lb-114" class="lightbox-toggle">
-      <label for="lb-114"><img src="images/RC099.png" alt="" loading="lazy"></label>
-      <label for="lb-114" class="lightbox-overlay"><img src="images/RC099.png" alt=""></label>
+      <input type="checkbox" id="lb-117" class="lightbox-toggle">
+      <label for="lb-117"><img src="images/RC099.png" alt="" loading="lazy"></label>
+      <label for="lb-117" class="lightbox-overlay"><img src="images/RC099.png" alt=""></label>
       <figcaption>Figure 10.10. The matrix way of calculating a 1→10 linear transformation.</figcaption>
     </figure>
     <p>The second linear layer is similar to our turkey model because we take multiple numbers and reduce them to a single number. Think of this as mixing the inputs—an extreme version could be to multiply the first number by 1 and all the others by 0 indicating that we only want the information in the first number. If we call our inputs x<sub>1</sub>, x<sub>2</sub>, etc. then our single output number will be w<sub>1</sub>(x<sub>1</sub>) + w<sub>2</sub>(x<sub>2</sub>) + … + w<sub>10</sub>(x<sub>10</sub>) + b. The weights and bias here are just for this second layer and are not the same as the first layer.</p>
     <p>Here’s how this looks with matrices. The output of the first linear layer is the input to the second linear layer.</p>
     <figure id="fig-10-11">
-      <input type="checkbox" id="lb-115" class="lightbox-toggle">
-      <label for="lb-115"><img src="images/RC100.png" alt="" loading="lazy"></label>
-      <label for="lb-115" class="lightbox-overlay"><img src="images/RC100.png" alt=""></label>
+      <input type="checkbox" id="lb-118" class="lightbox-toggle">
+      <label for="lb-118"><img src="images/RC100.png" alt="" loading="lazy"></label>
+      <label for="lb-118" class="lightbox-overlay"><img src="images/RC100.png" alt=""></label>
       <figcaption>Figure 10.11. The matrix way of calculating a 10→1 linear transformation.</figcaption>
     </figure>
     <p>Look how beautiful that is. Since you may still be getting used to working with matrices, let me also show the two linear layer calculations with actual numbers. I’ll use linear transformations of sizes 1 → 3 and 3 → 1 to keep things legible. I’ll also use random small integers (unrelated to our hedgehog data) for the weights and biases both to keep it legible and so you can repeat the calculations.</p>
     <figure id="fig-10-12">
-      <input type="checkbox" id="lb-116" class="lightbox-toggle">
-      <label for="lb-116"><img src="images/RC369.png" alt="" loading="lazy"></label>
-      <label for="lb-116" class="lightbox-overlay"><img src="images/RC369.png" alt=""></label>
+      <input type="checkbox" id="lb-119" class="lightbox-toggle">
+      <label for="lb-119"><img src="images/RC369.png" alt="" loading="lazy"></label>
+      <label for="lb-119" class="lightbox-overlay"><img src="images/RC369.png" alt=""></label>
       <figcaption>Figure 10.12. Example calculations for two linear layers using matrices.</figcaption>
     </figure>
     <p>Now back to our hedgehog model #3, let’s count the total parameters. We have 10 weights and 10 biases for the first linear layer plus 10 weights and 1 bias for the second linear layer for a total of 31 parameters. There’s much more room for the model to learn. Let’s go beat model #2. Again, you can assume I trained the model properly and I’m going to skip right to showing the loss with the resulting model.</p>
     <figure id="tbl-10-5">
-      <input type="checkbox" id="lb-117" class="lightbox-toggle">
-      <label for="lb-117"><img src="images/RC101.png" alt="" loading="lazy"></label>
-      <label for="lb-117" class="lightbox-overlay"><img src="images/RC101.png" alt=""></label>
+      <input type="checkbox" id="lb-120" class="lightbox-toggle">
+      <label for="lb-120"><img src="images/RC101.png" alt="" loading="lazy"></label>
+      <label for="lb-120" class="lightbox-overlay"><img src="images/RC101.png" alt=""></label>
       <figcaption>Table 10.5. Loss for model #3.</figcaption>
     </figure>
     <p>Well, that’s not good. Model #3 is very close to model #2 and actually slightly worse. Let’s look at the plot:</p>
     <figure id="fig-10-13">
-      <input type="checkbox" id="lb-118" class="lightbox-toggle">
-      <label for="lb-118"><img src="images/RC102.png" alt="" loading="lazy"></label>
-      <label for="lb-118" class="lightbox-overlay"><img src="images/RC102.png" alt=""></label>
+      <input type="checkbox" id="lb-121" class="lightbox-toggle">
+      <label for="lb-121"><img src="images/RC102.png" alt="" loading="lazy"></label>
+      <label for="lb-121" class="lightbox-overlay"><img src="images/RC102.png" alt=""></label>
       <figcaption>Figure 10.13. Hedgehog model #3.</figcaption>
     </figure>
     <p>Another line! What’s going on? Let me illustrate by pretending our first linear layer is 1 → 2 and our second linear layer is 2 → 1 to keep the numbers small. The outputs of the first layer will be w<sub>1</sub>x + b<sub>1</sub> and w<sub>2</sub>x + b<sub>2</sub>. These outputs are the inputs to the second layer, which means the output of the second layer will be w<sub>3</sub>(w<sub>1</sub>x + b<sub>1</sub>) + w<sub>4</sub>(w<sub>2</sub>x + b<sub>2</sub>) + b<sub>3</sub>. Multiply out and combine terms:</p>
@@ -186,102 +186,102 @@
     <p>So all that fancy work with a two-layer network and 29 extra parameters was pointless. No matter how many linear transforms we do, and no matter how many parameters those linear transforms have, if all we do is feed the output of one transform into the input of the next, the whole thing can be simplified to a single linear layer.</p>
     <p>We need something else. When you see what it is you’re going to think it’s too simple, almost a trick. Oddly it has a complicated name. To give you an intuition, suppose we wanted to create a model with two linear layers. The first layer goes from 1 → 2 and the second from 2 → 1. The purpose of the model is to predict y from x in this plot:</p>
     <figure id="fig-10-14">
-      <input type="checkbox" id="lb-119" class="lightbox-toggle">
-      <label for="lb-119"><img src="images/RC103.png" alt="" loading="lazy"></label>
-      <label for="lb-119" class="lightbox-overlay"><img src="images/RC103.png" alt=""></label>
+      <input type="checkbox" id="lb-122" class="lightbox-toggle">
+      <label for="lb-122"><img src="images/RC103.png" alt="" loading="lazy"></label>
+      <label for="lb-122" class="lightbox-overlay"><img src="images/RC103.png" alt=""></label>
       <figcaption>Figure 10.14. Can we build a linear model to predict y from x?</figcaption>
     </figure>
     <p>Even though it looks easy, you already know from the argument above that our model is going to be a line. This means at best we could get the right side correct or the left side correct, but not both. We need a way to tell our model to treat x &lt; 0 differently than x &gt; 0.</p>
     <p>Let’s say we add one more operation that we can sandwich between the two linear layers: taking the max of 0 and our input. If our input is negative, it becomes 0. If it’s positive, no change. We’ll get to if it’s useful or not in a moment, but you can clearly see it’s something other than a linear transformation. There is no way to rearrange y = mx + b into meaning y is the maximum of x and 0. Try to think of values for m and b in y = mx + b that will always give you x or 0, whichever is higher. It’s impossible.</p>
     <p>Here’s a diagram with the model I just described and variable names for the parameters in each linear layer. Before reading past the diagram, see if you can come up with parameter values that will make this model match the “data” shown in <a href="#fig-10-14" class="xref" data-preview="images/RC103.png">figure 10.14</a>. Or put another way, come up with the parameters that will make this model match the function y = |x| (y = absolute value of x). This is a fun one to play with so don’t peek ahead.</p>
     <figure id="fig-10-15">
-      <input type="checkbox" id="lb-120" class="lightbox-toggle">
-      <label for="lb-120"><img src="images/RC104.png" alt="" loading="lazy"></label>
-      <label for="lb-120" class="lightbox-overlay"><img src="images/RC104.png" alt=""></label>
+      <input type="checkbox" id="lb-123" class="lightbox-toggle">
+      <label for="lb-123"><img src="images/RC104.png" alt="" loading="lazy"></label>
+      <label for="lb-123" class="lightbox-overlay"><img src="images/RC104.png" alt=""></label>
       <figcaption>Figure 10.15. What values for the parameters (w<sub>1</sub>, etc.) will cause this machine to output the absolute value of x? Max(x, 0) means the maximum between x and 0.</figcaption>
     </figure>
     <p>One answer is to set w<sub>2</sub> to -1 and all the other weights to 1, and set all three biases to 0. Let’s input 5 and -5 as examples:</p>
     <figure id="fig-10-16">
-      <input type="checkbox" id="lb-121" class="lightbox-toggle">
-      <label for="lb-121"><img src="images/RC105.png" alt="" loading="lazy"></label>
-      <label for="lb-121" class="lightbox-overlay"><img src="images/RC105.png" alt=""></label>
+      <input type="checkbox" id="lb-124" class="lightbox-toggle">
+      <label for="lb-124"><img src="images/RC105.png" alt="" loading="lazy"></label>
+      <label for="lb-124" class="lightbox-overlay"><img src="images/RC105.png" alt=""></label>
       <figcaption>Figure 10.16. 5 goes in and 5 comes out.</figcaption>
     </figure>
     <figure id="fig-10-17">
-      <input type="checkbox" id="lb-122" class="lightbox-toggle">
-      <label for="lb-122"><img src="images/RC106.png" alt="" loading="lazy"></label>
-      <label for="lb-122" class="lightbox-overlay"><img src="images/RC106.png" alt=""></label>
+      <input type="checkbox" id="lb-125" class="lightbox-toggle">
+      <label for="lb-125"><img src="images/RC106.png" alt="" loading="lazy"></label>
+      <label for="lb-125" class="lightbox-overlay"><img src="images/RC106.png" alt=""></label>
       <figcaption>Figure 10.17. -5 goes in and 5 comes out.</figcaption>
     </figure>
     <p>This function to take the max of the value and zero has the fancy name<strong> Rectified Linear Unit</strong> or <strong>ReLU</strong> and I’ll be calling it that going forward. With this new tool, we give the model a way to introduce discontinuities. If it can match the “V” shape above, perhaps it can match more complicated data with lines of different slopes and intercepts in different regions. Let’s try!</p>
     <figure id="fig-10-18">
-      <input type="checkbox" id="lb-123" class="lightbox-toggle">
-      <label for="lb-123"><img src="images/RC107.png" alt="" loading="lazy"></label>
-      <label for="lb-123" class="lightbox-overlay"><img src="images/RC107.png" alt=""></label>
+      <input type="checkbox" id="lb-126" class="lightbox-toggle">
+      <label for="lb-126"><img src="images/RC107.png" alt="" loading="lazy"></label>
+      <label for="lb-126" class="lightbox-overlay"><img src="images/RC107.png" alt=""></label>
       <figcaption>Figure 10.18. Hedgehog model #4. Our first model with ReLU.</figcaption>
     </figure>
     <p>Unlike in <a href="#fig-10-9" class="xref" data-preview="images/RC094.png">figure 10.9</a>, I’m now only showing a single arrow connecting the output of one layer to the input of the next. I did add the dimensions of the tensors in purple as a reminder of the shape of the numbers that will flow through the model. I trained it and:</p>
     <figure id="tbl-10-6">
-      <input type="checkbox" id="lb-124" class="lightbox-toggle">
-      <label for="lb-124"><img src="images/RC108.png" alt="" loading="lazy"></label>
-      <label for="lb-124" class="lightbox-overlay"><img src="images/RC108.png" alt=""></label>
+      <input type="checkbox" id="lb-127" class="lightbox-toggle">
+      <label for="lb-127"><img src="images/RC108.png" alt="" loading="lazy"></label>
+      <label for="lb-127" class="lightbox-overlay"><img src="images/RC108.png" alt=""></label>
       <figcaption>Table 10.6. Loss for model #4.</figcaption>
     </figure>
     <p>Our loss came down. That’s a good sign. Let’s look at the plot.</p>
     <figure id="fig-10-19">
-      <input type="checkbox" id="lb-125" class="lightbox-toggle">
-      <label for="lb-125"><img src="images/RC109.png" alt="" loading="lazy"></label>
-      <label for="lb-125" class="lightbox-overlay"><img src="images/RC109.png" alt=""></label>
+      <input type="checkbox" id="lb-128" class="lightbox-toggle">
+      <label for="lb-128"><img src="images/RC109.png" alt="" loading="lazy"></label>
+      <label for="lb-128" class="lightbox-overlay"><img src="images/RC109.png" alt=""></label>
       <figcaption>Figure 10.19. Hedgehog model #4.</figcaption>
     </figure>
     <p>Yes! For the first time our model is not just a line, in other words, nonlinear. We’re on the right path, but we’re still not giving the model much room to learn the pattern. Let’s introduce one more layer and a lot more parameters.</p>
     <figure id="fig-10-20">
-      <input type="checkbox" id="lb-126" class="lightbox-toggle">
-      <label for="lb-126"><img src="images/RC110.png" alt="" loading="lazy"></label>
-      <label for="lb-126" class="lightbox-overlay"><img src="images/RC110.png" alt=""></label>
+      <input type="checkbox" id="lb-129" class="lightbox-toggle">
+      <label for="lb-129"><img src="images/RC110.png" alt="" loading="lazy"></label>
+      <label for="lb-129" class="lightbox-overlay"><img src="images/RC110.png" alt=""></label>
       <figcaption>Figure 10.20. Hedgehog model #5. This one has a third linear layer and far more parameters than #4.</figcaption>
     </figure>
     <p>Before reading on, count the number of parameters. The answer: 10 weights and 10 biases for the first linear layer, 100 weights and 10 biases for the second linear layer, and 10 weights and 1 bias for the third linear layer. That’s 20 + 110 + 11 = 141. (If you’re not sure why we need 100 weights and 10 biases for the second linear layer, think of it like this: each of the ten numbers in the output is its own linear combination of the 10 input numbers. Or you can think about the weight and bias matrices inside the layer. We multiply a 1×10 input by a 10×10 weight matrix to get a 1×10 result, and add that to a 1×10 bias matrix to get our final 1×10 output.)</p>
     <p>Enough talking. Let’s train it.</p>
     <figure id="tbl-10-7">
-      <input type="checkbox" id="lb-127" class="lightbox-toggle">
-      <label for="lb-127"><img src="images/RC111.png" alt="" loading="lazy"></label>
-      <label for="lb-127" class="lightbox-overlay"><img src="images/RC111.png" alt=""></label>
+      <input type="checkbox" id="lb-130" class="lightbox-toggle">
+      <label for="lb-130"><img src="images/RC111.png" alt="" loading="lazy"></label>
+      <label for="lb-130" class="lightbox-overlay"><img src="images/RC111.png" alt=""></label>
       <figcaption>Table 10.7. Loss for model #5.</figcaption>
     </figure>
     <p>Huge improvement! The square root of 0.153 is around 0.4 which means on average our predictions are off by around 400 quills. Here’s the plot.</p>
     <figure id="fig-10-21">
-      <input type="checkbox" id="lb-128" class="lightbox-toggle">
-      <label for="lb-128"><img src="images/RC112.png" alt="" loading="lazy"></label>
-      <label for="lb-128" class="lightbox-overlay"><img src="images/RC112.png" alt=""></label>
+      <input type="checkbox" id="lb-131" class="lightbox-toggle">
+      <label for="lb-131"><img src="images/RC112.png" alt="" loading="lazy"></label>
+      <label for="lb-131" class="lightbox-overlay"><img src="images/RC112.png" alt=""></label>
       <figcaption>Figure 10.21. Hedgehog model #5.</figcaption>
     </figure>
     <p>What if we go from 1 to 100 instead of 1 to 10? This could give the model even more room to match all the turns in the data. We also could be entering the danger territory of it beginning to miss the forest through the trees and start memorizing every single data point. We’ll have 100×100 = 10,000 weights in the middle linear layer, far more than our 900 hedgehogs in the training dataset.</p>
     <figure id="fig-10-22">
-      <input type="checkbox" id="lb-129" class="lightbox-toggle">
-      <label for="lb-129"><img src="images/RC113.png" alt="" loading="lazy"></label>
-      <label for="lb-129" class="lightbox-overlay"><img src="images/RC113.png" alt=""></label>
+      <input type="checkbox" id="lb-132" class="lightbox-toggle">
+      <label for="lb-132"><img src="images/RC113.png" alt="" loading="lazy"></label>
+      <label for="lb-132" class="lightbox-overlay"><img src="images/RC113.png" alt=""></label>
       <figcaption>Figure 10.22. Hedgehog model #6.</figcaption>
     </figure>
     <p>Here’s the loss:</p>
     <figure id="tbl-10-8">
-      <input type="checkbox" id="lb-130" class="lightbox-toggle">
-      <label for="lb-130"><img src="images/RC114.png" alt="" loading="lazy"></label>
-      <label for="lb-130" class="lightbox-overlay"><img src="images/RC114.png" alt=""></label>
+      <input type="checkbox" id="lb-133" class="lightbox-toggle">
+      <label for="lb-133"><img src="images/RC114.png" alt="" loading="lazy"></label>
+      <label for="lb-133" class="lightbox-overlay"><img src="images/RC114.png" alt=""></label>
       <figcaption>Table 10.8. Loss for model #6.</figcaption>
     </figure>
     <p>And the plot:</p>
     <figure id="fig-10-23">
-      <input type="checkbox" id="lb-131" class="lightbox-toggle">
-      <label for="lb-131"><img src="images/RC115.png" alt="" loading="lazy"></label>
-      <label for="lb-131" class="lightbox-overlay"><img src="images/RC115.png" alt=""></label>
+      <input type="checkbox" id="lb-134" class="lightbox-toggle">
+      <label for="lb-134"><img src="images/RC115.png" alt="" loading="lazy"></label>
+      <label for="lb-134" class="lightbox-overlay"><img src="images/RC115.png" alt=""></label>
       <figcaption>Figure 10.23. Hedgehog model #6.</figcaption>
     </figure>
     <p>It looks good. It appears to have picked up the trend. It’s modeling the big pattern without getting caught up in bits of what appear to be random variation or sloppy mistakes by our team of people in spacesuits measuring the hedgehogs with wooden meter sticks. One nice thing about our input being just a single number in a constrained range (hedgehog length) is we don’t need to limit ourselves to looking at predictions for the actual hedgehogs. We can look at predictions for all inputs in the range. This might be wise here to make it a little easier to spot if we’re overfitting.</p>
     <figure id="fig-10-24">
-      <input type="checkbox" id="lb-132" class="lightbox-toggle">
-      <label for="lb-132"><img src="images/RC116.png" alt="" loading="lazy"></label>
-      <label for="lb-132" class="lightbox-overlay"><img src="images/RC116.png" alt=""></label>
+      <input type="checkbox" id="lb-135" class="lightbox-toggle">
+      <label for="lb-135"><img src="images/RC116.png" alt="" loading="lazy"></label>
+      <label for="lb-135" class="lightbox-overlay"><img src="images/RC116.png" alt=""></label>
       <figcaption>Figure 10.24. Predictions of model #6 for all lengths from 0.25 to 2.5 meters.</figcaption>
     </figure>
     <p>It’s beautiful. We don’t know why there’s such an odd relationship between length and number of quills on these alien hedgehogs, but the computer can now make a good prediction. The hedgehog is 1.6 meters long? The model spits out 3.9.</p>
@@ -291,9 +291,9 @@
     <p>Another thing, a little more subtle, is the idea of finding a model architecture suitable for the task. Model #1 would have worked fine for our turkey example but was not especially suited for the alien hedgehogs whereas models #5 and #6 fit well. The trick is to find an architecture that fits the problem and is trainable and then let backpropagation work its magic.</p>
     <p>Finally, this is for the reader who says—wait, there are no alien hedgehogs, you generated that data, so how is model #6 compared to the ideal? You’re right. I made up a function and then added random noise. Let’s compare:</p>
     <figure id="fig-10-25">
-      <input type="checkbox" id="lb-133" class="lightbox-toggle">
-      <label for="lb-133"><img src="images/RC117.png" alt="" loading="lazy"></label>
-      <label for="lb-133" class="lightbox-overlay"><img src="images/RC117.png" alt=""></label>
+      <input type="checkbox" id="lb-136" class="lightbox-toggle">
+      <label for="lb-136"><img src="images/RC117.png" alt="" loading="lazy"></label>
+      <label for="lb-136" class="lightbox-overlay"><img src="images/RC117.png" alt=""></label>
       <figcaption>Figure 10.25. Model #6 vs the ideal model.</figcaption>
     </figure>
     <p>Pretty good! It’s not surprising that model #6 is worse in the tails. There aren’t many hedgehogs in our dataset that are less than 0.9 meters or more than 2.1 meters. There’s less data to learn from and being off in those regions does not affect the loss as much as in the regions where there’s lots of data.</p>
@@ -304,7 +304,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-11.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

@@ -28,9 +28,9 @@
     </div>
     <p>Here are all the diagrams we walked through in chapters 11, 13, 14, and 15, all in one place.</p>
     <figure id="fig-16-1">
-      <input type="checkbox" id="lb-201" class="lightbox-toggle">
-      <label for="lb-201"><img src="images/RC184.png" alt="" loading="lazy"></label>
-      <label for="lb-201" class="lightbox-overlay"><img src="images/RC184.png" alt=""></label>
+      <input type="checkbox" id="lb-204" class="lightbox-toggle">
+      <label for="lb-204"><img src="images/RC184.png" alt="" loading="lazy"></label>
+      <label for="lb-204" class="lightbox-overlay"><img src="images/RC184.png" alt=""></label>
       <figcaption>Figure 16.1. The full model.</figcaption>
     </figure>
     <p>A good exercise that will help me and you wrap our heads around the whole model is to count the learned parameters. We’ll do it for my 20-layer model, which has a vocab size of 65,536, an embedding size of 1280, and 20 transformer blocks (i.e., V = 65,536, D = 1280, depth = 20). I suggest you try counting the learned parameters yourself before reading on. You’ll know you’re on the right track if the total is around half a billion. One other piece of information you’ll need that I may not have been explicit about is that there are no biases in any of the linear transformations in our model.</p>
@@ -43,9 +43,9 @@
     <p>So the overall total: 83,886,080 + 393,216,000 + 83,886,080 = <strong>560,988,160</strong>.</p>
     <p>I want to double check the number with the model in code. With PyTorch that’s done as follows:</p>
     <figure id="fig-16-2" style="max-width:70%">
-      <input type="checkbox" id="lb-202" class="lightbox-toggle">
-      <label for="lb-202"><img src="images/RC185.png" alt="" loading="lazy"></label>
-      <label for="lb-202" class="lightbox-overlay"><img src="images/RC185.png" alt=""></label>
+      <input type="checkbox" id="lb-205" class="lightbox-toggle">
+      <label for="lb-205"><img src="images/RC185.png" alt="" loading="lazy"></label>
+      <label for="lb-205" class="lightbox-overlay"><img src="images/RC185.png" alt=""></label>
       <figcaption>Figure 16.2. Counting the number of model parameters using code.</figcaption>
     </figure>
     <p>It matches!</p>
@@ -54,39 +54,39 @@
     <p>One more word of encouragement to try this on your own first. It won’t be an easy exercise. But if you struggle through, referring back to earlier chapters as needed, I guarantee you&#x27;ll develop a stronger intuition, even if you have to give up on some of the especially tricky areas like scaled dot product attention.</p>
     <p>Let’s start with the top level.</p>
     <figure id="fig-16-3">
-      <input type="checkbox" id="lb-203" class="lightbox-toggle">
-      <label for="lb-203"><img src="images/RC186.png" alt="" loading="lazy"></label>
-      <label for="lb-203" class="lightbox-overlay"><img src="images/RC186.png" alt=""></label>
+      <input type="checkbox" id="lb-206" class="lightbox-toggle">
+      <label for="lb-206"><img src="images/RC186.png" alt="" loading="lazy"></label>
+      <label for="lb-206" class="lightbox-overlay"><img src="images/RC186.png" alt=""></label>
       <figcaption>Figure 16.3. The size of the tensors going in and out of every module at the top level of the model.</figcaption>
     </figure>
     <p>Next the transformer block:</p>
     <figure id="fig-16-4">
-      <input type="checkbox" id="lb-204" class="lightbox-toggle">
-      <label for="lb-204"><img src="images/RC187.png" alt="" loading="lazy"></label>
-      <label for="lb-204" class="lightbox-overlay"><img src="images/RC187.png" alt=""></label>
+      <input type="checkbox" id="lb-207" class="lightbox-toggle">
+      <label for="lb-207"><img src="images/RC187.png" alt="" loading="lazy"></label>
+      <label for="lb-207" class="lightbox-overlay"><img src="images/RC187.png" alt=""></label>
       <figcaption>Figure 16.4. The tensors going in and out of every module within the transformer block.</figcaption>
     </figure>
     <p>Now causal self attention. This gets tricky because we split the tensors into heads.</p>
     <figure id="fig-16-5">
-      <input type="checkbox" id="lb-205" class="lightbox-toggle">
-      <label for="lb-205"><img src="images/RC188.png" alt="" loading="lazy"></label>
-      <label for="lb-205" class="lightbox-overlay"><img src="images/RC188.png" alt=""></label>
+      <input type="checkbox" id="lb-208" class="lightbox-toggle">
+      <label for="lb-208"><img src="images/RC188.png" alt="" loading="lazy"></label>
+      <label for="lb-208" class="lightbox-overlay"><img src="images/RC188.png" alt=""></label>
       <figcaption>Figure 16.5. The tensors going in and out of every module within the causal self attention module.</figcaption>
     </figure>
     <p>(* To keep my diagrams consistent with the code I show I show the output of “split into heads” as  32×2048×10×128. However, before we go into scaled dot product attention, we need to swap the two middle dimensions to get to 32×10×2048×128 for q, k, and v. You’ll see this is the shape I show as the input in <a href="#fig-16-6" class="xref" data-preview="images/RC189.png">figure 16.6</a> below. The convention is that operations are performed on the deepest dimension or dimensions. Scaled dot product attention performs operations at the level of the “2048” dimension and the “128” dimension. The operations are identical across the “8” and “10” dimension. This is why we need to swap the “10” dimension and the “2048” dimension.)</p>
     <p>Here’s scaled dot product attention. This is where it gets really confusing.</p>
     <figure id="fig-16-6">
-      <input type="checkbox" id="lb-206" class="lightbox-toggle">
-      <label for="lb-206"><img src="images/RC189.png" alt="" loading="lazy"></label>
-      <label for="lb-206" class="lightbox-overlay"><img src="images/RC189.png" alt=""></label>
+      <input type="checkbox" id="lb-209" class="lightbox-toggle">
+      <label for="lb-209"><img src="images/RC189.png" alt="" loading="lazy"></label>
+      <label for="lb-209" class="lightbox-overlay"><img src="images/RC189.png" alt=""></label>
       <figcaption>Figure 16.6. Shape of the tensors flowing through scaled dot product attention.</figcaption>
     </figure>
     <p>In scaled dot product attention we need to compute a score between every query and every key. You’ll see that we transpose the keys as discussed in <a href="chapter-14.html" class="xref">chapter 14</a>. Now that you can see the full shape of the input tensors you can see that the transpose applies to the two deepest dimensions.</p>
     <p>And finally, the MLP:</p>
     <figure id="fig-16-7">
-      <input type="checkbox" id="lb-207" class="lightbox-toggle">
-      <label for="lb-207"><img src="images/RC190.png" alt="" loading="lazy"></label>
-      <label for="lb-207" class="lightbox-overlay"><img src="images/RC190.png" alt=""></label>
+      <input type="checkbox" id="lb-210" class="lightbox-toggle">
+      <label for="lb-210"><img src="images/RC190.png" alt="" loading="lazy"></label>
+      <label for="lb-210" class="lightbox-overlay"><img src="images/RC190.png" alt=""></label>
       <figcaption>Figure 16.7. Shape of tensors flowing through the MLP.</figcaption>
     </figure>
     <p>Now you know what’s in the model (<a href="chapter-11.html" class="xref">chapter 11</a> through this chapter), and you know how to calculate loss (<a href="chapter-8.html" class="xref">chapter 8</a>). So is that it? Are we done? No. Now for the fun and frustrating part. We have to train this thing, and we need to learn how to get from a no-longer-black-box that adds tokens to a sequence of text to something that behaves like an assistant, chats with us, and is capable of using tools.</p>
@@ -97,7 +97,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-17.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

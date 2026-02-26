@@ -50,9 +50,9 @@
     <p>The idea is to provide a tangible sense for the model getting smarter (or not). Of course we need to be careful about reading too much into a handful of completions, though it’s usually a good idea to look at specific examples in addition to aggregate scores like the CORE metric.</p>
     <p>Earlier, for practice, even before I trained the 20-layer model, I trained a much smaller 12-layer model on 72 million tokens (well under our desired ratio of 20 training tokens per parameter). Here were the completions early in the training and at the end of the training:</p>
     <figure id="tbl-24-1">
-      <input type="checkbox" id="lb-291" class="lightbox-toggle">
-      <label for="lb-291"><img src="images/RC260.png" alt="" loading="lazy"></label>
-      <label for="lb-291" class="lightbox-overlay"><img src="images/RC260.png" alt=""></label>
+      <input type="checkbox" id="lb-294" class="lightbox-toggle">
+      <label for="lb-294"><img src="images/RC260.png" alt="" loading="lazy"></label>
+      <label for="lb-294" class="lightbox-overlay"><img src="images/RC260.png" alt=""></label>
       <figcaption>Table 24.1. Sanity check completions from a 12-layer poorly trained model.</figcaption>
     </figure>
     <p>You immediately get the sense that the model is doing <em>something</em>, after all, these aren’t random words. You can tell that the model really likes the word “important.” You can also spot a tiny bit of improvement from early in training to the end. The completions were much better when I trained my 20-layer model and I expect they will also be much better with our 32-layer model.</p>
@@ -62,104 +62,104 @@
     <p>As I write these words, it’s been a little over five hours since I kicked off the training. We’re up to step 11,612 which places us 16.2% of the way to the finish line of 71,680 steps. I’m paying $24 an hour to rent eight NVIDIA H100 GPUs and so I’ve spent $127 so far. In total, across all GPUs, we’re processing around 340,000 tokens per second. By estimating the FLOPs required for all the calculations to train each token, I can see that in total across all GPUs I’m seeing around four petaflops per second. That’s a 4 followed by 15 zeros: 4,000,000,000,000,000. Look back at <a href="chapter-17.html" class="xref">chapter 17</a>. My Apple IIe could do 18 floating point operations per second.</p>
     <p>Let’s look at a few of the metrics we’ve been collecting and see if there are any red flags. Here’s GPU utilization:</p>
     <figure id="fig-24-1" style="max-width:90%">
-      <input type="checkbox" id="lb-292" class="lightbox-toggle">
-      <label for="lb-292"><img src="images/RC311.png" alt="" loading="lazy"></label>
-      <label for="lb-292" class="lightbox-overlay"><img src="images/RC311.png" alt=""></label>
+      <input type="checkbox" id="lb-295" class="lightbox-toggle">
+      <label for="lb-295"><img src="images/RC311.png" alt="" loading="lazy"></label>
+      <label for="lb-295" class="lightbox-overlay"><img src="images/RC311.png" alt=""></label>
       <figcaption>Figure 24.1. GPU utilization for the first almost six hours.</figcaption>
     </figure>
     <p>This looks good. Each GPU is running at 100% nearly all of the time. The drops in utilization mostly correspond to when the CORE metric is being calculated. You may have heard that GPUs get hot and consume a lot of electricity. Here’s the temperature:</p>
     <figure id="fig-24-2" style="max-width:90%">
-      <input type="checkbox" id="lb-293" class="lightbox-toggle">
-      <label for="lb-293"><img src="images/RC312.png" alt="" loading="lazy"></label>
-      <label for="lb-293" class="lightbox-overlay"><img src="images/RC312.png" alt=""></label>
+      <input type="checkbox" id="lb-296" class="lightbox-toggle">
+      <label for="lb-296"><img src="images/RC312.png" alt="" loading="lazy"></label>
+      <label for="lb-296" class="lightbox-overlay"><img src="images/RC312.png" alt=""></label>
       <figcaption>Figure 24.2. GPU temperature over the past 40 minutes.</figcaption>
     </figure>
     <p>We’re generating some serious heat. Remember that water boils at 100 degrees celsius. I’m not sure why one GPU is consistently hotter than the others. Maybe it has to do with the physical locations of the GPUs. All of mine are sitting in a data center in Texas somewhere so it’s not like I can go look. Here’s the electricity:</p>
     <figure id="fig-24-3" style="max-width:90%">
-      <input type="checkbox" id="lb-294" class="lightbox-toggle">
-      <label for="lb-294"><img src="images/RC313.png" alt="" loading="lazy"></label>
-      <label for="lb-294" class="lightbox-overlay"><img src="images/RC313.png" alt=""></label>
+      <input type="checkbox" id="lb-297" class="lightbox-toggle">
+      <label for="lb-297"><img src="images/RC313.png" alt="" loading="lazy"></label>
+      <label for="lb-297" class="lightbox-overlay"><img src="images/RC313.png" alt=""></label>
       <figcaption>Figure 24.3. GPU power usage.</figcaption>
     </figure>
     <p>When all eight GPUs are each consuming 700 watts the total is 5.6 kW. That’s enough power to drive an electric car at city speeds, though not quite at highway speeds.</p>
     <p>GPU memory is just where we want it, extremely close to 100%. (If you want to point out that allocating 100% is not proof that we’re using 100% the whole time…you’re right.)</p>
     <figure id="fig-24-4" style="max-width:90%">
-      <input type="checkbox" id="lb-295" class="lightbox-toggle">
-      <label for="lb-295"><img src="images/RC314.png" alt="" loading="lazy"></label>
-      <label for="lb-295" class="lightbox-overlay"><img src="images/RC314.png" alt=""></label>
+      <input type="checkbox" id="lb-298" class="lightbox-toggle">
+      <label for="lb-298"><img src="images/RC314.png" alt="" loading="lazy"></label>
+      <label for="lb-298" class="lightbox-overlay"><img src="images/RC314.png" alt=""></label>
       <figcaption>Figure 24.4. Nearly 100% of GPU memory was allocated at the start of training.</figcaption>
     </figure>
     <p>Now let’s jump to the CORE metric. Remember from <a href="chapter-18.html" class="xref">chapter 18</a> that the CORE metric will be a number between 0 and 1, the higher the better. Unlike loss, the metric is based on the model answering test questions that we as humans can understand and relate to. If there were one thing we were going to trust as a proxy for the model learning to do something useful, this is it, not GPU temperature or even loss. The training process has now passed step 12,000 so it will have paused and measured the CORE metric six times (at steps 2000, 4000, all the way up to 12,000). Here’s the chart:</p>
     <figure id="fig-24-5" style="max-width:90%">
-      <input type="checkbox" id="lb-296" class="lightbox-toggle">
-      <label for="lb-296"><img src="images/RC315.png" alt="" loading="lazy"></label>
-      <label for="lb-296" class="lightbox-overlay"><img src="images/RC315.png" alt=""></label>
+      <input type="checkbox" id="lb-299" class="lightbox-toggle">
+      <label for="lb-299"><img src="images/RC315.png" alt="" loading="lazy"></label>
+      <label for="lb-299" class="lightbox-overlay"><img src="images/RC315.png" alt=""></label>
       <figcaption>Figure 24.5. CORE metric measured every 2000 steps.</figcaption>
     </figure>
     <p>Looks good! We started at 0.15 and we’re now at 0.22. Interestingly the progress hasn’t been as smooth as the chart makes it look. For example, here are the results for SQuAD which was the first task type we looked at in <a href="chapter-18.html" class="xref">chapter 18</a>:</p>
     <figure id="fig-24-6" style="max-width:90%">
-      <input type="checkbox" id="lb-297" class="lightbox-toggle">
-      <label for="lb-297"><img src="images/RC316.png" alt="" loading="lazy"></label>
-      <label for="lb-297" class="lightbox-overlay"><img src="images/RC316.png" alt=""></label>
+      <input type="checkbox" id="lb-300" class="lightbox-toggle">
+      <label for="lb-300"><img src="images/RC316.png" alt="" loading="lazy"></label>
+      <label for="lb-300" class="lightbox-overlay"><img src="images/RC316.png" alt=""></label>
       <figcaption>Figure 24.6. The SQuAD component of CORE.</figcaption>
     </figure>
     <p>We went up, then down, then back up. Here’s ARC Easy which was the first multiple choice type of task we looked at in <a href="chapter-18.html" class="xref">chapter 18</a>:</p>
     <figure id="fig-24-7" style="max-width:90%">
-      <input type="checkbox" id="lb-298" class="lightbox-toggle">
-      <label for="lb-298"><img src="images/RC317.png" alt="" loading="lazy"></label>
-      <label for="lb-298" class="lightbox-overlay"><img src="images/RC317.png" alt=""></label>
+      <input type="checkbox" id="lb-301" class="lightbox-toggle">
+      <label for="lb-301"><img src="images/RC317.png" alt="" loading="lazy"></label>
+      <label for="lb-301" class="lightbox-overlay"><img src="images/RC317.png" alt=""></label>
       <figcaption>Figure 24.7. The ARC Easy component of CORE.</figcaption>
     </figure>
     <p>And the Dyck language (bracket matching) results look just plain bad. We started at 0.09, almost doubled to 0.17, and then dropped to 0.10. Perhaps there was some training data that was especially helpful for learning to match brackets somewhere between step 8,000 and 10,000 but the learning got messed up by other training data that pushed parameters in a different direction. You should always be careful not to read too much into small percentages of discreet numbers, although here, with 500 questions, the change from 0.09 × 500 = 45 to 0.17 × 500 = 85 is too big to attribute to noise, I imagine.</p>
     <figure id="fig-24-8" style="max-width:90%">
-      <input type="checkbox" id="lb-299" class="lightbox-toggle">
-      <label for="lb-299"><img src="images/RC318.png" alt="" loading="lazy"></label>
-      <label for="lb-299" class="lightbox-overlay"><img src="images/RC318.png" alt=""></label>
+      <input type="checkbox" id="lb-302" class="lightbox-toggle">
+      <label for="lb-302"><img src="images/RC318.png" alt="" loading="lazy"></label>
+      <label for="lb-302" class="lightbox-overlay"><img src="images/RC318.png" alt=""></label>
       <figcaption>Figure 24.8. The Dyck component of CORE.</figcaption>
     </figure>
     <p>These charts help me appreciate why it’s important to have a broad, general purpose way of evaluating when we’re trying to create a broad, general purpose model.</p>
     <p>Here’s our validation loss. (The reason it’s called <em>bpb</em> is because we adjust the loss to be per byte rather than per token so it can be compared to a model trained with a different sized vocabulary. This isn’t important for our purposes here but would be if we wanted to run experiments to determine the ideal vocab size as mentioned briefly in <a href="chapter-7.html" class="xref">chapter 7</a>.)</p>
     <figure id="fig-24-9" style="max-width:90%">
-      <input type="checkbox" id="lb-300" class="lightbox-toggle">
-      <label for="lb-300"><img src="images/RC319.png" alt="" loading="lazy"></label>
-      <label for="lb-300" class="lightbox-overlay"><img src="images/RC319.png" alt=""></label>
+      <input type="checkbox" id="lb-303" class="lightbox-toggle">
+      <label for="lb-303"><img src="images/RC319.png" alt="" loading="lazy"></label>
+      <label for="lb-303" class="lightbox-overlay"><img src="images/RC319.png" alt=""></label>
       <figcaption>Figure 24.9. Validation loss over the first ~13,000 steps.</figcaption>
     </figure>
     <p>This too looks good. We’re measuring the validation loss every 250 steps and it appears to be steadily declining. To be sure we also need to zoom in. Let’s look from 10,000 steps to the present:</p>
     <figure id="fig-24-10" style="max-width:90%">
-      <input type="checkbox" id="lb-301" class="lightbox-toggle">
-      <label for="lb-301"><img src="images/RC320.png" alt="" loading="lazy"></label>
-      <label for="lb-301" class="lightbox-overlay"><img src="images/RC320.png" alt=""></label>
+      <input type="checkbox" id="lb-304" class="lightbox-toggle">
+      <label for="lb-304"><img src="images/RC320.png" alt="" loading="lazy"></label>
+      <label for="lb-304" class="lightbox-overlay"><img src="images/RC320.png" alt=""></label>
       <figcaption>Figure 24.10. Zooming in on validation loss from step 10,000 to ~14,000.</figcaption>
     </figure>
     <p>Now the fun part. How are our prompt completions doing?</p>
     <figure id="tbl-24-2">
-      <input type="checkbox" id="lb-302" class="lightbox-toggle">
-      <label for="lb-302"><img src="images/RC261.png" alt="" loading="lazy"></label>
-      <label for="lb-302" class="lightbox-overlay"><img src="images/RC261.png" alt=""></label>
+      <input type="checkbox" id="lb-305" class="lightbox-toggle">
+      <label for="lb-305"><img src="images/RC261.png" alt="" loading="lazy"></label>
+      <label for="lb-305" class="lightbox-overlay"><img src="images/RC261.png" alt=""></label>
       <figcaption>Table 24.2. Sanity check completions.</figcaption>
     </figure>
     <p>The generated text at step 2000 is much better than the example I showed in <a href="#tbl-24-1" class="xref" data-preview="images/RC260.png">table 24.1</a>, but step 14,000 is not much better than step 2000. This is yet another reminder of why we need thorough evaluations and can’t trust spot checking. I checked and 79 is the atomic number for gold. And wouldn’t it be nice if there was a day in between Friday and Saturday?</p>
     <hr class="section-break">
     <p>I went to bed. I woke up. Training is up to 40,450 steps, 56% of the way to the finish line. Is validation loss still looking good?</p>
     <figure id="fig-24-11" style="max-width:90%">
-      <input type="checkbox" id="lb-303" class="lightbox-toggle">
-      <label for="lb-303"><img src="images/RC321.png" alt="" loading="lazy"></label>
-      <label for="lb-303" class="lightbox-overlay"><img src="images/RC321.png" alt=""></label>
+      <input type="checkbox" id="lb-306" class="lightbox-toggle">
+      <label for="lb-306"><img src="images/RC321.png" alt="" loading="lazy"></label>
+      <label for="lb-306" class="lightbox-overlay"><img src="images/RC321.png" alt=""></label>
       <figcaption>Figure 24.11. Validation loss over the first 40,000+ steps.</figcaption>
     </figure>
     <p>Zoom in:</p>
     <figure id="fig-24-12" style="max-width:90%">
-      <input type="checkbox" id="lb-304" class="lightbox-toggle">
-      <label for="lb-304"><img src="images/RC322.png" alt="" loading="lazy"></label>
-      <label for="lb-304" class="lightbox-overlay"><img src="images/RC322.png" alt=""></label>
+      <input type="checkbox" id="lb-307" class="lightbox-toggle">
+      <label for="lb-307"><img src="images/RC322.png" alt="" loading="lazy"></label>
+      <label for="lb-307" class="lightbox-overlay"><img src="images/RC322.png" alt=""></label>
       <figcaption>Figure 24.12. Validation loss zoomed in to see if it’s still declining.</figcaption>
     </figure>
     <p>Yes! Let me show you a boring chart that’s also remarkable.</p>
     <figure id="fig-24-13" style="max-width:90%">
-      <input type="checkbox" id="lb-305" class="lightbox-toggle">
-      <label for="lb-305"><img src="images/RC323.png" alt="" loading="lazy"></label>
-      <label for="lb-305" class="lightbox-overlay"><img src="images/RC323.png" alt=""></label>
+      <input type="checkbox" id="lb-308" class="lightbox-toggle">
+      <label for="lb-308"><img src="images/RC323.png" alt="" loading="lazy"></label>
+      <label for="lb-308" class="lightbox-overlay"><img src="images/RC323.png" alt=""></label>
       <figcaption>Figure 24.13. Step vs number of seconds since start of training.</figcaption>
     </figure>
     <p>Our training factory has been running for over 18 hours. Step after step after step takes about the same amount of time. This makes sense in theory given everything we’ve discussed about how all the batches are the same sizes, the calculations are identical, and how GPUs operate. Yet if you’ve had experience with more traditional computer systems or really creating and monitoring any type of process in life, you’ll recognize how rare and difficult it is to achieve consistency.</p>
@@ -168,16 +168,16 @@
     <hr class="section-break">
     <p>This is like a baking show where you get to skip ahead until we take the cake out of the oven. Base training is done. Step 71,680 just completed, 32 hours 41 minutes and 43 seconds after starting. All outward signs are that training went smoothly since we last checked in. Overall our CORE metric went from 0.15 when we first checked at step 2000 to 0.30. (Soon we’ll measure CORE on the full 90,000+ examples.)</p>
     <figure id="fig-24-14" style="max-width:90%">
-      <input type="checkbox" id="lb-306" class="lightbox-toggle">
-      <label for="lb-306"><img src="images/RC324.png" alt="" loading="lazy"></label>
-      <label for="lb-306" class="lightbox-overlay"><img src="images/RC324.png" alt=""></label>
+      <input type="checkbox" id="lb-309" class="lightbox-toggle">
+      <label for="lb-309"><img src="images/RC324.png" alt="" loading="lazy"></label>
+      <label for="lb-309" class="lightbox-overlay"><img src="images/RC324.png" alt=""></label>
       <figcaption>Figure 24.14. CORE metric measured every 2000 steps during the entire training.</figcaption>
     </figure>
     <p>Validation loss consistently declined other than one brief increase between steps 8750 and 9750:</p>
     <figure id="fig-24-15" style="max-width:90%">
-      <input type="checkbox" id="lb-307" class="lightbox-toggle">
-      <label for="lb-307"><img src="images/RC325.png" alt="" loading="lazy"></label>
-      <label for="lb-307" class="lightbox-overlay"><img src="images/RC325.png" alt=""></label>
+      <input type="checkbox" id="lb-310" class="lightbox-toggle">
+      <label for="lb-310"><img src="images/RC325.png" alt="" loading="lazy"></label>
+      <label for="lb-310" class="lightbox-overlay"><img src="images/RC325.png" alt=""></label>
       <figcaption>Figure 24.15. Validation loss.</figcaption>
     </figure>
     <p>The smooth graph makes it look too easy and hides how remarkable this is. This is not like the hedgehog models from <a href="chapter-10.html" class="xref">chapter 10</a>. There I was using the same training data over and over during successive training steps. You could see with your own eyes that validation loss would go down until the model started overfitting to noise in the training data. Here, each of the 70,000+ training steps used an entirely new batch of over half a million tokens of training data. And the validation data was different text altogether. Here are 155 of the 10.5 million tokens in the validation dataset:</p>
@@ -187,39 +187,39 @@
     <p>So after every 250 training steps, each time learning from 131+ million new tokens of text, the ability to predict next tokens in this distinct validation text went up. The optimistic and I think correct interpretation of this is that language, knowledge, and common sense can in fact be modeled.</p>
     <p>Let’s zoom into the validation loss from step 40,000 on to double check that it did not flatten out:</p>
     <figure id="fig-24-16" style="max-width:90%">
-      <input type="checkbox" id="lb-308" class="lightbox-toggle">
-      <label for="lb-308"><img src="images/RC326.png" alt="" loading="lazy"></label>
-      <label for="lb-308" class="lightbox-overlay"><img src="images/RC326.png" alt=""></label>
+      <input type="checkbox" id="lb-311" class="lightbox-toggle">
+      <label for="lb-311"><img src="images/RC326.png" alt="" loading="lazy"></label>
+      <label for="lb-311" class="lightbox-overlay"><img src="images/RC326.png" alt=""></label>
       <figcaption>Figure 24.16: Validation loss zoomed in from step 40,000 to the end.</figcaption>
     </figure>
     <p>It did not flatten out. In fact the rate of decline increased around step 57,000. Let me show you why. We’ve talked about learning rate and I briefly hinted above that even with our fancy optimizers we still use a learning rate scheduler. The idea is that at a certain point parameters are jumping around a little too much (see <a href="chapter-19.html#fig-19-13" class="xref" data-preview="images/RC230.png">figure 19.13</a>) and taking even smaller update steps will allow the optimizers to further minimize loss. The scheduler we use for base training says to keep the <em>learning rate multiplier</em> at 1.0 until we are 80% through with training and then slowly reduce it to 0 over the remaining steps.</p>
     <figure id="fig-24-17" style="max-width:90%">
-      <input type="checkbox" id="lb-309" class="lightbox-toggle">
-      <label for="lb-309"><img src="images/RC327.png" alt="" loading="lazy"></label>
-      <label for="lb-309" class="lightbox-overlay"><img src="images/RC327.png" alt=""></label>
+      <input type="checkbox" id="lb-312" class="lightbox-toggle">
+      <label for="lb-312"><img src="images/RC327.png" alt="" loading="lazy"></label>
+      <label for="lb-312" class="lightbox-overlay"><img src="images/RC327.png" alt=""></label>
       <figcaption>Figure 24.17. Learning rate multiplier.</figcaption>
     </figure>
     <p>As an example of how the learning rate multiplier is used, consider the Muon optimizer responsible for updating the parameters in the transformer blocks. It starts with a learning rate of 0.2 and remains at 0.2 until around step 57,300. At around step 64,500 it will be at 0.1. The specifics of the initial learning rate and the schedule for the learning rate multiplier are yet more configurable hyperparameters. They likely make a big difference and I’m benefiting yet again from the fact that Karpathy already figured out appropriate settings.</p>
     <p>Here are the sanity check completions:</p>
     <figure id="tbl-24-3">
-      <input type="checkbox" id="lb-310" class="lightbox-toggle">
-      <label for="lb-310"><img src="images/RC262.png" alt="" loading="lazy"></label>
-      <label for="lb-310" class="lightbox-overlay"><img src="images/RC262.png" alt=""></label>
+      <input type="checkbox" id="lb-313" class="lightbox-toggle">
+      <label for="lb-313"><img src="images/RC262.png" alt="" loading="lazy"></label>
+      <label for="lb-313" class="lightbox-overlay"><img src="images/RC262.png" alt=""></label>
       <figcaption>Table 24.3. Sanity check completions.</figcaption>
     </figure>
     <p>It was correct about “then tomorrow will be” on step 62,000 and several prior steps, but in the end it got it wrong. It never solved the math problem.</p>
     <p>SQuAD, one of the components of CORE, was at 6% right after step 2000 and was at 25% when we last checked in. We ended at 44%.</p>
     <figure id="fig-24-18" style="max-width:90%">
-      <input type="checkbox" id="lb-311" class="lightbox-toggle">
-      <label for="lb-311"><img src="images/RC328.png" alt="" loading="lazy"></label>
-      <label for="lb-311" class="lightbox-overlay"><img src="images/RC328.png" alt=""></label>
+      <input type="checkbox" id="lb-314" class="lightbox-toggle">
+      <label for="lb-314"><img src="images/RC328.png" alt="" loading="lazy"></label>
+      <label for="lb-314" class="lightbox-overlay"><img src="images/RC328.png" alt=""></label>
       <figcaption>Figure 24.18. The SQuAD component of CORE over the whole training.</figcaption>
     </figure>
     <p>If you remember, for SQuAD and all of CORE, we used only a subset of the full 90,000+ questions in order to not consume too much time during training. Now that we’re done I’ll run a full CORE evaluation:</p>
     <figure id="tbl-24-4">
-      <input type="checkbox" id="lb-312" class="lightbox-toggle">
-      <label for="lb-312"><img src="images/RC263.png" alt="" loading="lazy"></label>
-      <label for="lb-312" class="lightbox-overlay"><img src="images/RC263.png" alt=""></label>
+      <input type="checkbox" id="lb-315" class="lightbox-toggle">
+      <label for="lb-315"><img src="images/RC263.png" alt="" loading="lazy"></label>
+      <label for="lb-315" class="lightbox-overlay"><img src="images/RC263.png" alt=""></label>
       <figcaption>Table 24.4. Complete CORE evaluation.</figcaption>
     </figure>
     <p>CORE overall came in at 0.3 matching our estimate. SQuAD came in at 0.40 so we were “lucky” (or unlucky depending on your perspective) with the 500 questions used during our smaller evaluations. We now get 72% of the ARC easy questions right (that’s impressive!) and 40% of SQuAD, but our 32-layer model is atrocious compared to a human at the LSAT analytical reasoning questions. It also doesn’t know how to balance brackets: look at the bigbench_dyck_languages score.</p>
@@ -259,9 +259,9 @@
     </div>
     <p>I think I would get that right too. In <a href="chapter-18.html" class="xref">chapter 18</a> I showed how the model calculates a probability for each answer and we consider the answer with the highest probability to be the model’s choice. Here were the probabilities for the four choices:</p>
     <figure id="fig-24-19" style="max-width:70%">
-      <input type="checkbox" id="lb-313" class="lightbox-toggle">
-      <label for="lb-313"><img src="images/RC264.png" alt="" loading="lazy"></label>
-      <label for="lb-313" class="lightbox-overlay"><img src="images/RC264.png" alt=""></label>
+      <input type="checkbox" id="lb-316" class="lightbox-toggle">
+      <label for="lb-316"><img src="images/RC264.png" alt="" loading="lazy"></label>
+      <label for="lb-316" class="lightbox-overlay"><img src="images/RC264.png" alt=""></label>
       <figcaption>Figure 24.19. Probability the model assigned to each multiple choice answer.</figcaption>
     </figure>
     <p>Our model not only picked the correct answer, it’s very confident that it’s the right answer. Imagine if on middle school multiple choice questions students needed to state their confidence level.</p>
@@ -277,24 +277,24 @@
     </div>
     <p>I couldn’t help but look at the correct answer, but otherwise I would be very unsure. I’m thinking humans and mice and lizards don’t have rigid shells, so possibly I could rule out A), and B) sounds weird. The model chose A). The correct answer is D). Here are the probabilities predicted by the model:</p>
     <figure id="fig-24-20" style="max-width:70%">
-      <input type="checkbox" id="lb-314" class="lightbox-toggle">
-      <label for="lb-314"><img src="images/RC265.png" alt="" loading="lazy"></label>
-      <label for="lb-314" class="lightbox-overlay"><img src="images/RC265.png" alt=""></label>
+      <input type="checkbox" id="lb-317" class="lightbox-toggle">
+      <label for="lb-317"><img src="images/RC265.png" alt="" loading="lazy"></label>
+      <label for="lb-317" class="lightbox-overlay"><img src="images/RC265.png" alt=""></label>
       <figcaption>Figure 24.20. Probabilities predicted by the model for the multiple choice answers to “Which explains how the epithelium offers protection to land-dwelling vertebrates?”</figcaption>
     </figure>
     <p>So it picked A), but it wasn’t all that confident, and its next best choice, D), was correct. It seemed to agree with me that B) is unlikely.</p>
     <p>I wonder if the per-token probabilities will yield insight into why the model selected A). For example, to me, as soon as I saw “rigid shell” possibility A) became less likely. Let’s look:</p>
     <figure id="tbl-24-5">
-      <input type="checkbox" id="lb-315" class="lightbox-toggle">
-      <label for="lb-315"><img src="images/RC266.png" alt="" loading="lazy"></label>
-      <label for="lb-315" class="lightbox-overlay"><img src="images/RC266.png" alt=""></label>
+      <input type="checkbox" id="lb-318" class="lightbox-toggle">
+      <label for="lb-318"><img src="images/RC266.png" alt="" loading="lazy"></label>
+      <label for="lb-318" class="lightbox-overlay"><img src="images/RC266.png" alt=""></label>
       <figcaption>Table 24.5. Per-token probabilities for each token in each multiple choice answer.</figcaption>
     </figure>
     <p>“Punctures” is two tokens which makes it hard to compare. Let me calculate the combined probability (such that the overall averaged probability remains the same) and also eliminate the less likely choices B) and C). I’ll also show the total probability (actually the geometric mean of the total probability) up to each token.</p>
     <figure id="tbl-24-6">
-      <input type="checkbox" id="lb-316" class="lightbox-toggle">
-      <label for="lb-316"><img src="images/RC267.png" alt="" loading="lazy"></label>
-      <label for="lb-316" class="lightbox-overlay"><img src="images/RC267.png" alt=""></label>
+      <input type="checkbox" id="lb-319" class="lightbox-toggle">
+      <label for="lb-319"><img src="images/RC267.png" alt="" loading="lazy"></label>
+      <label for="lb-319" class="lightbox-overlay"><img src="images/RC267.png" alt=""></label>
       <figcaption>Table 24.6. Probability the model assigns to multiple choices A) and D) as its “reading” them.</figcaption>
     </figure>
     <p>The probability of “rigid shell” is low for the model, just as it was for me, but not low enough to let D) take the lead. It’s interesting that if choice A) was missing the “a,” this likely would have knocked it into second place. Maybe this is like the student who doesn’t know the correct answer but figures it’s not the one with the grammar error.</p>
@@ -320,9 +320,9 @@
     </div>
     <p>The model says A). The correct answer is D).</p>
     <figure id="fig-24-21" style="max-width:70%">
-      <input type="checkbox" id="lb-317" class="lightbox-toggle">
-      <label for="lb-317"><img src="images/RC268.png" alt="" loading="lazy"></label>
-      <label for="lb-317" class="lightbox-overlay"><img src="images/RC268.png" alt=""></label>
+      <input type="checkbox" id="lb-320" class="lightbox-toggle">
+      <label for="lb-320"><img src="images/RC268.png" alt="" loading="lazy"></label>
+      <label for="lb-320" class="lightbox-overlay"><img src="images/RC268.png" alt=""></label>
       <figcaption>Figure 24.21. Probabilities predicted by the model for the multiple choice answers to “The Hardy-Weinberg law is only valid when…”</figcaption>
     </figure>
     <p>This is again a situation where the model was not terribly confident in its top answer and its next choice was correct. In fact, for all of the wrong ARC Easy answers in my small sample, the next choice was the right one except for the question I’ll show next. (I wonder about the science teacher somewhere, somewhen who decided to make it easy for students to eliminate B) and C) because they are too similar. Or was it a mistake and one was meant to say <em>out</em> of the population?)</p>
@@ -338,16 +338,16 @@
     </div>
     <p>The correct answer is A).</p>
     <figure id="fig-24-22" style="max-width:70%">
-      <input type="checkbox" id="lb-318" class="lightbox-toggle">
-      <label for="lb-318"><img src="images/RC269.png" alt="" loading="lazy"></label>
-      <label for="lb-318" class="lightbox-overlay"><img src="images/RC269.png" alt=""></label>
+      <input type="checkbox" id="lb-321" class="lightbox-toggle">
+      <label for="lb-321"><img src="images/RC269.png" alt="" loading="lazy"></label>
+      <label for="lb-321" class="lightbox-overlay"><img src="images/RC269.png" alt=""></label>
       <figcaption>Figure 24.22. Probabilities predicted by the model for the multiple choice answers to the mass of an asteroid question.</figcaption>
     </figure>
     <p>We don’t need a fancy dataset to tell us our model isn’t great at math. I tried these problems:</p>
     <figure id="tbl-24-7" style="max-width:70%">
-      <input type="checkbox" id="lb-319" class="lightbox-toggle">
-      <label for="lb-319"><img src="images/RC270.png" alt="" loading="lazy"></label>
-      <label for="lb-319" class="lightbox-overlay"><img src="images/RC270.png" alt=""></label>
+      <input type="checkbox" id="lb-322" class="lightbox-toggle">
+      <label for="lb-322"><img src="images/RC270.png" alt="" loading="lazy"></label>
+      <label for="lb-322" class="lightbox-overlay"><img src="images/RC270.png" alt=""></label>
       <figcaption>Table 24.7. My own tiny math benchmark.</figcaption>
     </figure>
     <p>In each case the prompt was up to and including the equal sign and the rest was generated by the model. It seems likely that it memorized the answers to certain calculations that came up repeatedly in the training data but did not learn to do arithmetic.</p>
@@ -358,7 +358,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-25.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

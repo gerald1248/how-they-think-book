@@ -42,23 +42,23 @@
     </div>
     <p>Great. Now let’s think of this problem in a different way that at first will seem more convoluted. If you <strong>do not </strong>simplify f(x) = (x<sup>2</sup>)<sup>3</sup> to f(x) = x<sup>6</sup>, the way you would do the calculation in your head or on paper would be to first square the input and then take the result and cube it. This is also how a computer would calculate it.</p>
     <figure id="fig-4-1">
-      <input type="checkbox" id="lb-24" class="lightbox-toggle">
-      <label for="lb-24"><img src="images/RC023.png" alt="" loading="lazy"></label>
-      <label for="lb-24" class="lightbox-overlay"><img src="images/RC023.png" alt=""></label>
+      <input type="checkbox" id="lb-27" class="lightbox-toggle">
+      <label for="lb-27"><img src="images/RC023.png" alt="" loading="lazy"></label>
+      <label for="lb-27" class="lightbox-overlay"><img src="images/RC023.png" alt=""></label>
       <figcaption>Figure 4.1. Think of f(x) = (x<sup>2</sup>)<sup>3</sup> as a machine with two steps.</figcaption>
     </figure>
     <p>We now have a machine with two steps. (I’m using “step” here to mean something different from the steps in the <a href="chapter-3.html#tbl-3-11" class="xref" data-preview="images/RC020.png">table 3.11</a>.) Let’s plug in 3 as our input:</p>
     <figure id="fig-4-2">
-      <input type="checkbox" id="lb-25" class="lightbox-toggle">
-      <label for="lb-25"><img src="images/RC024.png" alt="" loading="lazy"></label>
-      <label for="lb-25" class="lightbox-overlay"><img src="images/RC024.png" alt=""></label>
+      <input type="checkbox" id="lb-28" class="lightbox-toggle">
+      <label for="lb-28"><img src="images/RC024.png" alt="" loading="lazy"></label>
+      <label for="lb-28" class="lightbox-overlay"><img src="images/RC024.png" alt=""></label>
       <figcaption>Figure 4.2. 3 goes into the machine, 729 comes out.</figcaption>
     </figure>
     <p>The number 3 goes into step A and 9 comes out, 9 goes into step B and 729 comes out. The output 729 is what we calculated a few paragraphs ago and you probably feel like I’m making a big deal out of nothing. Here’s where it gets interesting. Pretend A and B have dials off of which you can read numbers.</p>
     <figure id="fig-4-3">
-      <input type="checkbox" id="lb-26" class="lightbox-toggle">
-      <label for="lb-26"><img src="images/RC373.png" alt="" loading="lazy"></label>
-      <label for="lb-26" class="lightbox-overlay"><img src="images/RC373.png" alt=""></label>
+      <input type="checkbox" id="lb-29" class="lightbox-toggle">
+      <label for="lb-29"><img src="images/RC373.png" alt="" loading="lazy"></label>
+      <label for="lb-29" class="lightbox-overlay"><img src="images/RC373.png" alt=""></label>
       <figcaption>Figure 4.3. Pretend there are dials.</figcaption>
     </figure>
     <p>The dial on B is set to 9 automatically by B’s input. That’s just the way this machine works and we have no choice in the matter. But what if we <em>could</em> stick our finger on that red needle and increase it a tiny bit? By how much would the 729 increase? The derivative of x<sup>3</sup> is 3x<sup>2</sup>. You can take my word if you don’t remember the rule from calculus. Evaluate the derivative at the input to box B (9) and we have 3(9<sup>2</sup>) = 3(81) = 243. So if we turn B’s dial a tiny bit, the 729 will increase by 243 times that tiny bit.</p>
@@ -66,9 +66,9 @@
     <p>If we turn the dial up on A a tiny amount, A’s output, which is the input to B, goes up by 6 times the tiny amount. Each little increase in B’s dial causes B’s output to go up by 243 times as we calculated above. So overall, a tiny increase in A causes the overall output of 729 to increase by 6 × 243 = 1458 times the tiny amount. This matches our calculation at the start of the chapter.</p>
     <p>I’m now going to organize the calculation in a diagram. It may look a little strange at first. See if you can puzzle out why I arranged it this way.</p>
     <figure id="fig-4-4">
-      <input type="checkbox" id="lb-27" class="lightbox-toggle">
-      <label for="lb-27"><img src="images/RC297.png" alt="" loading="lazy"></label>
-      <label for="lb-27" class="lightbox-overlay"><img src="images/RC297.png" alt=""></label>
+      <input type="checkbox" id="lb-30" class="lightbox-toggle">
+      <label for="lb-30"><img src="images/RC297.png" alt="" loading="lazy"></label>
+      <label for="lb-30" class="lightbox-overlay"><img src="images/RC297.png" alt=""></label>
       <figcaption>Figure 4.4. Backward calculation.</figcaption>
     </figure>
     <p>In the <strong>forward calculation</strong>, the diagram where the arrows go to the right, we start with an initial input, do whatever calculations we want to do, and get a final output. In the <strong>backward calculation</strong>, we start on the right and work our way back to the initial input so we can see how changing the initial input will change the final output. In the forward calculation, we compute whatever final output the machine is supposed to compute. In the backward calculation we’re computing something different: the derivative of that final output with respect to the input.</p>
@@ -77,9 +77,9 @@
     <p>So why does the diagram show a 1 coming in from the far right? Because there is no box to the right of B. B is the last step in the machine. An increase of a tiny amount in the output is an increase of 1 times that tiny amount in the output. I know that sounds silly, but it explains why our starting number for the backward calculation is always 1. Or think about it this way—imagine the final output is itself a box with a dial from which we read the output. As with other steps, we want to ask this question: If we force the dial to increase by a tiny amount, how much does the final output increase? The dial <em>is</em> the final output, so the increase will be 1 times the tiny amount.</p>
     <p>Let me show the forward and backward calculations on a single diagram:</p>
     <figure id="fig-4-5">
-      <input type="checkbox" id="lb-28" class="lightbox-toggle">
-      <label for="lb-28"><img src="images/RC299.png" alt="" loading="lazy"></label>
-      <label for="lb-28" class="lightbox-overlay"><img src="images/RC299.png" alt=""></label>
+      <input type="checkbox" id="lb-31" class="lightbox-toggle">
+      <label for="lb-31"><img src="images/RC299.png" alt="" loading="lazy"></label>
+      <label for="lb-31" class="lightbox-overlay"><img src="images/RC299.png" alt=""></label>
       <figcaption>Figure 4.5. Forward and backward calculations for f(x) = (x<sup>2</sup>)<sup>3</sup>.</figcaption>
     </figure>
     <p>The exact details are less important than the idea that we can come up with model and loss calculations that involve a huge number of weights and all sorts of operations—multiplying, adding, raising to a power, taking a logarithm, replacing negative numbers with zero, clipping numbers, and there will still be an efficient (and organized!) way to find the partial derivatives with respect to the weights.</p>
@@ -94,34 +94,34 @@
     <p>Let’s do the forward and backward calculations for our turkey example in diagram form. Our goal will be to calculate loss in the forward calculation, and then calculate the partial derivatives of loss with respect to w1 and w2 in the backward calculation. There will be a lot of boxes and numbers. Don’t worry. Soon we’ll get to a cleaner way to organize the information and calculations.</p>
     <p>For convenience, here’s the table with table with our turkey data (same as <a href="chapter-3.html#tbl-3-1" class="xref" data-preview="images/RC009.png">table 3.1</a>):</p>
     <figure id="tbl-4-1" style="max-width:70%">
-      <input type="checkbox" id="lb-29" class="lightbox-toggle">
-      <label for="lb-29"><img src="images/RC009.png" alt="" loading="lazy"></label>
-      <label for="lb-29" class="lightbox-overlay"><img src="images/RC009.png" alt=""></label>
+      <input type="checkbox" id="lb-32" class="lightbox-toggle">
+      <label for="lb-32"><img src="images/RC009.png" alt="" loading="lazy"></label>
+      <label for="lb-32" class="lightbox-overlay"><img src="images/RC009.png" alt=""></label>
       <figcaption>Table 4.1. Our turkey data.</figcaption>
     </figure>
     <p>First let’s draw all the boxes for the forward calculation.</p>
     <figure id="fig-4-6">
-      <input type="checkbox" id="lb-30" class="lightbox-toggle">
-      <label for="lb-30"><img src="images/RC026.png" alt="" loading="lazy"></label>
-      <label for="lb-30" class="lightbox-overlay"><img src="images/RC026.png" alt=""></label>
+      <input type="checkbox" id="lb-33" class="lightbox-toggle">
+      <label for="lb-33"><img src="images/RC026.png" alt="" loading="lazy"></label>
+      <label for="lb-33" class="lightbox-overlay"><img src="images/RC026.png" alt=""></label>
       <figcaption>Figure 4.6. The forward calculation of loss.</figcaption>
     </figure>
     <p>There are a lot of boxes and arrows but mostly because we have to repeat everything for each of our three turkeys. Look at turkey #1. We take weight 1 (w1) and multiply it by the height of the turkey (1 meter), we take weight 2 (w2) and multiply it by the length of the turkey (1.5 meters), we add those two numbers together (that’s our prediction for number of feathers), we subtract 5000 (the actual number of feathers), that’s our error. Then we square the error, repeat for turkey #2 and turkey #3, and then add the three squared errors together. That’s our loss.</p>
     <p>You might wonder why inside the boxes I refer to the input as “input” instead of the much shorter “x” as in <a href="#fig-4-1" class="xref" data-preview="images/RC023.png">figure 4.1</a>. I could have used “x,” but “x” typically means data in AI (e.g. data about turkeys) and once you get used to that convention in future chapters, I don’t want you to come back to this diagram and wonder if I mean “x” the input to the box or “x” some data.</p>
     <p>Here’s the forward calculation for w1=1000 and w2=3000, the same starting weights we used in <a href="chapter-3.html" class="xref">chapter 3</a>.</p>
     <figure id="fig-4-7">
-      <input type="checkbox" id="lb-31" class="lightbox-toggle">
-      <label for="lb-31"><img src="images/RC027.png" alt="" loading="lazy"></label>
-      <label for="lb-31" class="lightbox-overlay"><img src="images/RC027.png" alt=""></label>
+      <input type="checkbox" id="lb-34" class="lightbox-toggle">
+      <label for="lb-34"><img src="images/RC027.png" alt="" loading="lazy"></label>
+      <label for="lb-34" class="lightbox-overlay"><img src="images/RC027.png" alt=""></label>
       <figcaption>Figure 4.7. Calculating the loss when w1 is 1000 and w2 is 3000.</figcaption>
     </figure>
     <p>The loss, 1,312,500, is the same as we computed in <a href="chapter-3.html" class="xref">chapter 3</a> (see <a href="chapter-3.html#tbl-3-3" class="xref" data-preview="images/RC011.png">table 3.3</a>).</p>
     <p>Now the fun and confusing part: the backward calculation. It took me a long time to work out the diagram. You may want to try on your own first. Even though I haven’t yet explained all of the rules of the road, trying will force you to think about what calculations must happen.</p>
     <p>Let’s set up the calculation first, understand it, then we’ll plug 1 in on the right and see what we get. As in <a href="#fig-4-4" class="xref" data-preview="images/RC297.png">figure 4.4</a>, I italicized “input” to remind you and me that the input into each box is from the right, as shown by the arrows. (This gets confusing because, as you know from <a href="#fig-4-5" class="xref" data-preview="images/RC299.png">figure 4.5</a>, the backward calculation in boxes also depends on the input they got from the left during the forward calculation.)</p>
     <figure id="fig-4-8">
-      <input type="checkbox" id="lb-32" class="lightbox-toggle">
-      <label for="lb-32"><img src="images/RC028.png" alt="" loading="lazy"></label>
-      <label for="lb-32" class="lightbox-overlay"><img src="images/RC028.png" alt=""></label>
+      <input type="checkbox" id="lb-35" class="lightbox-toggle">
+      <label for="lb-35"><img src="images/RC028.png" alt="" loading="lazy"></label>
+      <label for="lb-35" class="lightbox-overlay"><img src="images/RC028.png" alt=""></label>
       <figcaption>Figure 4.8. The backward calculation to compute the partial derivatives of loss with respect to w1 and w2.</figcaption>
     </figure>
     <p>As a reminder, our goal in this whole calculation is to figure out if we increase w1 by a tiny amount, by what multiple of that tiny amount will the loss change. And the same question for w2.</p>
@@ -135,9 +135,9 @@
     <p>I didn’t explain what happens when multiple arrows come into a single box like w1. The rule is we add. To see the intuition, think about a small increase in w1. This will cause the loss to increase by a certain amount according to the first arrow coming into the box, by a certain amount according to the second arrow, and a certain amount according to the third. The total increase will therefore be the small increase in w1 times the sum of the amounts indicated by each arrow.</p>
     <p>Now let’s plug 1 in on the far right and see what we get:</p>
     <figure id="fig-4-9">
-      <input type="checkbox" id="lb-33" class="lightbox-toggle">
-      <label for="lb-33"><img src="images/RC029.png" alt="" loading="lazy"></label>
-      <label for="lb-33" class="lightbox-overlay"><img src="images/RC029.png" alt=""></label>
+      <input type="checkbox" id="lb-36" class="lightbox-toggle">
+      <label for="lb-36"><img src="images/RC029.png" alt="" loading="lazy"></label>
+      <label for="lb-36" class="lightbox-overlay"><img src="images/RC029.png" alt=""></label>
       <figcaption>Figure 4.9. Backward calculation.</figcaption>
     </figure>
     <p>Look! The partial derivatives of loss with respect to w1 and w2 come out to 1875 and 3500, exactly as we calculated and showed in <a href="chapter-3.html#tbl-3-7" class="xref" data-preview="images/RC016.png">table 3.7</a> in <a href="chapter-3.html" class="xref">chapter 3</a>. Increase w1 a tiny bit, and the loss will increase by 1875 times that tiny bit. Increase w2 a tiny bit, and the loss will go up by 1500 times that tiny bit due to turkey #1, 2500 times that tiny bit due to turkey #2, and down by 500 times that tiny bit due to turkey #3, so in total 3500 times that tiny bit.</p>
@@ -150,7 +150,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-5.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

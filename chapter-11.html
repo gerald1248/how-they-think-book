@@ -32,9 +32,9 @@
     <p>A human DJ, of course, would attach layers of meaning to “Love Yourself.” They might think about its subject matter, tone, instrumentation, and vocal style. They would combine this with the picture they’ve already formed of you based on what other music you like and somehow their human brain would decide what to play next. The founders at Pandora must have thought—if our service is going to have even a shot of making good recommendations, we’ll first need to enrich our database with more information about each song.</p>
     <p>Soon I’ll circle back and show how this idea is relevant to what goes on inside a transformer. But first let’s get reoriented. In <a href="chapter-8.html" class="xref">chapter 8</a> I showed what goes into the transformer and what comes out with a diagram like this:</p>
     <figure id="fig-11-1">
-      <input type="checkbox" id="lb-134" class="lightbox-toggle">
-      <label for="lb-134"><img src="images/RC118.png" alt="" loading="lazy"></label>
-      <label for="lb-134" class="lightbox-overlay"><img src="images/RC118.png" alt=""></label>
+      <input type="checkbox" id="lb-137" class="lightbox-toggle">
+      <label for="lb-137"><img src="images/RC118.png" alt="" loading="lazy"></label>
+      <label for="lb-137" class="lightbox-overlay"><img src="images/RC118.png" alt=""></label>
       <figcaption>Figure 11.1. During training and generation our model takes a B×T tensor as input and outputs a B×T×V tensor. However, I’m going to leave out the B dimension in most of the upcoming diagrams.</figcaption>
     </figure>
     <p>B stands for batch size, T stands for length of sequence in tokens, and V is vocabulary size. I showed an example where B was 32 and T was 2048 resulting in a total of 65,536 tokens going into the model in a single input. This is in fact how the inputs and outputs are shaped.</p>
@@ -42,24 +42,24 @@
     <p>Inside the model, though, each sequence in a batch is treated exactly the same. Therefore it makes no conceptual difference if we ignore the batch dimension for most of the next few chapters.</p>
     <p>With that, it’s time to see how we make one next token prediction for each input token. As a reminder from <a href="chapter-8.html" class="xref">chapter 8</a>, each prediction consists of V numbers (the probability distribution over the vocab). Also as a reminder, we need to make sure the model doesn’t cheat.</p>
     <figure id="fig-11-2">
-      <input type="checkbox" id="lb-135" class="lightbox-toggle">
-      <label for="lb-135"><img src="images/RC119.png" alt="" loading="lazy"></label>
-      <label for="lb-135" class="lightbox-overlay"><img src="images/RC119.png" alt=""></label>
+      <input type="checkbox" id="lb-138" class="lightbox-toggle">
+      <label for="lb-138"><img src="images/RC119.png" alt="" loading="lazy"></label>
+      <label for="lb-138" class="lightbox-overlay"><img src="images/RC119.png" alt=""></label>
       <figcaption>Figure 11.2. For the next few chapters, think of the model as taking a sequence of T tokens as input and outputting a tensor of size T×V.</figcaption>
     </figure>
     <p>All GPT models are similar but not identical. There is no single, canonical architecture. As promised in the introduction, I’m sticking with the architecture that Andrej Karpathy devised for Nanochat. It’s clean, it incorporates recent innovations, and if you’re so inclined, you can view and download the code yourself. We’ll go through the architecture piece by piece here and in chapters 13, 14, and 15. In <a href="chapter-16.html" class="xref">chapter 16</a> I’ll put the whole picture back together. I’ll also ask to count the total number of parameters across the entire model, an exercise that will force the model into your mind.</p>
     <p>Here’s the top level:</p>
     <figure id="fig-11-3">
-      <input type="checkbox" id="lb-136" class="lightbox-toggle">
-      <label for="lb-136"><img src="images/RC120.png" alt="" loading="lazy"></label>
-      <label for="lb-136" class="lightbox-overlay"><img src="images/RC120.png" alt=""></label>
+      <input type="checkbox" id="lb-139" class="lightbox-toggle">
+      <label for="lb-139"><img src="images/RC120.png" alt="" loading="lazy"></label>
+      <label for="lb-139" class="lightbox-overlay"><img src="images/RC120.png" alt=""></label>
       <figcaption>Figure 11.3. Model architecture. I’ll explain “D” below.</figcaption>
     </figure>
     <p>Let’s put example dimensions in to make it easier to follow. I’ll assume my input is a sequence of five tokens (e.g. “&lt;bos&gt; He went to the” ). I’ll use the dimensions from my 20-layer model, the version of the model I trained before I started writing this book. I haven’t explained what “D” is yet but we’ll come to that.</p>
     <figure id="fig-11-4">
-      <input type="checkbox" id="lb-137" class="lightbox-toggle">
-      <label for="lb-137"><img src="images/RC121.png" alt="" loading="lazy"></label>
-      <label for="lb-137" class="lightbox-overlay"><img src="images/RC121.png" alt=""></label>
+      <input type="checkbox" id="lb-140" class="lightbox-toggle">
+      <label for="lb-140"><img src="images/RC121.png" alt="" loading="lazy"></label>
+      <label for="lb-140" class="lightbox-overlay"><img src="images/RC121.png" alt=""></label>
       <figcaption>Figure 11.4. Architecture for my 20-layer model showing a 5-token sequence as input.</figcaption>
     </figure>
     <p>We start with a sequence of five tokens. The <strong>embedding module</strong> turns each token into 1280 numbers. Since we have five tokens, the result is a 5×1280 tensor. We feed this tensor to the first transformer block. The output of this block is also a 5×1280 tensor. We feed this tensor to the next transformer block, on and on, until we’ve gone through all 20 blocks. The transformer blocks all have the exact same architecture but they will each learn different parameters during training. Nearly all the magic happens in the transformer blocks and I’ll be drawing many diagrams to show what’s inside. Finally, the output of the last transformer block goes into a linear transformation just like the ones in our hedgehog models. This linear layer takes each of those five rows with 1280 numbers and turns them into five rows with 65,536 numbers each, similar to the example output I showed in <a href="chapter-8.html#fig-8-6" class="xref" data-preview="images/RC070.png">figure 8.6</a>.</p>
@@ -70,27 +70,27 @@
     <p>D, V, and number of layers need to be roughly compatible with each other. I set to D to 1280 in my 20-layer model because Karpathy says that 64 times the number of layers (64 × 20 = 1280) is a reasonable choice for D. When we get to training our 32-layer model, we’ll set D to 2048. As you learn what happens in each transformer block I believe you’ll build an intuition for why a bigger D fits with more layers.</p>
     <p>I’ve mentioned “1280 numbers” a few times. It’s time to introduce the term <strong>vector</strong> because it’s going to make it easier to talk about those numbers. In <a href="chapter-5.html" class="xref">chapter 5</a> I described a matrix as a bunch of numbers organized into rows and columns. In <a href="chapter-8.html" class="xref">chapter 8</a> I said that a matrix is a two-dimensional tensor and that we can use the term <em>tensor</em> no matter how many dimensions we have. A <em>vector</em> is specifically a one-dimensional tensor. Let me show you a few examples.</p>
     <figure id="fig-11-5" style="max-width:70%">
-      <input type="checkbox" id="lb-138" class="lightbox-toggle">
-      <label for="lb-138"><img src="images/RC366.png" alt="" loading="lazy"></label>
-      <label for="lb-138" class="lightbox-overlay"><img src="images/RC366.png" alt=""></label>
+      <input type="checkbox" id="lb-141" class="lightbox-toggle">
+      <label for="lb-141"><img src="images/RC366.png" alt="" loading="lazy"></label>
+      <label for="lb-141" class="lightbox-overlay"><img src="images/RC366.png" alt=""></label>
       <figcaption>Figure 11.5. Examples of vectors.</figcaption>
     </figure>
     <p>That’s it. It’s just a bunch of numbers. You can think of a vector as a row in a matrix. And now with this terminology we can say that we turn a sequence of T tokens into a sequence of T vectors each of size D. Each successive transformer block then takes in T vectors of size D and outputs another T vectors of size D. The final linear layer takes in T vectors of size D and outputs T vectors of size V.</p>
     <h2>Embedding module</h2>
     <p>So what does the embedding module actually do? Think about token 6237 from our text generation example, “ Paris.” The number 6237 is just an identifier and has no more or less meaning than any other number. As humans, though, even in isolation with no other words around it, we associate quite a bit of meaning with “Paris”: noun, city, France, Europe, beautiful, baguette, old. Pandora needed to characterize song ID 153,432 along many dimensions (e.g. genre = pop, instrumentation = acoustic-driven, vocal presence = male vocalist) so their personalized radio stations could smartly pick next songs. We need to do something similar with our tokens. Here’s a somewhat silly example of how that could look:</p>
     <figure id="tbl-11-1">
-      <input type="checkbox" id="lb-139" class="lightbox-toggle">
-      <label for="lb-139"><img src="images/RC122.png" alt="" loading="lazy"></label>
-      <label for="lb-139" class="lightbox-overlay"><img src="images/RC122.png" alt=""></label>
+      <input type="checkbox" id="lb-142" class="lightbox-toggle">
+      <label for="lb-142"><img src="images/RC122.png" alt="" loading="lazy"></label>
+      <label for="lb-142" class="lightbox-overlay"><img src="images/RC122.png" alt=""></label>
       <figcaption>Table 11.1. Hand-crafted example of characterizing four tokens according to four dimensions.</figcaption>
     </figure>
     <p>I scored each token on its “nounness,” “adjectiveness,” “redness,” and “positiveness” on a scale of -1 to 1. Even though this is silly, I hope you can imagine that using numbers that actually say something meaningful about each token will be more helpful than the plain token IDs. After all, we trained our turkey model on the height and length of each turkey, not the “id” of the turkey (#1, #2, #2).</p>
     <p>Starting in 1999, Pandora hired human musicians and asked them to listen to songs and characterize each according to hundreds of dimensions. We will absolutely not be manually characterizing our 65,536 tokens across 1280 dimensions. The beauty of training a model through backprop is we can imagine a technique that we believe will help make good predictions, create its skeleton, and the parameters will be learned, provided we have enough data and enough computing power. I want to repeat this again because it’s the central idea of modern AI models and it’s not initially intuitive. The model designer imagines a technique that could work. Training figures out the parameters to make it actually work. We’ll see this over and over as we look at each part of the transformer.</p>
     <p>Back to the embed module, mechanically, it’s a lookup table. For example, pretend that our embed module uses <a href="#tbl-11-1" class="xref" data-preview="images/RC122.png">table 11.1</a> and that D is four. If my input is the token IDs for “red” and “dog,” what will I get out?</p>
     <figure id="fig-11-6" style="max-width:60%">
-      <input type="checkbox" id="lb-140" class="lightbox-toggle">
-      <label for="lb-140"><img src="images/RC123.png" alt="" loading="lazy"></label>
-      <label for="lb-140" class="lightbox-overlay"><img src="images/RC123.png" alt=""></label>
+      <input type="checkbox" id="lb-143" class="lightbox-toggle">
+      <label for="lb-143"><img src="images/RC123.png" alt="" loading="lazy"></label>
+      <label for="lb-143" class="lightbox-overlay"><img src="images/RC123.png" alt=""></label>
       <figcaption>Figure 11.6. Output of embed module with input of “red dog.”</figcaption>
     </figure>
     <p>Initially the numbers will be random. They will take on meaning during training, although the meaning won’t be nearly as obvious as in my contrived example. For example, you’re unlikely to look at the first dimension and say, aha, that’s nounness. (For the sake of how this approach fits with other approaches you may have heard about, it is also possible to start with pre-trained embeddings and keep them locked during training.)</p>
@@ -99,47 +99,47 @@
     <p>Here’s the answer. The embedding module will need D parameters for each token in the vocab. That’s D × V = 1280 × 65,536 = 83,886,080 parameters. The training for these 80+ million parameters will absolutely not be evenly distributed. The parameters for frequent tokens like “the” and “cat” will be under constant “pressure” from the gradient to adjust whereas some tokens may come up only infrequently during training leaving their parameters only lightly trained.</p>
     <p>Let’s look at some actual <strong>embeddings</strong> from my 20-layer model. Here are the first 10 out of 1280 dimensions for each of 9 tokens:</p>
     <figure id="tbl-11-2">
-      <input type="checkbox" id="lb-141" class="lightbox-toggle">
-      <label for="lb-141"><img src="images/RC124.png" alt="" loading="lazy"></label>
-      <label for="lb-141" class="lightbox-overlay"><img src="images/RC124.png" alt=""></label>
+      <input type="checkbox" id="lb-144" class="lightbox-toggle">
+      <label for="lb-144"><img src="images/RC124.png" alt="" loading="lazy"></label>
+      <label for="lb-144" class="lightbox-overlay"><img src="images/RC124.png" alt=""></label>
       <figcaption>Table 11.2. The first ten out of 1280 dimensions for the embeddings of “Paris,” “London,” etc.</figcaption>
     </figure>
     <p>What pops out? Nothing for me. As humans we’re not good at looking at tables and spotting patterns in 10 dimensional data, not to mention the full 1280 dimensions. We also can’t directly plot more than three dimensions. Also, we can’t expect that the model would just happen to “organize” the dimensions according to any logic that would jump out at us like dimension 1 being nounness and 2 being adjectiveness.</p>
     <p>We’re not helpless though. If we only cared about the first two dimensions, for example, you could draw a vector representing Paris from the origin to (-2.92, 9.12) and another representing London from the origin to (40, -7.31). You could consider the angle between those two vectors to be a measure of how similar they are.</p>
     <figure id="fig-11-7">
-      <input type="checkbox" id="lb-142" class="lightbox-toggle">
-      <label for="lb-142"><img src="images/RC125.png" alt="" loading="lazy"></label>
-      <label for="lb-142" class="lightbox-overlay"><img src="images/RC125.png" alt=""></label>
+      <input type="checkbox" id="lb-145" class="lightbox-toggle">
+      <label for="lb-145"><img src="images/RC125.png" alt="" loading="lazy"></label>
+      <label for="lb-145" class="lightbox-overlay"><img src="images/RC125.png" alt=""></label>
       <figcaption>Figure 11.7. The first two out of 1280 dimensions of the “Paris” and “London” embeddings.</figcaption>
     </figure>
     <p>They don’t look very similar in those first two dimensions. If you measure, you’ll see that the angle is 118 degrees which has a cosine of around -0.47. The nice thing is we can do this similarity calculation, known as cosine similarity, not with just the first two dimensions, but with <strong>all</strong> 1280 dimensions. A score of 1 means the angle is 0 and the two vectors are on top of each other in 1280-dimensional space. A score of 0 means the angle is 90 degrees and the two vectors are orthogonal in 1280-dimensional space. Let’s compute the cosine similarity between each pair of those 9 tokens.</p>
     <figure id="tbl-11-3">
-      <input type="checkbox" id="lb-143" class="lightbox-toggle">
-      <label for="lb-143"><img src="images/RC126.png" alt="" loading="lazy"></label>
-      <label for="lb-143" class="lightbox-overlay"><img src="images/RC126.png" alt=""></label>
+      <input type="checkbox" id="lb-146" class="lightbox-toggle">
+      <label for="lb-146"><img src="images/RC126.png" alt="" loading="lazy"></label>
+      <label for="lb-146" class="lightbox-overlay"><img src="images/RC126.png" alt=""></label>
       <figcaption>Table 11.3. Cosine similarity between pairs of embeddings computed using all 1280 dimensions.</figcaption>
     </figure>
     <p>Now I’m getting convinced that my embeddings actually do mean something! Read across on the “Paris” line. What’s most similar to “Paris” besides Paris itself? “London.” What’s most similar to “he”? “She.” The two adjectives are similar. The two pronouns are similar. The three animals are similar and “cat” is closer to “dog” than to “wolf.” </p>
     <p>There are other techniques for getting your mind around high-dimensional data. For example, we know we have 65,536 embeddings of 1280 dimensions each. Using <strong>principal component analysis</strong> we can say, look, I know there’s no great way to view those embeddings at less than 1280 dimensions, but if I really wanted to project them onto a smaller number dimensions, how should I do it to preserve as much of the information as possible? Let’s project to two dimensions:</p>
     <figure id="fig-11-8">
-      <input type="checkbox" id="lb-144" class="lightbox-toggle">
-      <label for="lb-144"><img src="images/RC127.png" alt="" loading="lazy"></label>
-      <label for="lb-144" class="lightbox-overlay"><img src="images/RC127.png" alt=""></label>
+      <input type="checkbox" id="lb-147" class="lightbox-toggle">
+      <label for="lb-147"><img src="images/RC127.png" alt="" loading="lazy"></label>
+      <label for="lb-147" class="lightbox-overlay"><img src="images/RC127.png" alt=""></label>
       <figcaption>Figure 11.8. The embeddings for 9 tokens projected from 1280 dimensions to 2 dimensions.</figcaption>
     </figure>
     <p>Paris and London are close. You could draw a line to separate the pronouns from the other words and you can do the same with the colors. You can’t quite separate out the animals. What about if we allow ourselves three dimensions?</p>
     <figure id="fig-11-9">
-      <input type="checkbox" id="lb-145" class="lightbox-toggle">
-      <label for="lb-145"><img src="images/RC128.png" alt="" loading="lazy"></label>
-      <label for="lb-145" class="lightbox-overlay"><img src="images/RC128.png" alt=""></label>
+      <input type="checkbox" id="lb-148" class="lightbox-toggle">
+      <label for="lb-148"><img src="images/RC128.png" alt="" loading="lazy"></label>
+      <label for="lb-148" class="lightbox-overlay"><img src="images/RC128.png" alt=""></label>
       <figcaption>Figure 11.9. The embeddings for 9 tokens projected from 1280 dimensions to 3 dimensions.</figcaption>
     </figure>
     <p>Amazingly you can now draw a plane that separates the animals from all the other words. This is a reminder that even though wolf, cat, and dog seem far away from each other in the 2D projection, they may in fact be nicely grouped in higher dimensional space. Just imagine if you were a being that could see 1000+ dimensions!</p>
     <p>We had a sequence of T tokens, each represented by a meaningless id. Now we have T embeddings each packed with meaning..</p>
     <figure id="fig-11-10">
-      <input type="checkbox" id="lb-146" class="lightbox-toggle">
-      <label for="lb-146"><img src="images/RC129.png" alt="" loading="lazy"></label>
-      <label for="lb-146" class="lightbox-overlay"><img src="images/RC129.png" alt=""></label>
+      <input type="checkbox" id="lb-149" class="lightbox-toggle">
+      <label for="lb-149"><img src="images/RC129.png" alt="" loading="lazy"></label>
+      <label for="lb-149" class="lightbox-overlay"><img src="images/RC129.png" alt=""></label>
       <figcaption>Figure 11.10. Model architecture. We made it through the first module.</figcaption>
     </figure>
     <p>I’m afraid that we’re not quite ready to peer into the transformer block. We need to first take a detour through a fun bit of deep learning history.</p>
@@ -149,7 +149,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-12.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

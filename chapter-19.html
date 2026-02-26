@@ -31,113 +31,113 @@
     <p>Which brings us to how we actually update the parameters during each training step. In <a href="chapter-3.html" class="xref">chapter 3</a> I made this sound simple: calculate loss, do backprop, multiply gradient by learning rate, subtract the result from the parameters. This is the fundamental, beautiful idea of gradient descent.</p>
     <p>Let me show an example using a model even simpler than our turkey feather and hedgehog quill predictors. Now we’re going to predict chicken feathers.</p>
     <figure id="fig-19-1" style="max-width:70%">
-      <input type="checkbox" id="lb-235" class="lightbox-toggle">
-      <label for="lb-235"><img src="images/RC219.png" alt="" loading="lazy"></label>
-      <label for="lb-235" class="lightbox-overlay"><img src="images/RC219.png" alt=""></label>
+      <input type="checkbox" id="lb-238" class="lightbox-toggle">
+      <label for="lb-238"><img src="images/RC219.png" alt="" loading="lazy"></label>
+      <label for="lb-238" class="lightbox-overlay"><img src="images/RC219.png" alt=""></label>
       <figcaption>Figure 19.1. A chicken with feathers.</figcaption>
     </figure>
     <p>I have 1000 chickens. Here is a plot of length vs number of feathers for each chicken:</p>
     <figure id="fig-19-2">
-      <input type="checkbox" id="lb-236" class="lightbox-toggle">
-      <label for="lb-236"><img src="images/RC218.png" alt="" loading="lazy"></label>
-      <label for="lb-236" class="lightbox-overlay"><img src="images/RC218.png" alt=""></label>
+      <input type="checkbox" id="lb-239" class="lightbox-toggle">
+      <label for="lb-239"><img src="images/RC218.png" alt="" loading="lazy"></label>
+      <label for="lb-239" class="lightbox-overlay"><img src="images/RC218.png" alt=""></label>
       <figcaption>Figure 19.2. Plot of length vs number of feathers for our 1000 chickens.</figcaption>
     </figure>
     <p>To keep the numbers simple, I subtracted the average of 55 cm from each length so that the lengths are centered at zero. I did the same with the number of feathers. For example, the chicken with the minimum length is around 52 cm and has around 8400 feathers. None of that actually matters for the point I’m going to make. Just keep it in mind if, like me, you find it helpful to think of data as mapping to real things. I’ll also tell you right now—it’s not a secret between us, only between us and the model—that I faked the number of feathers as 0.17 times the (centered) chicken length plus some noise.</p>
     <p>For the turkey prediction we built a model with two inputs and two weights. For the alien hedgehog prediction we had one input and many weights, which we needed to match the odd relationship between length and number of quills. For chickens we’re going even simpler: a single input and a single weight.</p>
     <figure id="fig-19-3">
-      <input type="checkbox" id="lb-237" class="lightbox-toggle">
-      <label for="lb-237"><img src="images/RC220.png" alt="" loading="lazy"></label>
-      <label for="lb-237" class="lightbox-overlay"><img src="images/RC220.png" alt=""></label>
+      <input type="checkbox" id="lb-240" class="lightbox-toggle">
+      <label for="lb-240"><img src="images/RC220.png" alt="" loading="lazy"></label>
+      <label for="lb-240" class="lightbox-overlay"><img src="images/RC220.png" alt=""></label>
       <figcaption>Figure 19.3. Our chicken feather prediction model. Weight here is the single parameter inside our model, not the weight of the chicken!</figcaption>
     </figure>
     <p>Our goal during training is to get that weight to end up at 0.17. We’ll calculate loss the same way as we did in the hedgehog example: mean squared error. Look at <a href="chapter-10.html" class="xref">chapter 10</a> if you want a reminder.</p>
     <p>One nice thing about having a single weight in the model is we can easily come up with a range of weights and calculate the loss for each. For example, with our chickens, a weight of -2.0 will result in a loss of 4.8. A weight of -1.9 will result in a loss of 4.5. I’ll keep going up to a weight of 2.0 and plot:</p>
     <figure id="fig-19-4">
-      <input type="checkbox" id="lb-238" class="lightbox-toggle">
-      <label for="lb-238"><img src="images/RC221.png" alt="" loading="lazy"></label>
-      <label for="lb-238" class="lightbox-overlay"><img src="images/RC221.png" alt=""></label>
+      <input type="checkbox" id="lb-241" class="lightbox-toggle">
+      <label for="lb-241"><img src="images/RC221.png" alt="" loading="lazy"></label>
+      <label for="lb-241" class="lightbox-overlay"><img src="images/RC221.png" alt=""></label>
       <figcaption>Figure 19.4. Losses of our model for weights from -2.0 to 2.0.</figcaption>
     </figure>
     <p>You can see that the minimum loss will be when the weight is around 0.17, which is expected since that’s the number I used to fake the data.</p>
     <p>During training, we start with our initial parameters (a single weight in this case), calculate the gradient, update the parameters, calculate the gradient again, update the weights again, etc. Let’s say we start with an initial weight of 1. The loss will calculate out to 0.7. That’s a point we could plot on the graph above. An advantage of keeping things to a single weight is we should be able to watch gradient descent. Our first point might be at (1, 0.7), and then our next point could be (0.8, 0.4), until we end up where we want with a weight of 0.17.</p>
     <p>Let’s try. Let’s take a few steps with a learning rate of 1.0 starting with a weight of 1. You’ll have to trust that I calculated the loss and gradient correctly because I didn’t give you the chicken-by-chicken data shown in <a href="#fig-19-2" class="xref" data-preview="images/RC218.png">figure 19.2</a>.</p>
     <figure id="tbl-19-1">
-      <input type="checkbox" id="lb-239" class="lightbox-toggle">
-      <label for="lb-239"><img src="images/RC348.png" alt="" loading="lazy"></label>
-      <label for="lb-239" class="lightbox-overlay"><img src="images/RC348.png" alt=""></label>
+      <input type="checkbox" id="lb-242" class="lightbox-toggle">
+      <label for="lb-242"><img src="images/RC348.png" alt="" loading="lazy"></label>
+      <label for="lb-242" class="lightbox-overlay"><img src="images/RC348.png" alt=""></label>
       <figcaption>Table 19.1: First few steps of gradient descent with a learning rate of 1.0.</figcaption>
     </figure>
     <p>Recall from <a href="chapter-3.html" class="xref">chapter 3</a> that the bigger the learning rate, the bigger step we take, because we update the weight by subtracting the learning rate times the gradient. With a learning rate of 1.0, we stepped from a weight of 1.0 all the way to a weight of -0.70. Let me plot the weights at these four steps: </p>
     <figure id="fig-19-5">
-      <input type="checkbox" id="lb-240" class="lightbox-toggle">
-      <label for="lb-240"><img src="images/RC222.png" alt="" loading="lazy"></label>
-      <label for="lb-240" class="lightbox-overlay"><img src="images/RC222.png" alt=""></label>
+      <input type="checkbox" id="lb-243" class="lightbox-toggle">
+      <label for="lb-243"><img src="images/RC222.png" alt="" loading="lazy"></label>
+      <label for="lb-243" class="lightbox-overlay"><img src="images/RC222.png" alt=""></label>
       <figcaption>Figure 19.5. First few steps of gradient descent with a learning rate of 1.0.</figcaption>
     </figure>
     <p>This doesn’t look promising. Our weights jump from 1 to -0.7 to 1.1 to -0.83. It feels like we’re moving away from our goal. Maybe it will just take more steps to correct itself. After all, the gradient should always be telling us which way to move.</p>
     <figure id="fig-19-6">
-      <input type="checkbox" id="lb-241" class="lightbox-toggle">
-      <label for="lb-241"><img src="images/RC223.png" alt="" loading="lazy"></label>
-      <label for="lb-241" class="lightbox-overlay"><img src="images/RC223.png" alt=""></label>
+      <input type="checkbox" id="lb-244" class="lightbox-toggle">
+      <label for="lb-244"><img src="images/RC223.png" alt="" loading="lazy"></label>
+      <label for="lb-244" class="lightbox-overlay"><img src="images/RC223.png" alt=""></label>
       <figcaption>Figure 19.6. First 20 steps of gradient descent with a learning rate of 1.0.</figcaption>
     </figure>
     <p>Now it’s clear that each step is taking us further away from our goal and we’re never going to converge on 0.17. Let me also plot the weight and gradient at each step, like what I showed in <a href="#tbl-19-1" class="xref" data-preview="images/RC348.png">table 19.1</a> above but for all 20 steps:</p>
     <figure id="fig-19-7">
-      <input type="checkbox" id="lb-242" class="lightbox-toggle">
-      <label for="lb-242"><img src="images/RC224.png" alt="" loading="lazy"></label>
-      <label for="lb-242" class="lightbox-overlay"><img src="images/RC224.png" alt=""></label>
+      <input type="checkbox" id="lb-245" class="lightbox-toggle">
+      <label for="lb-245"><img src="images/RC224.png" alt="" loading="lazy"></label>
+      <label for="lb-245" class="lightbox-overlay"><img src="images/RC224.png" alt=""></label>
       <figcaption>Figure 19.7. Weight and gradient at each step of gradient descent with a learning rate of 1.0.</figcaption>
     </figure>
     <p>At first the gradient is around 1.7, which makes sense since the slope at red point 1 is positive. Then we jump to a weight of -0.7 shown as red point 2. The gradient here is -1.8 which also makes sense because the slope at red point 2 is negative. Now we multiply our learning rate of 1 times -1.8 and subtract that from -0.7 bringing us to point 3 with a weight of 1.11 where the gradient will be an even greater positive number than at point 1. This is a vicious cycle that will not stop.</p>
     <p>So the gradient is telling us the right direction to move in, and giving us a clue about how much to move, but we’re moving so far that we’re overshooting the weight that minimizes the loss. So let’s pick a different learning rate. Say 0.001 which is the default for the <strong>stochastic gradient descent</strong> function built into PyTorch. Let’s again do four steps.</p>
     <figure id="fig-19-8">
-      <input type="checkbox" id="lb-243" class="lightbox-toggle">
-      <label for="lb-243"><img src="images/RC225.png" alt="" loading="lazy"></label>
-      <label for="lb-243" class="lightbox-overlay"><img src="images/RC225.png" alt=""></label>
+      <input type="checkbox" id="lb-246" class="lightbox-toggle">
+      <label for="lb-246"><img src="images/RC225.png" alt="" loading="lazy"></label>
+      <label for="lb-246" class="lightbox-overlay"><img src="images/RC225.png" alt=""></label>
       <figcaption>Figure 19.8. First few steps of gradient descent with a learning rate of 0.001.</figcaption>
     </figure>
     <p>The good news is we didn’t jump over the goal. The bad news is we barely moved at all. The points are so close that they look like a single point and the labels (1, 2, etc.) all fall on top of each other. Let’s do 100 steps.</p>
     <figure id="fig-19-9">
-      <input type="checkbox" id="lb-244" class="lightbox-toggle">
-      <label for="lb-244"><img src="images/RC226.png" alt="" loading="lazy"></label>
-      <label for="lb-244" class="lightbox-overlay"><img src="images/RC226.png" alt=""></label>
+      <input type="checkbox" id="lb-247" class="lightbox-toggle">
+      <label for="lb-247"><img src="images/RC226.png" alt="" loading="lazy"></label>
+      <label for="lb-247" class="lightbox-overlay"><img src="images/RC226.png" alt=""></label>
       <figcaption>Figure 19.9. First 100 steps of gradient descent with a learning rate of 0.001.</figcaption>
     </figure>
     <p>We’re getting there, but very slowly. Let’s try a learning rate of 0.1 and do 30 steps.</p>
     <figure id="fig-19-10">
-      <input type="checkbox" id="lb-245" class="lightbox-toggle">
-      <label for="lb-245"><img src="images/RC227.png" alt="" loading="lazy"></label>
-      <label for="lb-245" class="lightbox-overlay"><img src="images/RC227.png" alt=""></label>
+      <input type="checkbox" id="lb-248" class="lightbox-toggle">
+      <label for="lb-248"><img src="images/RC227.png" alt="" loading="lazy"></label>
+      <label for="lb-248" class="lightbox-overlay"><img src="images/RC227.png" alt=""></label>
       <figcaption>Figure 19.10. First 30 steps with a learning rate of 0.1.</figcaption>
     </figure>
     <p>This seems reasonable. It’s hard to see with all the dots converging near the minimum. We can plot the weights at each step and see that by around step 22 we’re close to a weight of 0.17.</p>
     <figure id="fig-19-11">
-      <input type="checkbox" id="lb-246" class="lightbox-toggle">
-      <label for="lb-246"><img src="images/RC228.png" alt="" loading="lazy"></label>
-      <label for="lb-246" class="lightbox-overlay"><img src="images/RC228.png" alt=""></label>
+      <input type="checkbox" id="lb-249" class="lightbox-toggle">
+      <label for="lb-249"><img src="images/RC228.png" alt="" loading="lazy"></label>
+      <label for="lb-249" class="lightbox-overlay"><img src="images/RC228.png" alt=""></label>
       <figcaption>Figure 19.11. Weight at each step with a learning rate of 0.1</figcaption>
     </figure>
     <p>Are we wasting steps? Should we use an even higher learning rate, something greater than 0.1 but less than the 1 we started with? Let’s try 0.5.</p>
     <figure id="fig-19-12">
-      <input type="checkbox" id="lb-247" class="lightbox-toggle">
-      <label for="lb-247"><img src="images/RC229.png" alt="" loading="lazy"></label>
-      <label for="lb-247" class="lightbox-overlay"><img src="images/RC229.png" alt=""></label>
+      <input type="checkbox" id="lb-250" class="lightbox-toggle">
+      <label for="lb-250"><img src="images/RC229.png" alt="" loading="lazy"></label>
+      <label for="lb-250" class="lightbox-overlay"><img src="images/RC229.png" alt=""></label>
       <figcaption>Figure 19.12. First 30 steps with a learning rate of 0.5.</figcaption>
     </figure>
     <p>Look! We got there in around three steps. However, you might guess that there was luck involved, and that sharp turn in the right plot is a red flag. Still, let’s try an even bigger learning rate. Maybe we can get there in a single leap. Here’s a learning rate of 0.9:</p>
     <figure id="fig-19-13">
-      <input type="checkbox" id="lb-248" class="lightbox-toggle">
-      <label for="lb-248"><img src="images/RC230.png" alt="" loading="lazy"></label>
-      <label for="lb-248" class="lightbox-overlay"><img src="images/RC230.png" alt=""></label>
+      <input type="checkbox" id="lb-251" class="lightbox-toggle">
+      <label for="lb-251"><img src="images/RC230.png" alt="" loading="lazy"></label>
+      <label for="lb-251" class="lightbox-overlay"><img src="images/RC230.png" alt=""></label>
       <figcaption>Figure 19.13. First 30 steps with a learning rate of 0.9.</figcaption>
     </figure>
     <p>Hmm. You can see it will converge, but even after 30 steps it’s not quite at 0.17. You can see what’s happening. We’re jumping over the minimum, but unlike when the learning rate was 1, it’s not fatal.</p>
     <p>Let’s try a learning rate of 0.97 and do 100 steps.</p>
     <figure id="fig-19-14">
-      <input type="checkbox" id="lb-249" class="lightbox-toggle">
-      <label for="lb-249"><img src="images/RC231.png" alt="" loading="lazy"></label>
-      <label for="lb-249" class="lightbox-overlay"><img src="images/RC231.png" alt=""></label>
+      <input type="checkbox" id="lb-252" class="lightbox-toggle">
+      <label for="lb-252"><img src="images/RC231.png" alt="" loading="lazy"></label>
+      <label for="lb-252" class="lightbox-overlay"><img src="images/RC231.png" alt=""></label>
       <figcaption>Figure 19.14. First 100 steps with a learning rate of 0.97.</figcaption>
     </figure>
     <p>This is really bad. If we rapidly explode out of control at least we’ll know. Here we might not even realize we’re in trouble.</p>
@@ -151,7 +151,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-20.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

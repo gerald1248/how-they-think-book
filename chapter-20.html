@@ -29,32 +29,32 @@
     <p>The Adam optimizer was developed by Diedrick (Durk) Kingma and Jimmy Lei Ba in 2015. Kingma, a future member of the OpenAI founding team, was at the time earning his PhD at the University of Amsterdam. Ba was at the time studying for his PhD at the University of Toronto. This was the same institution where a few years earlier Alex Krizhevsky, Ilya Sutskever, and future Nobel laureate Geoffrey Hinton had won the ImageNet competition (see <a href="chapter-12.html" class="xref">chapter 12</a>). Both Kingma and Ba must have been intimately familiar with the practical problems of training large models.</p>
     <p>To explain the intuition behind Adam, I’m going to take a fun detour. Suppose you’re getting annoyed with the weather forecast, so every day for a week you note the difference between the forecasted average temperature and the actual average temperature.</p>
     <figure id="tbl-20-1" style="max-width:50%">
-      <input type="checkbox" id="lb-250" class="lightbox-toggle">
-      <label for="lb-250"><img src="images/RC232.png" alt="" loading="lazy"></label>
-      <label for="lb-250" class="lightbox-overlay"><img src="images/RC232.png" alt=""></label>
+      <input type="checkbox" id="lb-253" class="lightbox-toggle">
+      <label for="lb-253"><img src="images/RC232.png" alt="" loading="lazy"></label>
+      <label for="lb-253" class="lightbox-overlay"><img src="images/RC232.png" alt=""></label>
       <figcaption>Table 20.1. Scenario A. Actual temperature minus forecast temperature.</figcaption>
     </figure>
     <p>You calculate the average which comes out to 4.57. So are the weather forecasts basically consistently low by 4 to 6 degrees? Should you make your own corrected forecast by subtracting 4.57?</p>
     <p>Now imagine a different scenario:</p>
     <figure id="tbl-20-2" style="max-width:50%">
-      <input type="checkbox" id="lb-251" class="lightbox-toggle">
-      <label for="lb-251"><img src="images/RC233.png" alt="" loading="lazy"></label>
-      <label for="lb-251" class="lightbox-overlay"><img src="images/RC233.png" alt=""></label>
+      <input type="checkbox" id="lb-254" class="lightbox-toggle">
+      <label for="lb-254"><img src="images/RC233.png" alt="" loading="lazy"></label>
+      <label for="lb-254" class="lightbox-overlay"><img src="images/RC233.png" alt=""></label>
       <figcaption>Table 20.2. Scenario B.</figcaption>
     </figure>
     <p>The average here is the same: 4.57. However, the errors are all over the map (figuratively) relative to the first scenario and intuition might make you pause before deciding to subtract 4.57 each day. You’ll probably think—well, predicting the temperature is so imperfect and the forecasts have a lot of noise in them, who am I to think I could correct them so easily? Maybe you’ll monitor for another week, find that the forecast is off by four degrees in the other direction, and pat yourself on the back for not prematurely assuming you could outsmart the weather people.</p>
     <p>It would nice if we could quantify how spread out these forecast errors are. You may hear <em>spread out</em> and think, I know something good for that: <strong>standard deviation</strong>. You also may have never learned how to calculate it. Let me do it step by step in a spreadsheet.</p>
     <figure id="tbl-20-3">
-      <input type="checkbox" id="lb-252" class="lightbox-toggle">
-      <label for="lb-252"><img src="images/RC234.png" alt="" loading="lazy"></label>
-      <label for="lb-252" class="lightbox-overlay"><img src="images/RC234.png" alt=""></label>
+      <input type="checkbox" id="lb-255" class="lightbox-toggle">
+      <label for="lb-255"><img src="images/RC234.png" alt="" loading="lazy"></label>
+      <label for="lb-255" class="lightbox-overlay"><img src="images/RC234.png" alt=""></label>
       <figcaption>Table 20.3. Calculating the standard deviation for scenario A.</figcaption>
     </figure>
     <p>Here’s the calculation for the the second scenario:</p>
     <figure id="tbl-20-4">
-      <input type="checkbox" id="lb-253" class="lightbox-toggle">
-      <label for="lb-253"><img src="images/RC235.png" alt="" loading="lazy"></label>
-      <label for="lb-253" class="lightbox-overlay"><img src="images/RC235.png" alt=""></label>
+      <input type="checkbox" id="lb-256" class="lightbox-toggle">
+      <label for="lb-256"><img src="images/RC235.png" alt="" loading="lazy"></label>
+      <label for="lb-256" class="lightbox-overlay"><img src="images/RC235.png" alt=""></label>
       <figcaption>Table 20.4. Calculating the standard deviation for scenario B.</figcaption>
     </figure>
     <p>Now we have a formal way to talk about how spread out the forecast errors are and as we already noticed, they are much more spread out in scenario B.</p>
@@ -62,9 +62,9 @@
     <p>Something you may not have seen before is comparing the mean itself to the standard deviation. In the first scenario, the mean is 4.57 and the standard deviation is 0.98. The mean is over four standard deviations above zero which matches our feeling that the 4.57 is meaningful and we should correct the forecast. But in the second scenario, that same mean of 4.57 is much less than a single standard deviation above zero. This reflects our sense that the errors might be caused by noisy fluctuations and do not reflect a meaningful trend.</p>
     <p>Let’s put a measure to these feelings by dividing the mean by the standard deviation. This measure is called the <strong>signal-to-noise ratio</strong>.</p>
     <figure id="tbl-20-5" style="max-width:70%">
-      <input type="checkbox" id="lb-254" class="lightbox-toggle">
-      <label for="lb-254"><img src="images/RC236.png" alt="" loading="lazy"></label>
-      <label for="lb-254" class="lightbox-overlay"><img src="images/RC236.png" alt=""></label>
+      <input type="checkbox" id="lb-257" class="lightbox-toggle">
+      <label for="lb-257"><img src="images/RC236.png" alt="" loading="lazy"></label>
+      <label for="lb-257" class="lightbox-overlay"><img src="images/RC236.png" alt=""></label>
       <figcaption>Table 20.5. Signal-to-noise ratios for scenarios A and B.</figcaption>
     </figure>
     <p>The much-greater-than-one signal-to-noise ratio hints to us that in the first scenario we’re seeing a lot of signal and in the second scenario the signal is weaker.</p>
@@ -72,48 +72,48 @@
     <p>The key idea in Adam (and AdamW) is to multiply the learning rate <strong>not</strong> by the gradient but by the mean divided by the square root of the uncentered variance (similar to standard deviation). This acts as a sort-of normalized version of the gradient. When there is a lot of variation this quantity will become small causing a small update in the parameters and vice versa.</p>
     <p>If you’re following so far, you’re probably wondering—the mean and uncentered variance of what exactly? All of the gradient values computed on all the prior steps? That doesn’t seem right. Why should the gradient at a point we saw 100 steps ago have much influence over how we next update a parameter? The approach is to use a moving average, specifically an <strong>exponential moving average</strong>. If you look at financial data you may have come across EMA (also known as EWMA) charts. If not, it’s a fancy term for a simple but powerful technique for smoothing time-series data. Let’s go back to the weather and I’ll show an example using the temperature in Boston.</p>
     <figure id="tbl-20-6">
-      <input type="checkbox" id="lb-255" class="lightbox-toggle">
-      <label for="lb-255"><img src="images/RC349.png" alt="" loading="lazy"></label>
-      <label for="lb-255" class="lightbox-overlay"><img src="images/RC349.png" alt=""></label>
+      <input type="checkbox" id="lb-258" class="lightbox-toggle">
+      <label for="lb-258"><img src="images/RC349.png" alt="" loading="lazy"></label>
+      <label for="lb-258" class="lightbox-overlay"><img src="images/RC349.png" alt=""></label>
       <figcaption>Table 20.6. Temperature and exponential moving average of temperature in Boston for the first 7 days of January 2025.</figcaption>
     </figure>
     <p>The EMA for January 2 is 90% the EMA of the day before plus 10% of the January 2 temperature. The EMA for January 3 is 90% of the EMA of the day before plus 10% of the January 3 temperature. Each day’s EMA is a weighted average between the previous day’s EMA and the current day and so the EMA is a smoother version of the data. We’re using a 90/10 split here but we can choose any split based on how much we want the EMA to reflect older data points vs newer data points. The 0.9 is typically called beta, which I mention so it will look familiar in <a href="#tbl-20-7" class="xref" data-preview="images/RC238.png">table 20.7</a> below.</p>
     <p>It’s easier to build an intuition for the EMA with more data and a plot. Here’s the daily temperature and EMA for all of 2025 in Boston.</p>
     <figure id="fig-20-1" style="max-width:90%">
-      <input type="checkbox" id="lb-256" class="lightbox-toggle">
-      <label for="lb-256"><img src="images/RC350.png" alt="" loading="lazy"></label>
-      <label for="lb-256" class="lightbox-overlay"><img src="images/RC350.png" alt=""></label>
+      <input type="checkbox" id="lb-259" class="lightbox-toggle">
+      <label for="lb-259"><img src="images/RC350.png" alt="" loading="lazy"></label>
+      <label for="lb-259" class="lightbox-overlay"><img src="images/RC350.png" alt=""></label>
       <figcaption>Figure 20.1. 2025 Daily temperature and exponential moving average of temperature in Boston for 2025.</figcaption>
     </figure>
     <p>You can see that there were some pretty cold days in December. I remember them like they were last week because they practically were. The EMA, however, smooths over those daily fluctuations while still capturing the overall trend over the course of the year.</p>
     <p>Now back to Adam and our chicken model. We’ll start with an extreme example and set the learning rate to 5.0. I want to show how even though initially the weight jumps way too far, the Adam optimizer gets things under control.</p>
     <figure id="fig-20-2">
-      <input type="checkbox" id="lb-257" class="lightbox-toggle">
-      <label for="lb-257"><img src="images/RC237.png" alt="" loading="lazy"></label>
-      <label for="lb-257" class="lightbox-overlay"><img src="images/RC237.png" alt=""></label>
+      <input type="checkbox" id="lb-260" class="lightbox-toggle">
+      <label for="lb-260"><img src="images/RC237.png" alt="" loading="lazy"></label>
+      <label for="lb-260" class="lightbox-overlay"><img src="images/RC237.png" alt=""></label>
       <figcaption>Figure 20.2. First 100 steps of gradient descent controlled by Adam optimizer with a learning rate of 5.0.</figcaption>
     </figure>
     <p>I ran the first 10 steps of the optimizer in a spreadsheet:</p>
     <figure id="tbl-20-7">
-      <input type="checkbox" id="lb-258" class="lightbox-toggle">
-      <label for="lb-258"><img src="images/RC238.png" alt="" loading="lazy"></label>
-      <label for="lb-258" class="lightbox-overlay"><img src="images/RC238.png" alt=""></label>
+      <input type="checkbox" id="lb-261" class="lightbox-toggle">
+      <label for="lb-261"><img src="images/RC238.png" alt="" loading="lazy"></label>
+      <label for="lb-261" class="lightbox-overlay"><img src="images/RC238.png" alt=""></label>
       <figcaption>Table 20.7. The calculations going on inside the Adam optimizer.</figcaption>
     </figure>
     <p>You can see as early as step 2, rather than making another huge leap due to the gradient of -7.66 and the learning rate of 5, we start to come under control and our new weight is -4 - (-3) = -1. Column D is the moving average of the gradient using “beta 1” as the mixing number. Column E is the moving average of the gradient squared using “beta 2” as the mixing number. Since initially we’re mixing with zero we need to correct m and v or the early values would be too small. Column H is the signal-to-noise-ratio-like quantity.</p>
     <p>Here’s how the training works with a more reasonable learning rate of 0.1. It overshoots and then corrects, which may be overkill here but is useful for not getting stuck at less than optimal parameters.</p>
     <figure id="fig-20-3">
-      <input type="checkbox" id="lb-259" class="lightbox-toggle">
-      <label for="lb-259"><img src="images/RC239.png" alt="" loading="lazy"></label>
-      <label for="lb-259" class="lightbox-overlay"><img src="images/RC239.png" alt=""></label>
+      <input type="checkbox" id="lb-262" class="lightbox-toggle">
+      <label for="lb-262"><img src="images/RC239.png" alt="" loading="lazy"></label>
+      <label for="lb-262" class="lightbox-overlay"><img src="images/RC239.png" alt=""></label>
       <figcaption>Figure 20.3. Adam optimizer with a learning rate of 0.1.</figcaption>
     </figure>
     <p>I want to point out a few other things about the Adam optimizer before we move on. It maintains a moving average of the gradient and squared gradient shown as “m” and “v” in <a href="#tbl-20-7" class="xref" data-preview="images/RC238.png">table 20.7</a>. In the example we’ve been working through those are just two numbers because there is only one parameter in the model. If we’re using Adam to optimize half a billion parameters, then it will need to store a billion numbers to track these two moving averages. It also will need to update the averages and do all the other computations shown above for each step. So memory and speed are important considerations for optimizer choice just as they are for the model itself.</p>
     <p>Also, I may have painted the picture that Adam / AdamW is a panacea. It is not. We can’t get away from careful initialization of learning rates at different levels for different parts of the model and using a <strong>scheduler</strong> to change the learning rates as training progresses. And in fact we’re only going to use Adam to optimize the parameters in the embedding module and final linear transformation in our model. For all the parameters inside the transformer blocks we’ll be using Muon. Unlike Adam, which as you saw works independently on each weight, Muon uses information for the full gradient for each linear transform to decide how to update its weights.</p>
     <figure id="fig-20-4">
-      <input type="checkbox" id="lb-260" class="lightbox-toggle">
-      <label for="lb-260"><img src="images/RC240.png" alt="" loading="lazy"></label>
-      <label for="lb-260" class="lightbox-overlay"><img src="images/RC240.png" alt=""></label>
+      <input type="checkbox" id="lb-263" class="lightbox-toggle">
+      <label for="lb-263"><img src="images/RC240.png" alt="" loading="lazy"></label>
+      <label for="lb-263" class="lightbox-overlay"><img src="images/RC240.png" alt=""></label>
       <figcaption>Figure 20.4. Our model uses both the Adam and Muon optimizers.</figcaption>
     </figure>
   </article>
@@ -122,7 +122,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-21.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

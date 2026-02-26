@@ -29,9 +29,9 @@
     <p>Subway tokens went away a long time ago, but tokens in games, cryptographic tokens, tokenization of virtual goods, and tokenization of personally identifiable information are all ways you may have encountered tokens recently. Another way is paying for use of models (e.g. from OpenAI and Anthropic) where you pay a tiny fraction of a cent per token. The funny thing is that these tokens are not a virtual currency made up by the vendors as a way to meter their services. Tokens are in fact a fundamental concept: GPT models are trained on tokens, and once trained, they take tokens as input and generate tokens as output.</p>
     <p>So what is a token? For the moment, think of it as a word. Take the example in <a href="chapter-2.html" class="xref">chapter 2</a> of a language with very few words and assign each word an id:</p>
     <figure id="tbl-7-1" style="max-width:50%">
-      <input type="checkbox" id="lb-57" class="lightbox-toggle">
-      <label for="lb-57"><img src="images/RC052.png" alt="" loading="lazy"></label>
-      <label for="lb-57" class="lightbox-overlay"><img src="images/RC052.png" alt=""></label>
+      <input type="checkbox" id="lb-60" class="lightbox-toggle">
+      <label for="lb-60"><img src="images/RC052.png" alt="" loading="lazy"></label>
+      <label for="lb-60" class="lightbox-overlay"><img src="images/RC052.png" alt=""></label>
       <figcaption>Table 7.1. Example of assigning IDs to words.</figcaption>
     </figure>
     <p>In <a href="chapter-5.html" class="xref">chapter 5</a> you hopefully built an appreciation for how when we were training to learn the weights for our turkey feather model, and later when we were plugging turkeys into the model to get out a prediction, we worked with matrices of numbers. The same is true when working with language. If we’re going to want to feed the sentence “He went to the store” into a model as training data, we’ll want to first convert it to numbers. A <strong>tokenizer</strong> encodes text as a list of tokens. In this case: 2, 10, 9, 8, 7. (These days, images, movies, and sound can also be encoded as tokens.)</p>
@@ -44,18 +44,18 @@
     <p>The core of a computer works with bits and bytes. Bytes are stored, bytes are processed, and the instructions of how to process the bytes are themselves in bytes. Nothing at the deepest level of your computer knows anything about letters in English or any other language. This is as true for the digital computers of today as it was of the first digital computers. Therefore, to represent text, there needs to be a system to encode letters as bytes. It’s a much more straightforward problem than tokenizing (which we’ll come back to), and yet filled with subtle issues you might not think of.</p>
     <p>The history of using two states to encode letters predates computers. Morse code, for example, was created around 1840 and used variable numbers of dots and dashes to encode letters, numbers, and some punctuation. When one of the co-creators of Morse code was deciding which letters should get shorter sequences of dots and dashes, he estimated the frequency of letters by counting the number of pieces of movable type for each letter at a newspaper printer. We’re going to see pretty much this exact technique again soon for how we decide our tokens.</p>
     <figure id="fig-7-1" style="max-width:90%">
-      <input type="checkbox" id="lb-58" class="lightbox-toggle">
-      <label for="lb-58"><img src="images/RC382.png" alt="" loading="lazy"></label>
-      <label for="lb-58" class="lightbox-overlay"><img src="images/RC382.png" alt=""></label>
+      <input type="checkbox" id="lb-61" class="lightbox-toggle">
+      <label for="lb-61"><img src="images/RC382.png" alt="" loading="lazy"></label>
+      <label for="lb-61" class="lightbox-overlay"><img src="images/RC382.png" alt=""></label>
       <figcaption>Figure 7.1. The American Morse Code from page 470 of the 1867 book <em>The Telegraph Manual: A Complete History and Description of the Semaphoric, Electric and Magnetic Telegraphs of Europe, Asia, Africa, and America, Ancient and Modern. </em></figcaption>
     </figure>
     <p>Back to letters and bytes, you may have heard of ASCII which is a widely adopted standard from the 1960s. In it, uppercase A is encoded as 65, uppercase B as 66, lower case ‘a’ as 97, and exclamation point as 33. ASCII was designed to fit within seven bits which gave 128 possible values. A hundred twenty eight values was more than enough to represent the regular English alphabet and woefully inadequate to encode all characters in all languages, which these days even includes emoji.</p>
     <p>There is a long, wonderful, and fascinating history of people inventing encodings to handle different languages and standards bodies creating national and international standards. In the 1980s computer scientists and linguists from around the world got together to create a single worldwide standard (Unicode) to represent all characters. When I started my translation management software company, encodings were still all over the map and getting software to support languages like Japanese meant special logic to handle what were called double byte character sets. I’ll spare you all that history. Today, UTF-8, a clever encoding of Unicode that is backwards compatible with ASCII, is widely used. This limits the scope of our trouble. Our tokenizer will need to convert from UTF-8 text to tokens and from tokens back to UTF-8. We can skip worrying about other ways of representing characters.</p>
     <p>Unlike ASCII, UTF-8 uses different numbers of bytes to encode different characters. I’ll show you a few examples so you can get the idea:</p>
     <figure id="tbl-7-2">
-      <input type="checkbox" id="lb-59" class="lightbox-toggle">
-      <label for="lb-59"><img src="images/RC053.png" alt="" loading="lazy"></label>
-      <label for="lb-59" class="lightbox-overlay"><img src="images/RC053.png" alt=""></label>
+      <input type="checkbox" id="lb-62" class="lightbox-toggle">
+      <label for="lb-62"><img src="images/RC053.png" alt="" loading="lazy"></label>
+      <label for="lb-62" class="lightbox-overlay"><img src="images/RC053.png" alt=""></label>
       <figcaption>Table 7.2. Examples of Unicode characters encoded in UTF-8.</figcaption>
     </figure>
     <p>There are nearly 300,000 Unicode characters. Ideally our GPT model will never encounter a character that causes it to stumble, but most of them are also useless because they are so rare.</p>
@@ -70,16 +70,16 @@
     <p>How should we pick V? If we had all the time in the world we would run experiments. We could train a model with different sizes of V and see what works best. In chapters 18 and 25 you’ll learn how to evaluate the model and this will give you a firm idea of how to run these experiments. However, we don’t need to start from scratch. We can look at what works well in other models and look to ratios published by researchers. For the 20-layer model I trained ahead of time, and for the 32-layer model we’ll be training together starting in <a href="chapter-24.html" class="xref">chapter 24</a>, we’re going to set V to 65,536 which is 2<sup>16</sup>.</p>
     <p>Another thing that would be really nice is if no matter what text we give our tokenizer, it can always encode it in a lossless fashion. This means that if we give it a sentence consisting of an obscure word in English, an obscure Chinese character, and an obscure emoji, and then we take the token IDs that come out and ask it to decode them, we’ll get back to what we started with. In other words we want this:</p>
     <figure id="fig-7-2">
-      <input type="checkbox" id="lb-60" class="lightbox-toggle">
-      <label for="lb-60"><img src="images/RC054.png" alt="" loading="lazy"></label>
-      <label for="lb-60" class="lightbox-overlay"><img src="images/RC054.png" alt=""></label>
+      <input type="checkbox" id="lb-63" class="lightbox-toggle">
+      <label for="lb-63"><img src="images/RC054.png" alt="" loading="lazy"></label>
+      <label for="lb-63" class="lightbox-overlay"><img src="images/RC054.png" alt=""></label>
       <figcaption>Figure 7.2. A lossless tokenizer.</figcaption>
     </figure>
     <p>Not:</p>
     <figure id="fig-7-3">
-      <input type="checkbox" id="lb-61" class="lightbox-toggle">
-      <label for="lb-61"><img src="images/RC055.png" alt="" loading="lazy"></label>
-      <label for="lb-61" class="lightbox-overlay"><img src="images/RC055.png" alt=""></label>
+      <input type="checkbox" id="lb-64" class="lightbox-toggle">
+      <label for="lb-64"><img src="images/RC055.png" alt="" loading="lazy"></label>
+      <label for="lb-64" class="lightbox-overlay"><img src="images/RC055.png" alt=""></label>
       <figcaption>Figure 7.3. A lossy tokenizer.</figcaption>
     </figure>
     <p>It used to be common practice for tokenizers to encode words not in the vocabulary as <em>unknown</em> like in <a href="#fig-7-3" class="xref" data-preview="images/RC055.png">figure 7.3</a>. The problem is when you want to train a model on all text you can possibly find and that’s billions or even trillions of characters out in the wild, you’re going to see even rare things, and we don’t want to deprive the model of the chance to learn from or generate those rare things. If our tokenizer is lossy and outputs <em>unknown</em> tokens, then “floccinaucinihilipilification,”  “錔,” and “🦃” will all look identical to the model: the unknown token.</p>
@@ -94,31 +94,31 @@
     </ul>
     <p>We start by encoding each word using the tokens we have so far, which at this point is exactly the same as encoding the words in UTF-8.</p>
     <figure id="tbl-7-3" style="max-width:90%">
-      <input type="checkbox" id="lb-62" class="lightbox-toggle">
-      <label for="lb-62"><img src="images/RC056.png" alt="" loading="lazy"></label>
-      <label for="lb-62" class="lightbox-overlay"><img src="images/RC056.png" alt=""></label>
+      <input type="checkbox" id="lb-65" class="lightbox-toggle">
+      <label for="lb-65"><img src="images/RC056.png" alt="" loading="lazy"></label>
+      <label for="lb-65" class="lightbox-overlay"><img src="images/RC056.png" alt=""></label>
       <figcaption>Table 7.3. First step is to encode each word using our starting set of tokens.</figcaption>
     </figure>
     <p>Now we look at all the consecutive pairs of tokens: 115 and 104 (corresponding to “sh”), 104 and 101 (corresponding to “he”), 114 and 117 (corresponding to “ru”) and so on, and find the pair with the highest frequency. You can trust me that there are a few tied for first place. We’ll pick the first of these, 104 and 101 (corresponding to “he”) and <strong>merge </strong>them into a new token which we’ll give the next ID, 256. (Why is the next ID 256 and not 257? Because our first 256 tokens went from 0 to 255.)</p>
     <figure id="tbl-7-4">
-      <input type="checkbox" id="lb-63" class="lightbox-toggle">
-      <label for="lb-63"><img src="images/RC298.png" alt="" loading="lazy"></label>
-      <label for="lb-63" class="lightbox-overlay"><img src="images/RC298.png" alt=""></label>
+      <input type="checkbox" id="lb-66" class="lightbox-toggle">
+      <label for="lb-66"><img src="images/RC298.png" alt="" loading="lazy"></label>
+      <label for="lb-66" class="lightbox-overlay"><img src="images/RC298.png" alt=""></label>
       <figcaption>Table 7.4. Token pair 104 and 101 become the single token 256.</figcaption>
     </figure>
     <p>Notice that we replace the pair of tokens 104 and 101 with the single token 256 everywhere. Next up we merge pair 114 and 117 (“ru” in both “runs” and “running”) into new token 257. We keep going in this way until we get to the token with ID 260. (This gives us a total vocab size of 261 since we start at 0.)</p>
     <p>At the end of this very short tokenizing training our list of words looks like this:</p>
     <figure id="tbl-7-5" style="max-width:90%">
-      <input type="checkbox" id="lb-64" class="lightbox-toggle">
-      <label for="lb-64"><img src="images/RC058.png" alt="" loading="lazy"></label>
-      <label for="lb-64" class="lightbox-overlay"><img src="images/RC058.png" alt=""></label>
+      <input type="checkbox" id="lb-67" class="lightbox-toggle">
+      <label for="lb-67"><img src="images/RC058.png" alt="" loading="lazy"></label>
+      <label for="lb-67" class="lightbox-overlay"><img src="images/RC058.png" alt=""></label>
       <figcaption>Table 7.5: Our words and their encodings in tokens after we stop merging.</figcaption>
     </figure>
     <p>And here’s our list of tokens:</p>
     <figure id="tbl-7-6" style="max-width:60%">
-      <input type="checkbox" id="lb-65" class="lightbox-toggle">
-      <label for="lb-65"><img src="images/RC059.png" alt="" loading="lazy"></label>
-      <label for="lb-65" class="lightbox-overlay"><img src="images/RC059.png" alt=""></label>
+      <input type="checkbox" id="lb-68" class="lightbox-toggle">
+      <label for="lb-68"><img src="images/RC059.png" alt="" loading="lazy"></label>
+      <label for="lb-68" class="lightbox-overlay"><img src="images/RC059.png" alt=""></label>
       <figcaption>Table 7.6. Final list of tokens.</figcaption>
     </figure>
     <p>We can now encode “he runs” as 256, 260 (glossing over spaces for the moment) and we can also encode the fire emoji even though it wasn’t in our tokenizer training sentences. It will be 240, 159, 148, 165. (See <a href="#tbl-7-2" class="xref" data-preview="images/RC053.png">table 7.2</a> for where I got those token IDs.)</p>
@@ -128,31 +128,31 @@
     <p>Another thing I glossed over before but we have to deal with in the real world is breaking text up into words. I listed three sentences above (“she runs,” etc.) and then listed their words in <a href="#tbl-7-3" class="xref" data-preview="images/RC056.png">table 7.3</a> without ever being clear about how I came up with the words. I also didn’t say what happened to the spaces or periods, and of course in the real world text we’ll see numbers, hyphenated words, quotes, apostrophes, parenthesis, and much more. We somehow have to be able to take any text and break it into words. These may not be words as we think of them as English, but they serve as boundaries beyond which we don’t merge.</p>
     <p>This breaking up step is one place we use hardcoded rules. Rather than try to describe them all, I’ll show a few rules by example.</p>
     <figure id="tbl-7-7">
-      <input type="checkbox" id="lb-66" class="lightbox-toggle">
-      <label for="lb-66"><img src="images/RC060.png" alt="" loading="lazy"></label>
-      <label for="lb-66" class="lightbox-overlay"><img src="images/RC060.png" alt=""></label>
+      <input type="checkbox" id="lb-69" class="lightbox-toggle">
+      <label for="lb-69"><img src="images/RC060.png" alt="" loading="lazy"></label>
+      <label for="lb-69" class="lightbox-overlay"><img src="images/RC060.png" alt=""></label>
       <figcaption>Table 7.7. Example of how text is split into words.</figcaption>
     </figure>
     <p>You may be surprised that spaces are often included in words. This means through merging we’ll end up with many tokens that start with spaces. Apparently this works well. Ending punctuation like period and exclamation points become their own words. Apostrophe-s also becomes its own word, which is possibly intuitive because the model can learn that the apostrophe-s token means possession. </p>
     <p>And finally, here are a few tokens from my trained tokenizer. The more common words have lower IDs.</p>
     <figure id="tbl-7-8" style="max-width:50%">
-      <input type="checkbox" id="lb-67" class="lightbox-toggle">
-      <label for="lb-67"><img src="images/RC061.png" alt="" loading="lazy"></label>
-      <label for="lb-67" class="lightbox-overlay"><img src="images/RC061.png" alt=""></label>
+      <input type="checkbox" id="lb-70" class="lightbox-toggle">
+      <label for="lb-70"><img src="images/RC061.png" alt="" loading="lazy"></label>
+      <label for="lb-70" class="lightbox-overlay"><img src="images/RC061.png" alt=""></label>
       <figcaption>Table 7.8. A few of our 65,000+ tokens. These are the tokens we’ll use to train our 32-layer model later in this book.</figcaption>
     </figure>
     <p>Encoding examples:</p>
     <figure id="tbl-7-9" style="max-width:60%">
-      <input type="checkbox" id="lb-68" class="lightbox-toggle">
-      <label for="lb-68"><img src="images/RC062.png" alt="" loading="lazy"></label>
-      <label for="lb-68" class="lightbox-overlay"><img src="images/RC062.png" alt=""></label>
+      <input type="checkbox" id="lb-71" class="lightbox-toggle">
+      <label for="lb-71"><img src="images/RC062.png" alt="" loading="lazy"></label>
+      <label for="lb-71" class="lightbox-overlay"><img src="images/RC062.png" alt=""></label>
       <figcaption>Table 7.9. Examples of tokenizing text.</figcaption>
     </figure>
     <p>We’re just about done with the tokenizer and ready to move on to using the tokens. One last point to keep in mind: Since our model will take tokens in and predict tokens, it’s going to turn out to be helpful to have special, reserved tokens that signify specific information that can never appear in normal text. One example is <em>beginning of sequence.</em> There will be others. The point for now is to leave room for them so that the total vocab size still ends up at our desired number, 65,536 in this case.</p>
     <figure id="tbl-7-10" style="max-width:60%">
-      <input type="checkbox" id="lb-69" class="lightbox-toggle">
-      <label for="lb-69"><img src="images/RC063.png" alt="" loading="lazy"></label>
-      <label for="lb-69" class="lightbox-overlay"><img src="images/RC063.png" alt=""></label>
+      <input type="checkbox" id="lb-72" class="lightbox-toggle">
+      <label for="lb-72"><img src="images/RC063.png" alt="" loading="lazy"></label>
+      <label for="lb-72" class="lightbox-overlay"><img src="images/RC063.png" alt=""></label>
       <figcaption>Table 7.10. The last regular token and our first of nine special tokens.</figcaption>
     </figure>
     <p>That’s it! Tokenizer in hand, on to the GPT.</p>
@@ -162,7 +162,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-8.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

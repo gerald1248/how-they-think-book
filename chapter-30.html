@@ -48,32 +48,32 @@
     <p>To illustrate how not obvious the answers to these problems are, let me describe three reasonable ways of representing signed integers (positive and negative) using 4 bits. (In reality we would never use only 4 bits.) The first way is similar to how we write base ten numbers on paper. We’ll call the first bit a sign bit. If it’s a 0 it indicates that the number is positive. If it’s a 1 it indicates negative. This leaves three other binary digits which we’ll treat as regular old binary numbers from 0 (000) to 7 (111). For example, 0101 is 5 and 1101 is -5 is To me, as someone who’s never had to worry much about the inner workings of a computer at this level, this seems the most familiar. It’s what we do in base ten but in base two.</p>
     <p>The second way is inspired by mechanical calculators. The first bit is again a sign bit and 0 means positive. The remaining three digits are the usual binary digits. We form the negative number by flipping all of the bits. For example, 0101 is 5 and -5 is 1010. If you play with this you’ll see that we can represent all of the integers from -7 to 7 just as in the first approach. In the mid-1600s the famous French mathematician Pascal, annoyed with helping his tax-commissioner father do tedious arithmetic, invented the Pascaline. It used a similar approach (although not in base 2) for subtraction.</p>
     <figure id="fig-30-1">
-      <input type="checkbox" id="lb-363" class="lightbox-toggle">
-      <label for="lb-363"><img src="images/RC352.jpg" alt="" loading="lazy"></label>
-      <label for="lb-363" class="lightbox-overlay"><img src="images/RC352.jpg" alt=""></label>
+      <input type="checkbox" id="lb-366" class="lightbox-toggle">
+      <label for="lb-366"><img src="images/RC352.jpg" alt="" loading="lazy"></label>
+      <label for="lb-366" class="lightbox-overlay"><img src="images/RC352.jpg" alt=""></label>
       <figcaption>Figure 30.1. A Pascaline.</figcaption>
     </figure>
     <p>The third way is to represent positive integers as 0 followed by three binary digits, like above. Negative numbers, though, are formed by flipping the bits and adding 1. For example, 0101 is 5 and -5 is 1011. This way we end up with a single representation for zero (0000) and can represent all of the integers from -8 to 7, one more than in the previous two approaches.</p>
     <p>I realize this is confusing. Let me show all of the possible 4 bit integers with all three approaches in a table. There’s no reason to learn the details here—at this point I’m only trying to give an appreciation for the history and complexity even for integers.</p>
     <figure id="tbl-30-1" style="max-width:90%">
-      <input type="checkbox" id="lb-364" class="lightbox-toggle">
-      <label for="lb-364"><img src="images/RC353.png" alt="" loading="lazy"></label>
-      <label for="lb-364" class="lightbox-overlay"><img src="images/RC353.png" alt=""></label>
+      <input type="checkbox" id="lb-367" class="lightbox-toggle">
+      <label for="lb-367"><img src="images/RC353.png" alt="" loading="lazy"></label>
+      <label for="lb-367" class="lightbox-overlay"><img src="images/RC353.png" alt=""></label>
       <figcaption>Table 30.1. All 4-bit integers encoded according to the three approaches described above.</figcaption>
     </figure>
     <p>I’ll cut to the chase and tell you that the third approach is best and has been used in nearly all computers for fifty years. It might seem the strangest, but it has several advantages: there is only a single representation for zero, it supports one extra number, and the procedure for addition is the cleanest. The first approach is familiar but something as simple as adding a positive and a negative number gets messy. I can imagine there were some heated arguments among computer designers in the 1950s deciding between approaches two and three.</p>
     <p>Those arguments need not have happened because the perhaps most famous computer architect ever, not to mention one of the most prolific and influential scientists of the 20th century, John von Neumann, said to use the third approach in his 1945 <em>First Draft of a Report on the EDVAC</em>, the first public description of a modern digital computer:</p>
     <figure id="fig-30-2" style="max-width:70%">
-      <input type="checkbox" id="lb-365" class="lightbox-toggle">
-      <label for="lb-365"><img src="images/RC354.png" alt="" loading="lazy"></label>
-      <label for="lb-365" class="lightbox-overlay"><img src="images/RC354.png" alt=""></label>
+      <input type="checkbox" id="lb-368" class="lightbox-toggle">
+      <label for="lb-368"><img src="images/RC354.png" alt="" loading="lazy"></label>
+      <label for="lb-368" class="lightbox-overlay"><img src="images/RC354.png" alt=""></label>
       <figcaption>Figure 30.2. Section 8 from John von Neumann’s famous <em>First Draft of a Report on the EDVAC.</em></figcaption>
     </figure>
     <p>And to stay in history and on von Neumann’s document for a moment, it’s incredible that he draws diagrams to show the addition of a single binary digit using vacuum tubes, and eighty years later we’re able to multiply trillions of numbers using hundreds of billions of transistors without breaking a sweat. (I suppose if you look at the GPU temperatures in <a href="chapter-24.html#fig-24-2" class="xref" data-preview="images/RC312.png">figure 24.2</a> you’ll see this isn’t quite true.)</p>
     <figure id="fig-30-3" style="max-width:70%">
-      <input type="checkbox" id="lb-366" class="lightbox-toggle">
-      <label for="lb-366"><img src="images/RC355.png" alt="" loading="lazy"></label>
-      <label for="lb-366" class="lightbox-overlay"><img src="images/RC355.png" alt=""></label>
+      <input type="checkbox" id="lb-369" class="lightbox-toggle">
+      <label for="lb-369"><img src="images/RC355.png" alt="" loading="lazy"></label>
+      <label for="lb-369" class="lightbox-overlay"><img src="images/RC355.png" alt=""></label>
       <figcaption>Figure 30.3. Adding two bits via vacuum tubes, from <em>First Draft of a Report on the EDVAC.</em></figcaption>
     </figure>
     <p>Now you see that with four bits we can represent 16 different <em>things.</em> These can be the integers -8 through 7 or the integers 0 through 15 or codes that identify my 16 pet rabbits, but there are only 16. I don’t get to cheat and use 3.5 or 1.23. There are ways to represent non-whole numbers, of course, and we’ll get to that in a moment, but the room to represent them can’t come from thin air. We need bits!</p>
@@ -97,42 +97,42 @@
     <p>Next question: with the same restrictions, how many numbers can you write between 10 and 11, including 10 but excluding 11? Let’s see. We can write 1.0 × 10<sup>1</sup> and…that’s it. We have no way to write 10.1 or 10.5. Is this weird? Maybe not, but to me it was counterintuitive. I thought of scientific notation as this panacea, but if you restrict the number of digits, you have to live within big limitations.</p>
     <p>And how many total positive numbers can we represent with our restriction? Nine possibilities for the first digit, 10 possibilities for the second digit, and 19 possibilities for the exponent (-9 to 9) is 9 × 10 × 19 = 1710. We only get 1710 numbers to spread over the range from our smallest number, 1.0 × 10<sup>-9</sup> to our biggest number, 9.9 × 10<sup>9</sup>.  The way scientific notation works, we spread a fixed number evenly between each power of ten. I’ll show this in a table.</p>
     <figure id="tbl-30-2" style="max-width:70%">
-      <input type="checkbox" id="lb-367" class="lightbox-toggle">
-      <label for="lb-367"><img src="images/RC356.png" alt="" loading="lazy"></label>
-      <label for="lb-367" class="lightbox-overlay"><img src="images/RC356.png" alt=""></label>
+      <input type="checkbox" id="lb-370" class="lightbox-toggle">
+      <label for="lb-370"><img src="images/RC356.png" alt="" loading="lazy"></label>
+      <label for="lb-370" class="lightbox-overlay"><img src="images/RC356.png" alt=""></label>
       <figcaption>Table 30.2. The number of positive numbers we can represent in scientific notation if we restrict ourselves to three digits including the exponent.</figcaption>
     </figure>
     <p>We can represent 1.8 (1.8 × 10<sup>0</sup>). We can also represent 1800 (1.8 × 10<sup>3</sup>) . But if we want to represent 1080 the best we can do is round to 1100—we can’t write 1.08 × 10<sup>3</sup> so we round it to 1.1 × 10<sup>3</sup>. Let’s say we’re taking the average of two values in a loss calculation: 0.52 and 0.31 and representing the result in our restricted scientific notation. The average of 0.52 and 0.31 is 0.415 which we’ll need to round to 4.2 × 10<sup>-1</sup>. We’ve lost a little bit of information but we’re making great use of our two significant digits. Let’s say now though that the two values were 10.52 and 10.31. The average is 10.415 which is 1.0415 × 10<sup>1</sup> which we’ll need to round to 1.0 × 10<sup>1</sup>. Ooh, that doesn’t feel good. The average of 10.52 and 10.31 is 10? If the fractional part of the number was important we’ve now lost this information.</p>
     <p>Now let’s turn to 32-bit floating point which is basically binary scientific notation. This is the famous floating point in the “floating point operations” and “floating point operations per second” we discussed in <a href="chapter-17.html" class="xref">chapter 17</a>. It’s called floating point because the point (it’s a binary point, not a decimal point) moves around just as in scientific notation. You already know that whatever the exact approach, we’ll have a total of around 4.3 billion numbers we can represent, and you can guess we’re going to end up with the same number of numbers between every power of two.</p>
     <p>There’s no one way to encode a floating point number in 32 bits, but like most of life, everything works better with standards. In this case the standard is IEEE 754 originally adopted in 1985 and updated a few times since. IEEE, the Institute of Electrical and Electronics Engineers, is one of the most important modern standards bodies and I suspect you’re using multiple IEEE standards right now. Ever hear of Wi-Fi referred to as 802.11? That’s IEEE 802.11, the standard for wireless internet access. Here’s how IEEE 754 tell us to use our 32 bits:</p>
     <figure id="fig-30-4">
-      <input type="checkbox" id="lb-368" class="lightbox-toggle">
-      <label for="lb-368"><img src="images/RC357.png" alt="" loading="lazy"></label>
-      <label for="lb-368" class="lightbox-overlay"><img src="images/RC357.png" alt=""></label>
+      <input type="checkbox" id="lb-371" class="lightbox-toggle">
+      <label for="lb-371"><img src="images/RC357.png" alt="" loading="lazy"></label>
+      <label for="lb-371" class="lightbox-overlay"><img src="images/RC357.png" alt=""></label>
       <figcaption>Figure 30.4. The bits of an IEEE 754 32-bit floating point number.</figcaption>
     </figure>
     <p>The sign bit works like our integer examples: 0 is for positive and 1 is for negative. The exponent specifies our power of two. To get the actual exponent you treat those eight bits as a positive binary number and subtract 127. The fraction is the part to the right of the binary point assuming an implicit binary digit 1 to the left of the point. (For example, if you have 1.56 × 10<sup>3</sup> in decimal scientific notation, you can think of it as being the number 1000 + 56/100 × 1000.) To make it a little more confusing, even though we only have 23 bits for the fraction, we put an extra implicit zero bit at the end giving us 24 bits. The fraction therefore is those 24 bits over a binary 1 followed by 24 binary 0s, just as my 0.56 is the fraction 56/100 in decimal. For reference, binary 1000000000000000000000000 is 16,777,216.</p>
     <p>Let’s try an example. What decimal number is this?</p>
     <figure id="fig-30-5">
-      <input type="checkbox" id="lb-369" class="lightbox-toggle">
-      <label for="lb-369"><img src="images/RC359.png" alt="" loading="lazy"></label>
-      <label for="lb-369" class="lightbox-overlay"><img src="images/RC359.png" alt=""></label>
+      <input type="checkbox" id="lb-372" class="lightbox-toggle">
+      <label for="lb-372"><img src="images/RC359.png" alt="" loading="lazy"></label>
+      <label for="lb-372" class="lightbox-overlay"><img src="images/RC359.png" alt=""></label>
       <figcaption>Figure 30.5. What number is this?</figcaption>
     </figure>
     <p>The sign bit is 0 so it’s positive. The exponent part read as a binary number is 128 and subtracting 127 gives us an exponent of 1. The fraction part is zero, and zero over 16,777,216 is zero. So overall it’s 2<sup>1</sup> + 2<sup>1</sup> × 0 = 2.</p>
     <p>What decimal number is this?</p>
     <figure id="fig-30-6">
-      <input type="checkbox" id="lb-370" class="lightbox-toggle">
-      <label for="lb-370"><img src="images/RC360.png" alt="" loading="lazy"></label>
-      <label for="lb-370" class="lightbox-overlay"><img src="images/RC360.png" alt=""></label>
+      <input type="checkbox" id="lb-373" class="lightbox-toggle">
+      <label for="lb-373"><img src="images/RC360.png" alt="" loading="lazy"></label>
+      <label for="lb-373" class="lightbox-overlay"><img src="images/RC360.png" alt=""></label>
       <figcaption>Figure 30.6. What number is this?</figcaption>
     </figure>
     <p>The sign and the exponent are the same as the previous example. However, the fraction is a 1 followed by 23 zeros. A 1 followed by 23 zeros divided by a 1 followed by 24 zeros will be 0.5. Don’t believe me? It’s 8,388,608 / 16,777,216 = 0.5. So it’s 2<sup>1</sup> + 2<sup>1</sup> × 0.5 = 3. A cleaner way to calculate this is 2<sup>1</sup> × (1 + 0.5)  = 2 × 1.5 = 3.</p>
     <p>Let’s do one more.</p>
     <figure id="fig-30-7">
-      <input type="checkbox" id="lb-371" class="lightbox-toggle">
-      <label for="lb-371"><img src="images/RC361.png" alt="" loading="lazy"></label>
-      <label for="lb-371" class="lightbox-overlay"><img src="images/RC361.png" alt=""></label>
+      <input type="checkbox" id="lb-374" class="lightbox-toggle">
+      <label for="lb-374"><img src="images/RC361.png" alt="" loading="lazy"></label>
+      <label for="lb-374" class="lightbox-overlay"><img src="images/RC361.png" alt=""></label>
       <figcaption>Figure 30.7. What number is this?</figcaption>
     </figure>
     <p>This fraction works out to 0.25, so the overall number will be 2<sup>1</sup> × 1.25 = 2.5.</p>
@@ -141,30 +141,30 @@
     <p>I mentioned 32-bit floating point numbers and 16-bit floating point numbers. I also mentioned that for our restaurant software example we should use 64-bit integers and not stress about saving a tiny bit of space. Where is the sweet spot for a transformer model? More precision sounds good in theory. But can we get away with fewer bits? If we can achieve similar or close results with fewer bits we should. First, going from 32 bits to 16 bits halves the space required which means we can fit larger batches and/or more parameters in the same amount of GPU memory. Second, the calculations will be faster. Eventually the operations come down to manipulating bits, so roughly speaking, an operation (e.g. multiplication) on two 16-bit floating point numbers will take half the time of the same operation on two 32-bit floating point numbers.</p>
     <p>The best solution turns out to be a mixture. Use 32 bits where we need it and use 16 bits where we can get away with it. Now to mention one other wrinkle, a traditional 16-bit floating point number (one sign bit, five bits for the exponent, ten bits for the fraction) is not especially compatible with this strategy. However, modern GPUs support bfloat16 (<em>brain</em> float 16) which is compatible. This standard uses the same number of exponent bits as our 32-bit floating point numbers (eight) so it can represent the same range, but with much less precision. It’s also very easy to convert from 32-bit floating point to bfloat16—chop off the extra bits.</p>
     <figure id="fig-30-8" style="max-width:70%">
-      <input type="checkbox" id="lb-372" class="lightbox-toggle">
-      <label for="lb-372"><img src="images/RC362.png" alt="" loading="lazy"></label>
-      <label for="lb-372" class="lightbox-overlay"><img src="images/RC362.png" alt=""></label>
+      <input type="checkbox" id="lb-375" class="lightbox-toggle">
+      <label for="lb-375"><img src="images/RC362.png" alt="" loading="lazy"></label>
+      <label for="lb-375" class="lightbox-overlay"><img src="images/RC362.png" alt=""></label>
       <figcaption>Figure 30.8. The bits of a bfloat16 number.</figcaption>
     </figure>
     <p>We use 32-bit floats for all of our parameters. But as we’re sending batches through the model, we use bfloat16 numbers out of the embed layer and remain in bfloat16 through all layers up through the unnormalized logits that come out of the final linear transformation. We then turn those numbers back into 32-bit floats before calculating loss. Revisit the end of <a href="chapter-8.html" class="xref">chapter 8</a> for the loss calculation and a reminder that it involves taking exponents and logs. If we were to do these types of operations with only bfloat16 precision the rounding would be too severe. Let me draw a diagram with the types at each spot in the model:</p>
     <figure id="fig-30-9">
-      <input type="checkbox" id="lb-373" class="lightbox-toggle">
-      <label for="lb-373"><img src="images/RC363.png" alt="" loading="lazy"></label>
-      <label for="lb-373" class="lightbox-overlay"><img src="images/RC363.png" alt=""></label>
+      <input type="checkbox" id="lb-376" class="lightbox-toggle">
+      <label for="lb-376"><img src="images/RC363.png" alt="" loading="lazy"></label>
+      <label for="lb-376" class="lightbox-overlay"><img src="images/RC363.png" alt=""></label>
       <figcaption>Figure 30.9. The types used for parameters and calculations in the model.</figcaption>
     </figure>
     <p>Finally, as promised, here is exactly why, in bfloat16, 100 × (1 + 1.24 - 1.24) is 101. I’ll show each step of the calculations. Let’s first look at the three input numbers to the calculation: 100, 1, and 1.24.</p>
     <figure id="tbl-30-3">
-      <input type="checkbox" id="lb-374" class="lightbox-toggle">
-      <label for="lb-374"><img src="images/RC364.png" alt="" loading="lazy"></label>
-      <label for="lb-374" class="lightbox-overlay"><img src="images/RC364.png" alt=""></label>
+      <input type="checkbox" id="lb-377" class="lightbox-toggle">
+      <label for="lb-377"><img src="images/RC364.png" alt="" loading="lazy"></label>
+      <label for="lb-377" class="lightbox-overlay"><img src="images/RC364.png" alt=""></label>
       <figcaption>Table 30.3. The three numbers in our calculation converted to bfloat16. For 1.24 this requires rounding.</figcaption>
     </figure>
     <p>And now here’s each operation performed on the bfloat16 numbers:</p>
     <figure id="tbl-30-4">
-      <input type="checkbox" id="lb-375" class="lightbox-toggle">
-      <label for="lb-375"><img src="images/RC365.png" alt="" loading="lazy"></label>
-      <label for="lb-375" class="lightbox-overlay"><img src="images/RC365.png" alt=""></label>
+      <input type="checkbox" id="lb-378" class="lightbox-toggle">
+      <label for="lb-378"><img src="images/RC365.png" alt="" loading="lazy"></label>
+      <label for="lb-378" class="lightbox-overlay"><img src="images/RC365.png" alt=""></label>
       <figcaption>Table 30.4. The three operations in bfloat16.</figcaption>
     </figure>
   </article>
@@ -173,7 +173,7 @@
     <a href="index.html">Contents</a>
     <a href="select-figures.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

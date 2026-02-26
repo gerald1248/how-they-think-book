@@ -28,9 +28,9 @@
     </div>
     <p>What is this?</p>
     <figure id="fig-12-1" style="max-width:90%">
-      <input type="checkbox" id="lb-147" class="lightbox-toggle">
-      <label for="lb-147"><img src="images/RC130.jpg" alt="" loading="lazy"></label>
-      <label for="lb-147" class="lightbox-overlay"><img src="images/RC130.jpg" alt=""></label>
+      <input type="checkbox" id="lb-150" class="lightbox-toggle">
+      <label for="lb-150"><img src="images/RC130.jpg" alt="" loading="lazy"></label>
+      <label for="lb-150" class="lightbox-overlay"><img src="images/RC130.jpg" alt=""></label>
       <figcaption>Figure 12.1. A photo from ImageNet. What is it?</figcaption>
     </figure>
     <p>If you know your animals, which I don’t, you probably will recognize a sea otter. If you’re not sure you can paste it into ChatGPT or similar, as I just did, and it will helpfully tell you: “It’s a sea otter floating on its back in the water. The pose—lying belly-up with paws held to the chest—is very characteristic of sea otters. They often rest, eat, or groom themselves in this position.”</p>
@@ -51,17 +51,17 @@
     <p>Now that researchers could train networks with tens of layers, they began to see that up to a certain number of layers made things better, but above this level things got worse. You might think—well, that makes sense, there’s an ideal number of layers to “understand” a given problem and beyond that the extra layers will confuse things and cause harm. What the Microsoft team realized is that this argument is invalid. If you can achieve a certain loss with 20 layers, there must be a model with 21 layers that achieves at least the same loss: take the 20-layer model and add one more layer that does nothing but copy its input to its output. The overall loss for the 21-layer model would then be identical to the 20-layer model. That the training process was not automatically finding this solution (or a better one) told the team that models were hitting a training limitation, not bumping up against some fundamental maximum number of useful layers.</p>
     <p>Motivated, the team came up with an ingenious idea, which I’ll show in an example diagram first:</p>
     <figure id="fig-12-2">
-      <input type="checkbox" id="lb-148" class="lightbox-toggle">
-      <label for="lb-148"><img src="images/RC131.png" alt="" loading="lazy"></label>
-      <label for="lb-148" class="lightbox-overlay"><img src="images/RC131.png" alt=""></label>
+      <input type="checkbox" id="lb-151" class="lightbox-toggle">
+      <label for="lb-151"><img src="images/RC131.png" alt="" loading="lazy"></label>
+      <label for="lb-151" class="lightbox-overlay"><img src="images/RC131.png" alt=""></label>
       <figcaption>Figure 12.2. A model with skip connections, also known as residual connections.</figcaption>
     </figure>
     <p>You saw linear and ReLU modules working together starting in hedgehog model #4 (see <a href="chapter-10.html#fig-10-18" class="xref" data-preview="images/RC107.png">figure 10.18</a>). What’s new here are the two <strong>skip connections</strong>. The output of the first linear / ReLU / linear sublayer gets added to the input and fed into the second linear / ReLU / linear sublayer, where the same thing happens again. By “added,” I’m not referring to anything abstract. It’s literally an element-wise addition.</p>
     <p>I’ll add numbers to the diagram to make this concrete. Let’s say our input is the height and length of an adult turkey. Our aim is for the model to predict the average height and length of the turkey’s children once they themselves reach adulthood (apparently this takes around four months). We haven’t started training yet, but assume the initial weights and biases in the linear layers are small.</p>
     <figure id="fig-12-3">
-      <input type="checkbox" id="lb-149" class="lightbox-toggle">
-      <label for="lb-149"><img src="images/RC132.png" alt="" loading="lazy"></label>
-      <label for="lb-149" class="lightbox-overlay"><img src="images/RC132.png" alt=""></label>
+      <input type="checkbox" id="lb-152" class="lightbox-toggle">
+      <label for="lb-152"><img src="images/RC132.png" alt="" loading="lazy"></label>
+      <label for="lb-152" class="lightbox-overlay"><img src="images/RC132.png" alt=""></label>
       <figcaption>Figure 12.3. Real numbers flowing through a model with skip connections. The input to the second sublayer of (1.1, 2.1) is the overall input (1.0, 2.0) plus the output of the first sublayer (0.1, 0.1).</figcaption>
     </figure>
     <p>It’s incredible and probably not intuitive that this enhancement, one that adds no extra parameters and a negligible amount of extra computation, is one of the most important techniques in deep learning. With it, it’s possible to train models with dozens or hundreds of layers, and even smaller models (fewer layers, fewer parameters) train better and faster.</p>
@@ -76,51 +76,51 @@
     <p>The reason these connections are also called <strong>residual connections</strong>, and that the 2015 winning model from the Microsoft researchers was called ResNet, is that each sublayer only needs to learn whatever is not already predicted by the layer behind it. In other words it needs to learn the <em>residual,</em> the part left over after the main part is explained.</p>
     <p>Even though it’s probably overkill or at least an odd modeling choice for the hedgehog quill predictions, I created a deep model using skip connections:</p>
     <figure id="fig-12-4">
-      <input type="checkbox" id="lb-150" class="lightbox-toggle">
-      <label for="lb-150"><img src="images/RC133.png" alt="" loading="lazy"></label>
-      <label for="lb-150" class="lightbox-overlay"><img src="images/RC133.png" alt=""></label>
+      <input type="checkbox" id="lb-153" class="lightbox-toggle">
+      <label for="lb-153"><img src="images/RC133.png" alt="" loading="lazy"></label>
+      <label for="lb-153" class="lightbox-overlay"><img src="images/RC133.png" alt=""></label>
       <figcaption>Figure 12.4. Hedgehog model #7. Uses skip connections.</figcaption>
     </figure>
     <p>This model #7 was fast and easy to train. It also has far fewer parameters than hedgehog model #6 (see <a href="chapter-10.html#fig-10-22" class="xref" data-preview="images/RC113.png">figure 10.22</a>). Hedgehog model #6 had 100 × 100 = 10,000 parameters in the middle linear layer alone. This model #7 has 8 parameters (2 × 2 + 2 × 2) in each repeating sublayer plus 2 in each of the first and final linear layers for a total of 20 × 8 + 2 + 2 = 164 parameters. Here’s the loss:</p>
     <figure id="tbl-12-1">
-      <input type="checkbox" id="lb-151" class="lightbox-toggle">
-      <label for="lb-151"><img src="images/RC134.png" alt="" loading="lazy"></label>
-      <label for="lb-151" class="lightbox-overlay"><img src="images/RC134.png" alt=""></label>
+      <input type="checkbox" id="lb-154" class="lightbox-toggle">
+      <label for="lb-154"><img src="images/RC134.png" alt="" loading="lazy"></label>
+      <label for="lb-154" class="lightbox-overlay"><img src="images/RC134.png" alt=""></label>
       <figcaption>Table 12.1. Our new hedgehog model #7 with skip connections.</figcaption>
     </figure>
     <p>Here’s the plot:</p>
     <figure id="fig-12-5">
-      <input type="checkbox" id="lb-152" class="lightbox-toggle">
-      <label for="lb-152"><img src="images/RC135.png" alt="" loading="lazy"></label>
-      <label for="lb-152" class="lightbox-overlay"><img src="images/RC135.png" alt=""></label>
+      <input type="checkbox" id="lb-155" class="lightbox-toggle">
+      <label for="lb-155"><img src="images/RC135.png" alt="" loading="lazy"></label>
+      <label for="lb-155" class="lightbox-overlay"><img src="images/RC135.png" alt=""></label>
       <figcaption>Figure 12.5. Hedgehog model #7.</figcaption>
     </figure>
     <p>I plotted the model during training after the 0th step and then every 3,000 steps up to step 12,000.</p>
     <figure id="fig-12-6">
-      <input type="checkbox" id="lb-153" class="lightbox-toggle">
-      <label for="lb-153"><img src="images/RC136.png" alt="" loading="lazy"></label>
-      <label for="lb-153" class="lightbox-overlay"><img src="images/RC136.png" alt=""></label>
+      <input type="checkbox" id="lb-156" class="lightbox-toggle">
+      <label for="lb-156"><img src="images/RC136.png" alt="" loading="lazy"></label>
+      <label for="lb-156" class="lightbox-overlay"><img src="images/RC136.png" alt=""></label>
       <figcaption>Figure 12.6. Hedgehog model #7 during training.</figcaption>
     </figure>
     <p>The training appears under control as the model learns the patterns in the data. When I pop open the training hood, I can see that the gradients are behaving nicely. During backprop, a gradient will be computed for all of the parameters of all of the layers. I recorded the sum of the absolute values of the gradients of the two weights in the first layer, the two weights in the last layer, and the four weights in two of the sublayers at every step of training. Here are those sums smoothed and plotted:</p>
     <figure id="fig-12-7">
-      <input type="checkbox" id="lb-154" class="lightbox-toggle">
-      <label for="lb-154"><img src="images/RC137.png" alt="" loading="lazy"></label>
-      <label for="lb-154" class="lightbox-overlay"><img src="images/RC137.png" alt=""></label>
+      <input type="checkbox" id="lb-157" class="lightbox-toggle">
+      <label for="lb-157"><img src="images/RC137.png" alt="" loading="lazy"></label>
+      <label for="lb-157" class="lightbox-overlay"><img src="images/RC137.png" alt=""></label>
       <figcaption>Figure 12.7. Sums of the absolute values of the gradients at select layers during the training of hedgehog model #7.</figcaption>
     </figure>
     <p>The numbers never get too small or too big. The sums increase in the beginning as the training explores and decrease later as the weights get closer to optimal. By contrast, here’s what happens when I remove the skip connections from the model.</p>
     <figure id="fig-12-8">
-      <input type="checkbox" id="lb-155" class="lightbox-toggle">
-      <label for="lb-155"><img src="images/RC138.png" alt="" loading="lazy"></label>
-      <label for="lb-155" class="lightbox-overlay"><img src="images/RC138.png" alt=""></label>
+      <input type="checkbox" id="lb-158" class="lightbox-toggle">
+      <label for="lb-158"><img src="images/RC138.png" alt="" loading="lazy"></label>
+      <label for="lb-158" class="lightbox-overlay"><img src="images/RC138.png" alt=""></label>
       <figcaption>Figure 12.8. An attempt to train a model just like hedgehog model #7 but without skip connections. The training gets stuck.</figcaption>
     </figure>
     <p>You can see from both the model plot looking like a horizontal line and the loss not budging from around 1.2 that the training gets stuck. It is unable to learn how to adjust parameters in a meaningful way. Now let’s look at the gradients for the final layer and the last few sublayers over the first 200 training steps:</p>
     <figure id="fig-12-9">
-      <input type="checkbox" id="lb-156" class="lightbox-toggle">
-      <label for="lb-156"><img src="images/RC139.png" alt="" loading="lazy"></label>
-      <label for="lb-156" class="lightbox-overlay"><img src="images/RC139.png" alt=""></label>
+      <input type="checkbox" id="lb-159" class="lightbox-toggle">
+      <label for="lb-159"><img src="images/RC139.png" alt="" loading="lazy"></label>
+      <label for="lb-159" class="lightbox-overlay"><img src="images/RC139.png" alt=""></label>
       <figcaption>Figure 12.9. Sums of the absolute values of the gradients at select layers during the first 200 training steps of our model without skip connections.</figcaption>
     </figure>
     <p>The gradient for sublayers 18 and below (not shown) vanish after around 25 steps leaving training with only the five weights in layers 19, 20, and the final layer to adjust. It’s not surprising that the model gets stuck on predicting the mean number of quills, the same as hedgehog model #1. As bad, the training process is very sensitive to the randomly initialized parameters and the gradients can vanish even sooner. For example, just now I changed my random seed and reinitialized my model, and all gradients from the 19th sublayer and below vanished immediately. You can imagine how this happens with ReLU and only two weights in each linear layer, but the same problem occurs in less sudden ways with bigger models.</p>
@@ -131,7 +131,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-13.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>

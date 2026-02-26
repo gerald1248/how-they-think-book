@@ -28,9 +28,9 @@
     </div>
     <p>I never explained exactly what calculation happens in the norm module or why it’s there. I was originally going to discuss it earlier, but decided to postpone until you saw that gradient descent is not always a walk in the park—sometimes it’s a walk off a cliff. Gradients can explode or vanish, and in an attempt to dodge those bullets, a tiny learning rate can cause the taking of such small steps that little progress is made toward minimizing loss.</p>
     <figure id="fig-22-1">
-      <input type="checkbox" id="lb-278" class="lightbox-toggle">
-      <label for="lb-278"><img src="images/RC380.png" alt="" loading="lazy"></label>
-      <label for="lb-278" class="lightbox-overlay"><img src="images/RC380.png" alt=""></label>
+      <input type="checkbox" id="lb-281" class="lightbox-toggle">
+      <label for="lb-281"><img src="images/RC380.png" alt="" loading="lazy"></label>
+      <label for="lb-281" class="lightbox-overlay"><img src="images/RC380.png" alt=""></label>
       <figcaption>Figure 22.1. What exactly does norm do?</figcaption>
     </figure>
     <p>Take a look at our turkey model from <a href="chapter-3.html" class="xref">chapter 3</a>. My data was the height and length of each turkey in meters which meant that the two inputs for each turkey were of a similar magnitude. Imagine, though, that I had used millimeters for height and stayed with meters for length. The purist in me thinks it shouldn’t matter. If the height number is a thousand times bigger, the model can just learn a number for the first weight that is a thousand times smaller. In practice, though, it does matter. A tiny change in the first weight would cause a much, much bigger change in the loss than a tiny change in the second weight. When the gradient is huge in one direction and small in another it’s tough to adjust our weights. If we use a small learning rate, we’ll move a healthy amount in one direction and barely at all in the other. If we use a big learning rate, we risk overshooting or having the gradient explode, similar to what I showed in <a href="chapter-19.html#fig-19-6" class="xref" data-preview="images/RC223.png">figure 19.6</a>.</p>
@@ -43,23 +43,23 @@
     <p>The calculation is in the name: Root Mean Square Layer Normalization. Square each element in the vector, take the mean, take the square root, and divide this into each element. The beauty of Zhang and Sennrich’s research, and prior research into layer normalization, was to show that, counterintuitively to people at the time, this all you need to do—no need to calculate the mean or standard deviation on a bigger sample of data flowing through the model and no need to learn any parameters.</p>
     <p>Let me first show the calculation in a table. Let’s say D=1280. Think of a single embedding, say for the token “Paris,” coming out of the embedding layer and entering the first transformer block as shown in <a href="#fig-22-1" class="xref" data-preview="images/RC380.png">figure 22.1</a> above.</p>
     <figure id="tbl-22-1">
-      <input type="checkbox" id="lb-279" class="lightbox-toggle">
-      <label for="lb-279"><img src="images/RC377.png" alt="" loading="lazy"></label>
-      <label for="lb-279" class="lightbox-overlay"><img src="images/RC377.png" alt=""></label>
+      <input type="checkbox" id="lb-282" class="lightbox-toggle">
+      <label for="lb-282"><img src="images/RC377.png" alt="" loading="lazy"></label>
+      <label for="lb-282" class="lightbox-overlay"><img src="images/RC377.png" alt=""></label>
       <figcaption>Table 22.1. The calculation of RMSNorm for a vector of size 1280.</figcaption>
     </figure>
     <p>If the mean of the input vector is zero, this calculation is the same as the type of normalization I described above where you subtract the mean and divide by the standard deviation. A geometric way to think about the calculation is that it preserves the angle of the vector but forces its length to be the square root of its size, 35.78 in this case. This is easier to see if we pretend that our vectors have two dimensions:</p>
     <figure id="tbl-22-2" style="max-width:70%">
-      <input type="checkbox" id="lb-280" class="lightbox-toggle">
-      <label for="lb-280"><img src="images/RC379.png" alt="" loading="lazy"></label>
-      <label for="lb-280" class="lightbox-overlay"><img src="images/RC379.png" alt=""></label>
+      <input type="checkbox" id="lb-283" class="lightbox-toggle">
+      <label for="lb-283"><img src="images/RC379.png" alt="" loading="lazy"></label>
+      <label for="lb-283" class="lightbox-overlay"><img src="images/RC379.png" alt=""></label>
       <figcaption>Table 22.2. Three two-dimensional vectors before and after normalization.</figcaption>
     </figure>
     <p>I’ll plot each vector before and after RMS normalization:</p>
     <figure id="fig-22-2">
-      <input type="checkbox" id="lb-281" class="lightbox-toggle">
-      <label for="lb-281"><img src="images/RC378.png" alt="" loading="lazy"></label>
-      <label for="lb-281" class="lightbox-overlay"><img src="images/RC378.png" alt=""></label>
+      <input type="checkbox" id="lb-284" class="lightbox-toggle">
+      <label for="lb-284"><img src="images/RC378.png" alt="" loading="lazy"></label>
+      <label for="lb-284" class="lightbox-overlay"><img src="images/RC378.png" alt=""></label>
       <figcaption>Figure 22.2. Plots of vectors A, B, and C before and after normalization.</figcaption>
     </figure>
     <p>Notice that the angles are the same after normalization but the lengths change dramatically. Before normalization vector C extends almost to (-30, -30). After normalization all three vectors have a length of 1.4 (the square root of 2).</p>
@@ -71,7 +71,7 @@
     <a href="index.html">Contents</a>
     <a href="chapter-23.html">Next &#8594;</a>
   </nav>
-  <footer class="site-footer"><em>How They Think</em> &mdash; February 24, 2026 draft &mdash; &copy; Eric Silberstein</footer>
+  <footer class="site-footer"><em>How They Think</em> &mdash; February 25, 2026 draft &mdash; &copy; Eric Silberstein</footer>
   <div id="preview-tooltip" class="preview-tooltip" hidden>
     <img id="preview-tooltip-img" src="" alt="">
   </div>
